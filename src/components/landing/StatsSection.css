@@ -1,0 +1,138 @@
+.stats {
+    background: var(--color-bg-primary);
+    padding: 80px 0;
+    border-top: 1px solid var(--color-border-light);
+    border-bottom: 1px solid var(--color-border-light);
+    position: relative;
+}
+
+/* Subtle background accent */
+.stats::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(10, 102, 194, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(10, 102, 194, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    text-align: center;
+    position: relative;
+}
+
+.stat-item {
+    padding: 16px;
+    /* Staggered animation */
+    opacity: 0;
+    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.stat-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stat-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stat-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.stat-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.stat-value {
+    font-size: clamp(2.5rem, 5vw, 3.25rem);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+    line-height: 1;
+    /* Use tabular nums for proper alignment */
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+}
+
+.stat-label {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Dividers between stats */
+.stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 48px;
+    background: var(--color-border-light);
+}
+
+/* Position the dividers correctly */
+.stats-grid {
+    position: relative;
+}
+
+.stat-item {
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .stats {
+        padding: 64px 0;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px 24px;
+    }
+
+    .stat-value {
+        font-size: 2.25rem;
+    }
+
+    /* Remove vertical dividers on mobile */
+    .stat-item::after {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 16px;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+    }
+
+    .stat-label {
+        font-size: 0.813rem;
+    }
+}
+
+/* Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

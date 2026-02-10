@@ -1,0 +1,322 @@
+.leads-table-wrapper {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.leads-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leads-table th {
+    background: var(--color-bg-secondary);
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--color-border-light);
+    white-space: nowrap;
+}
+
+.leads-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.leads-table th.sortable:hover {
+    color: var(--color-primary);
+}
+
+.leads-table th svg {
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.leads-table td {
+    padding: 14px 16px;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.leads-table tbody tr {
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.leads-table tbody tr:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.leads-table tbody tr.selected {
+    background: var(--color-primary-lighter);
+}
+
+.leads-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Checkbox */
+.checkbox {
+    display: inline-flex;
+    cursor: pointer;
+}
+
+.checkbox input {
+    display: none;
+}
+
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border-medium);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+
+.checkbox:hover .checkmark {
+    border-color: var(--color-primary);
+}
+
+.checkbox input:checked+.checkmark {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.checkbox input:checked+.checkmark::after {
+    content: '✓';
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Column specific styles */
+.col-select {
+    width: 48px;
+}
+
+.col-name {
+    min-width: 180px;
+}
+
+.col-company {
+    min-width: 140px;
+}
+
+.col-title {
+    min-width: 160px;
+    color: var(--color-text-secondary);
+}
+
+.col-score {
+    width: 120px;
+}
+
+.col-message {
+    width: 100px;
+}
+
+.col-status {
+    width: 100px;
+}
+
+.col-post {
+    width: 60px;
+    text-align: center;
+}
+
+.col-actions {
+    width: 48px;
+}
+
+/* Lead name cell */
+.lead-name-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.lead-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.lead-fullname {
+    font-weight: 500;
+}
+
+/* Score cell */
+.score-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.score-bar {
+    width: 50px;
+    height: 6px;
+    background: var(--color-bg-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.score-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.score-bar.excellent .score-fill {
+    background: var(--color-success);
+}
+
+.score-bar.good .score-fill {
+    background: #22C55E;
+}
+
+.score-bar.fair .score-fill {
+    background: #EAB308;
+}
+
+.score-bar.low .score-fill {
+    background: var(--color-error);
+}
+
+.score-value {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    min-width: 24px;
+}
+
+/* Message status */
+.message-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8125rem;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.message-status.ready {
+    background: #DCFCE7;
+    color: var(--color-success);
+}
+
+.message-status.draft {
+    background: #FEF9C3;
+    color: #A16207;
+}
+
+.message-status.sent {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.message-status.empty {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-tertiary);
+}
+
+/* Outreach badge */
+.outreach-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+}
+
+.outreach-badge.pending {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-tertiary);
+}
+
+.outreach-badge.sent {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.outreach-badge.accepted {
+    background: #DCFCE7;
+    color: var(--color-success);
+}
+
+.outreach-badge.replied {
+    background: #EDE9FE;
+    color: #7C3AED;
+}
+
+/* Post status */
+.post-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-status.scraped {
+    color: var(--color-success);
+}
+
+.post-status.pending {
+    color: var(--color-text-tertiary);
+}
+
+/* Action link */
+.action-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-tertiary);
+    transition: all 0.15s;
+}
+
+.action-link:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-primary);
+}
+
+/* Empty state */
+.empty-state {
+    padding: var(--space-3xl);
+    text-align: center;
+    color: var(--color-text-tertiary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+
+    .col-title,
+    .col-post {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .col-company,
+    .col-message {
+        display: none;
+    }
+}

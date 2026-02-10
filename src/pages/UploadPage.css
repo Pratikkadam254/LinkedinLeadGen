@@ -1,0 +1,405 @@
+.upload-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-secondary);
+}
+
+.upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-xl);
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.upload-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.upload-nav .nav-link {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.upload-nav .nav-link:hover {
+    color: var(--color-primary);
+}
+
+.upload-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: var(--space-2xl);
+}
+
+.upload-container {
+    width: 100%;
+    max-width: 800px;
+}
+
+.upload-intro {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.upload-intro h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.upload-intro p {
+    color: var(--color-text-secondary);
+}
+
+.upload-header-left {
+    display: flex;
+    align-items: center;
+}
+
+.upload-header-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Step Indicator */
+.step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-2xl);
+    gap: 0;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.step-item.active .step-circle {
+    background: var(--color-primary);
+    color: white;
+}
+
+.step-item.done .step-circle {
+    background: var(--color-success);
+    color: white;
+}
+
+.step-item span {
+    font-size: 0.875rem;
+    color: var(--color-text-tertiary);
+    font-weight: 500;
+}
+
+.step-item.active span {
+    color: var(--color-primary);
+}
+
+.step-item.done span {
+    color: var(--color-success);
+}
+
+.step-line {
+    width: 60px;
+    height: 2px;
+    background: var(--color-border-light);
+    margin: 0 var(--space-sm);
+}
+
+/* Preview */
+.preview-content {
+    animation: fadeSlideUp 0.3s ease;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-xl);
+}
+
+.preview-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.upload-subtitle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-top: var(--space-xs);
+}
+
+.preview-stats {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+}
+
+.preview-stat {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.preview-stat.success {
+    background: #F0FDF4;
+    color: var(--color-success);
+}
+
+.preview-stat.warning {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.preview-stat.error {
+    background: #FEE2E2;
+    color: var(--color-error);
+}
+
+/* Preview Table */
+.preview-table-wrapper {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--space-lg);
+}
+
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+}
+
+.preview-table th {
+    background: var(--color-bg-secondary);
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.preview-table td {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-border-light);
+    color: var(--color-text-primary);
+}
+
+.preview-table tr:last-child td {
+    border-bottom: none;
+}
+
+.preview-table .row-num {
+    color: var(--color-text-tertiary);
+    width: 40px;
+}
+
+.preview-table .url-cell {
+    text-align: center;
+    color: var(--color-text-secondary);
+}
+
+.more-rows {
+    padding: var(--space-md);
+    text-align: center;
+    color: var(--color-text-tertiary);
+    font-size: 0.8125rem;
+    background: var(--color-bg-secondary);
+}
+
+/* Errors Panel */
+.errors-panel {
+    margin-bottom: var(--space-lg);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+}
+
+.errors-panel summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.errors-panel ul {
+    margin-top: var(--space-sm);
+    padding-left: var(--space-lg);
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+.errors-panel li {
+    margin-bottom: var(--space-xs);
+}
+
+.preview-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+/* Importing */
+.importing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4xl) var(--space-lg);
+    text-align: center;
+    animation: fadeSlideUp 0.3s ease;
+}
+
+.spin-icon {
+    color: var(--color-primary);
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--space-lg);
+}
+
+.importing-content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.importing-content p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xl);
+}
+
+.progress-bar {
+    width: 100%;
+    max-width: 400px;
+    height: 8px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    margin-top: var(--space-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* Complete */
+.complete-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4xl) var(--space-lg);
+    text-align: center;
+    animation: fadeSlideUp 0.3s ease;
+}
+
+.complete-icon {
+    color: var(--color-success);
+    margin-bottom: var(--space-lg);
+}
+
+.complete-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.complete-content p {
+    color: var(--color-text-secondary);
+    font-size: 1.0625rem;
+}
+
+.skipped-note {
+    color: var(--color-text-tertiary) !important;
+    font-size: 0.875rem !important;
+    margin-top: var(--space-xs);
+}
+
+.complete-actions {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-2xl);
+}
+
+.format-note {
+    margin-top: var(--space-md);
+    font-size: 0.8125rem;
+    color: var(--color-text-tertiary);
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 640px) {
+    .option-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .dropzone-content {
+        padding: var(--space-2xl);
+    }
+
+    .preview-stats {
+        flex-direction: column;
+    }
+
+    .step-line {
+        width: 30px;
+    }
+}

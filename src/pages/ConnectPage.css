@@ -1,0 +1,413 @@
+.connect-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-secondary);
+}
+
+.connect-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-md) var(--space-xl);
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.connect-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.connect-nav .nav-link {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.connect-nav .nav-link:hover {
+    color: var(--color-primary);
+}
+
+.connect-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: var(--space-2xl);
+}
+
+.connect-container {
+    width: 100%;
+    max-width: 600px;
+}
+
+.connect-intro {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.linkedin-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: #0A66C2;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-lg);
+}
+
+.connect-intro h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.connect-intro p {
+    color: var(--color-text-secondary);
+}
+
+/* Error Banner */
+.error-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #DC2626;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+    font-size: 0.875rem;
+}
+
+/* Connect Card */
+.connect-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+    text-align: center;
+}
+
+.connect-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: var(--space-xl);
+}
+
+.connect-status.disconnected {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+}
+
+.connect-status.connected {
+    background: #DCFCE7;
+    color: var(--color-success);
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.connect-status.disconnected .status-indicator {
+    background: var(--color-text-tertiary);
+}
+
+.connect-status.connected .status-indicator {
+    background: var(--color-success);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Benefits */
+.connect-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+    text-align: left;
+}
+
+.benefit {
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+}
+
+.benefit svg {
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.benefit h4 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.benefit p {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+/* LinkedIn Button */
+.btn-linkedin {
+    background: #0A66C2;
+    color: white;
+    width: 100%;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.btn-linkedin:hover {
+    background: #094D92;
+}
+
+.btn-linkedin:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.connect-note {
+    margin-top: var(--space-lg);
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+}
+
+.connect-note a {
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Connected State */
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-xl);
+    text-align: left;
+}
+
+.account-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #0A66C2;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.account-details {
+    flex: 1;
+}
+
+.account-details h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.account-details p {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--color-primary);
+}
+
+.check-icon {
+    color: var(--color-success);
+}
+
+/* Limits Section */
+.limits-section {
+    margin-bottom: var(--space-xl);
+}
+
+.limits-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.limits-header h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.limits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+}
+
+.limit-card {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+}
+
+.limit-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.limit-bar {
+    height: 6px;
+    background: var(--color-bg-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: var(--space-sm);
+}
+
+.limit-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.limit-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.6875rem;
+    color: var(--color-text-tertiary);
+}
+
+/* Account Actions */
+.account-actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.account-actions .btn {
+    flex: 1;
+}
+
+.btn-danger-outline {
+    background: transparent;
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+}
+
+.btn-danger-outline:hover {
+    background: #FEF2F2;
+}
+
+.connected-time {
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+}
+
+/* FAQ Section */
+.faq-section {
+    margin-top: var(--space-2xl);
+}
+
+.faq-section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.faq-item {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.faq-item summary {
+    padding: var(--space-md);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-item summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: var(--color-text-tertiary);
+}
+
+.faq-item[open] summary::after {
+    content: '−';
+}
+
+.faq-item p {
+    padding: 0 var(--space-md) var(--space-md);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+    .limits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-actions {
+        flex-direction: column;
+    }
+}
