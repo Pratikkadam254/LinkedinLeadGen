@@ -4,13 +4,21 @@ import './CTASection.css'
 
 function CTASection() {
     return (
-        <section className="final-cta" aria-labelledby="cta-heading">
-            <div className="final-cta-inner">
-                <h2 id="cta-heading">Make pipeline predictable.</h2>
-                <Link to="/signup" className="btn btn-cta btn-lg">
-                    Book a Demo
-                    <ArrowRight size={18} className="arrow" aria-hidden="true" />
-                </Link>
+        <section id="cta" className="cta-section" aria-labelledby="cta-heading">
+            <div className="container">
+                <div className="cta-card">
+                    <div className="cta-content">
+                        <h2 id="cta-heading">Ready to Transform Your Lead Generation?</h2>
+                        <p>
+                            Join hundreds of B2B professionals using LeadFlow AI
+                            to build meaningful connections at scale.
+                        </p>
+                        <Link to="/signup" className="btn btn-cta btn-lg">
+                            Start Free Trial
+                            <ArrowRight size={18} className="arrow" aria-hidden="true" />
+                        </Link>
+                    </div>
+                </div>
             </div>
         </section>
     )

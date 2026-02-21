@@ -8,8 +8,6 @@ import OnboardingPage from './pages/OnboardingPage'
 import UploadPage from './pages/UploadPage'
 import LeadsPage from './pages/LeadsPage'
 import ConnectPage from './pages/ConnectPage'
-import StrategyPage from './pages/StrategyPage'
-import CampaignsPage from './pages/CampaignsPage'
 
 // Get the Clerk publishable key from environment
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -106,32 +104,6 @@ function ClerkProviderWithRoutes() {
                         <>
                             <SignedIn>
                                 <ConnectPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/strategy"
-                    element={
-                        <>
-                            <SignedIn>
-                                <StrategyPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/campaigns"
-                    element={
-                        <>
-                            <SignedIn>
-                                <CampaignsPage />
                             </SignedIn>
                             <SignedOut>
                                 <SignInPage />

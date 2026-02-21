@@ -1,71 +1,37 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import Logo from '../ui/Logo'
 import './Header.css'
 
-const navLinks = [
-    { label: 'Home', href: '#hero' },
-    { label: 'Features', href: '#features' },
-    { label: 'How it works', href: '#how-it-works' },
-    { label: 'Pricing', href: '#pricing' },
-]
-
 function Header() {
-    const [mobileOpen, setMobileOpen] = useState(false)
-
     return (
         <header className="header" role="banner">
-            <div className="header-pill" aria-label="Main navigation">
+            <nav className="container header-nav" aria-label="Main navigation">
                 <Link to="/" className="header-logo" aria-label="LeadFlow AI - Home">
                     <Logo />
                     <span>LeadFlow AI</span>
                 </Link>
 
-                <nav className="header-nav">
-                    <ul className="header-links" role="list">
-                        {navLinks.map(link => (
-                            <li key={link.href}>
-                                <a href={link.href}>{link.label}</a>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                <ul className="header-links" role="list">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#stats">Results</a></li>
+                    <li><a href="#cta">Pricing</a></li>
+                </ul>
 
                 <div className="header-actions">
-                    <Link to="/signup" className="btn btn-primary btn-sm">
-                        Get started
+                    <Link to="/signin" className="btn btn-text">Sign In</Link>
+                    <Link to="/signup" className="btn btn-primary">
+                        Start Free Trial
                     </Link>
                     <button
                         className="mobile-menu-btn"
-                        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                        aria-expanded={mobileOpen}
-                        onClick={() => setMobileOpen(!mobileOpen)}
+                        aria-label="Open navigation menu"
+                        aria-expanded="false"
                     >
-                        {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+                        <Menu size={24} aria-hidden="true" />
                     </button>
                 </div>
-            </div>
-
-            {/* Mobile menu */}
-            {mobileOpen && (
-                <div className="mobile-menu">
-                    <nav>
-                        <ul role="list">
-                            {navLinks.map(link => (
-                                <li key={link.href}>
-                                    <a href={link.href} onClick={() => setMobileOpen(false)}>
-                                        {link.label}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                        <Link to="/signup" className="btn btn-primary btn-mobile-cta" onClick={() => setMobileOpen(false)}>
-                            Get started
-                        </Link>
-                    </nav>
-                </div>
-            )}
+            </nav>
         </header>
     )
 }
