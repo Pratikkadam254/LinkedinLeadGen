@@ -1,0 +1,111 @@
+.pricing-section {
+    padding: 100px 0;
+    background: var(--color-bg-primary);
+}
+
+.pricing-card-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.pricing-card {
+    max-width: 480px;
+    width: 100%;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-2xl);
+    padding: 40px 36px;
+    text-align: center;
+    position: relative;
+    box-shadow:
+        0 0 0 1px rgba(59, 130, 246, 0.08),
+        0 12px 48px rgba(0, 0, 0, 0.08);
+    transition:
+        transform var(--transition-slow),
+        box-shadow var(--transition-slow);
+}
+
+.pricing-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 0 0 1px rgba(59, 130, 246, 0.15),
+        0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.pricing-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.pricing-plan {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+.pricing-model {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 28px;
+}
+
+.pricing-cta {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.pricing-features {
+    list-style: none;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.pricing-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.pricing-check {
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pricing-note {
+    font-size: 0.813rem;
+    color: var(--color-text-tertiary);
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border-light);
+    font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .pricing-section {
+        padding: 64px 0;
+    }
+
+    .pricing-card {
+        padding: 32px 24px;
+    }
+}

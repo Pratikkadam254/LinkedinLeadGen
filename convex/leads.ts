@@ -1,6 +1,40 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalQuery, internalMutation } from "./_generated/server";
 import { Id } from "./_generated/dataModel";
+
+export const getPendingLeadsForCampaign = internalQuery({
+    args: { campaignId: v.id("campaigns"), limit: v.number() },
+    handler: async (ctx, args) => {
+        // MVP: Just find leads with 'pending' status and no generated message
+        return await ctx.db
+            .query("leads")
+            .withIndex("by_campaign", (q) => q.eq("campaignId", args.campaignId))
+            .filter((q) => q.eq(q.field("outreachStatus"), "pending"))
+            .filter((q) => q.eq(q.field("messageStatus"), "empty"))
+            .take(args.limit);
+    },
+});
+
+export const updateGeneratedMessage = internalMutation({
+    args: { leadId: v.id("leads"), message: v.string(), status: v.union(v.literal("draft"), v.literal("ready")) },
+    handler: async (ctx, args) => {
+        await ctx.db.patch(args.leadId, {
+            generatedMessage: args.message,
+            messageStatus: args.status,
+            updatedAt: Date.now(),
+        });
+
+        const lead = await ctx.db.get(args.leadId);
+        if (lead) {
+            await ctx.db.insert("activities", {
+                userId: lead.userId,
+                leadId: lead._id,
+                type: "message_generated",
+                createdAt: Date.now(),
+            });
+        }
+    },
+});
 
 // Get all leads for a user
 export const listByUser = query({
@@ -114,6 +148,8 @@ export const create = mutation({
             email: args.email,
             score,
             scoreTier,
+            bookingStatus: "not_booked",
+            potentialValue: 0,
             postScraped: false,
             messageStatus: "empty",
             outreachStatus: "pending",
@@ -172,6 +208,8 @@ export const bulkCreate = mutation({
                 ...lead,
                 score,
                 scoreTier,
+                bookingStatus: "not_booked",
+                potentialValue: 0,
                 postScraped: false,
                 messageStatus: "empty",
                 outreachStatus: "pending",

@@ -1,0 +1,147 @@
+.strategy-page {
+    min-height: 100vh;
+    background-color: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+}
+
+.empty-strategy-state {
+    text-align: center;
+    padding: 4rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-top: 2rem;
+}
+
+.empty-strategy-state h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.empty-strategy-state p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.strategy-view {
+    padding: 2rem 0;
+}
+
+.strategy-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.strategy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.strategy-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.strategy-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.markdown-preview pre {
+    white-space: pre-wrap;
+    font-family: inherit;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Wizard */
+.wizard-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.wizard-steps {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.step {
+    margin-right: 2rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.step.active {
+    color: var(--primary);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-family: inherit;
+}
+
+.form-group textarea:focus,
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.generated-preview {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--primary-dark);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-family: monospace;
+    margin-bottom: 1.5rem;
+    resize: vertical;
+}
+
+.btn-success {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.btn-success:hover {
+    background: #059669;
+}

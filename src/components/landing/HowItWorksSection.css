@@ -1,0 +1,178 @@
+.how-it-works {
+    padding: 100px 0;
+    background: var(--color-bg-primary);
+}
+
+/* Step Tabs */
+.step-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+}
+
+.step-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition:
+        background-color var(--transition-base),
+        border-color var(--transition-base),
+        color var(--transition-base),
+        box-shadow var(--transition-base);
+}
+
+.step-tab:hover {
+    border-color: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.step-tab.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+    box-shadow: var(--shadow-blue);
+}
+
+/* Step Content */
+.step-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    padding: 40px;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border-light);
+    animation: fadeIn 0.3s ease;
+}
+
+.step-number {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+}
+
+.step-text h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+}
+
+.step-text>p {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.step-details {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.step-details li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.check-icon {
+    color: var(--color-success);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Step Visual */
+.step-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step-illustration {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, var(--color-primary-lighter) 0%, var(--color-bg-tertiary) 100%);
+    border-radius: var(--radius-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--color-primary);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.step-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .how-it-works {
+        padding: 80px 0;
+    }
+
+    .step-tabs {
+        gap: 6px;
+    }
+
+    .step-tab {
+        padding: 8px 14px;
+        font-size: 0.813rem;
+    }
+
+    .step-tab span {
+        display: none;
+    }
+
+    .step-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 28px;
+    }
+
+    .step-visual {
+        order: -1;
+    }
+}
+
+@media (max-width: 480px) {
+    .step-content {
+        padding: 20px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

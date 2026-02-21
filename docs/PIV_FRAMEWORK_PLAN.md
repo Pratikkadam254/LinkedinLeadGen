@@ -783,9 +783,15 @@ npx convex deploy --prod
   - [ ] Add sign-in/sign-up pages
   - [ ] Protect routes
   
-- [ ] Day 7: Testing & Documentation
-  - [ ] Test auth flow
-  - [ ] Document setup process
+- [x] Day 7: Testing & Documentation
+  - [x] Test auth flow
+  - [x] Document setup process
+
+### Backend: Strategy & Campaigns (Phase 2 Start)
+- [x] `convex/schema.ts`: Added strategies and campaigns tables
+- [x] `convex/actions/strategy.ts`: AI Agents for ICP & Offer
+- [x] `convex/strategies.ts`: CRUD for Strategies
+- [x] `convex/campaigns.ts`: CRUD for Campaigns
 
 ---
 
