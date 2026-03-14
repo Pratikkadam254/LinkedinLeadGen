@@ -51,6 +51,23 @@ export interface ConnectionStatus {
     respondedAt?: string
 }
 
+export interface ProfileData {
+    firstName: string
+    lastName: string
+    title: string
+    company: string
+    linkedInUrl: string
+    email?: string
+    followers?: number
+    location?: string
+}
+
+export interface SearchCriteria {
+    title?: string
+    industry?: string
+    location?: string
+}
+
 // Webhook event types
 export type WebhookEventType =
     | 'connection.accepted'
@@ -216,6 +233,55 @@ class UnipileService {
         }
 
         return results
+    }
+
+    // Lookup a LinkedIn profile by URL
+    async lookupProfile(linkedInUrl: string): Promise<UnipileResponse<ProfileData>> {
+        if (!this.config) {
+            return {
+                success: false,
+                error: { code: 'NOT_INITIALIZED', message: 'Unipile not initialized' },
+            }
+        }
+
+        // In production, calls Unipile API to scrape profile
+        await this.simulateDelay(1500)
+
+        const mockProfile: ProfileData = {
+            firstName: 'Alex',
+            lastName: 'Morgan',
+            title: 'VP of Sales',
+            company: 'TechCorp',
+            linkedInUrl,
+            email: 'alex.morgan@techcorp.com',
+            followers: 2400,
+            location: 'San Francisco, CA',
+        }
+
+        console.log('[Unipile] Profile lookup:', linkedInUrl)
+        return { success: true, data: mockProfile }
+    }
+
+    // Search LinkedIn profiles by criteria
+    async searchProfiles(criteria: SearchCriteria): Promise<UnipileResponse<ProfileData[]>> {
+        if (!this.config) {
+            return {
+                success: false,
+                error: { code: 'NOT_INITIALIZED', message: 'Unipile not initialized' },
+            }
+        }
+
+        // In production, calls Unipile LinkedIn search API
+        await this.simulateDelay(2000)
+
+        const mockResults: ProfileData[] = [
+            { firstName: 'Sarah', lastName: 'Chen', title: criteria.title || 'Director', company: 'CloudScale', linkedInUrl: 'https://linkedin.com/in/sarah-chen', followers: 3200 },
+            { firstName: 'James', lastName: 'Park', title: criteria.title || 'Manager', company: 'DataFlow Inc', linkedInUrl: 'https://linkedin.com/in/james-park', followers: 1800 },
+            { firstName: 'Emily', lastName: 'Rodriguez', title: criteria.title || 'VP', company: 'GrowthCo', linkedInUrl: 'https://linkedin.com/in/emily-rodriguez', followers: 5100 },
+        ]
+
+        console.log('[Unipile] Profile search:', criteria)
+        return { success: true, data: mockResults }
     }
 
     // Get daily limits

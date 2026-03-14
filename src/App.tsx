@@ -5,6 +5,7 @@ import SignInPage from './pages/SignInPage'
 import SignUpPage from './pages/SignUpPage'
 import DashboardPage from './pages/DashboardPage'
 import OnboardingPage from './pages/OnboardingPage'
+import OnboardingFlowPage from './pages/OnboardingFlowPage'
 import UploadPage from './pages/UploadPage'
 import LeadsPage from './pages/LeadsPage'
 import ApprovalPage from './pages/ApprovalPage'
@@ -30,7 +31,8 @@ function ClerkProviderWithRoutes() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/signin" element={<SignInPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
-                <Route path="/onboarding" element={<OnboardingPage />} />
+                <Route path="/onboarding/*" element={<OnboardingFlowPage />} />
+                <Route path="/onboarding-legacy" element={<OnboardingPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/dashboard/upload" element={<UploadPage />} />
                 <Route path="/dashboard/leads" element={<LeadsPage />} />
@@ -52,9 +54,10 @@ function ClerkProviderWithRoutes() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/signin/*" element={<SignInPage />} />
                 <Route path="/signup/*" element={<SignUpPage />} />
+                <Route path="/onboarding/*" element={<OnboardingFlowPage />} />
 
                 {/* Protected routes */}
-                <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+                <Route path="/onboarding-legacy" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
                 <Route path="/dashboard/upload" element={<ProtectedRoute><UploadPage /></ProtectedRoute>} />
                 <Route path="/dashboard/leads" element={<ProtectedRoute><LeadsPage /></ProtectedRoute>} />

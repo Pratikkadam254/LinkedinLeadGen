@@ -1,0 +1,32 @@
+.onboarding-step {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.step-active {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.step-exit-left {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.step-exit-right {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.step-enter-right {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: none;
+}
+
+.step-enter-left {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: none;
+}

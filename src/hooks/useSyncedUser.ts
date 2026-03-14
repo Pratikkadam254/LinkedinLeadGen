@@ -6,6 +6,7 @@ import { Id } from '../../convex/_generated/dataModel';
 
 interface UserPreferences {
     primaryGoal?: string;
+    role?: string;
     targetIndustries?: string[];
     targetCompanySize?: string;
     targetTitles?: string[];

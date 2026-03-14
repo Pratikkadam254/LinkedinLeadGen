@@ -13,8 +13,8 @@ function HeroSection() {
                     Upload your leads. AI writes personalized messages. You approve and send. That simple.
                 </p>
                 <div className="hero-cta">
-                    <Link to="/signup" className="hero-cta-primary">
-                        Get Started - $59/mo
+                    <Link to="/onboarding" className="hero-cta-primary">
+                        Get Started Free
                     </Link>
                     <a href="#how-it-works" className="hero-cta-secondary">
                         See how it works

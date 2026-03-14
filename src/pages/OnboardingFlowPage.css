@@ -1,0 +1,161 @@
+/* Onboarding Flow Page - Clean & Minimal Duolingo-style */
+
+.flow-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-primary);
+}
+
+/* Header */
+.flow-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-xl);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.flow-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.flow-skip-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+}
+
+.flow-skip-btn:hover {
+    color: var(--color-text-secondary);
+    background: var(--color-bg-secondary);
+}
+
+/* Main Content */
+.flow-main {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.flow-container {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.flow-content {
+    overflow: hidden;
+}
+
+/* Navigation Actions */
+.flow-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border-light);
+}
+
+.flow-btn {
+    padding: 12px 28px;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    font-family: var(--font-sans);
+}
+
+.flow-btn-back {
+    background: none;
+    border: 1px solid var(--color-border-medium);
+    color: var(--color-text-secondary);
+}
+
+.flow-btn-back:hover:not(:disabled) {
+    background: var(--color-bg-secondary);
+}
+
+.flow-btn-back:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.flow-btn-next {
+    background: var(--color-primary);
+    border: none;
+    color: white;
+    margin-left: auto;
+}
+
+.flow-btn-next:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+}
+
+.flow-btn-next:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Signup Screen */
+.flow-signup-screen {
+    text-align: center;
+}
+
+.flow-signup-screen h2 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.flow-signup-screen p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-lg);
+}
+
+.flow-clerk-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.flow-clerk-wrapper .clerk-root {
+    width: 100%;
+}
+
+.flow-clerk-wrapper .clerk-card {
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .flow-main {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    .flow-header {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    .flow-btn {
+        padding: 10px 20px;
+        font-size: 0.875rem;
+    }
+}
