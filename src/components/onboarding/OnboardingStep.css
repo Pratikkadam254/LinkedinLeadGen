@@ -1,0 +1,24 @@
+.onboarding-step {
+    /* No transition needed — animation handles entry */
+}
+
+@keyframes slideFadeIn {
+    from {
+        transform: translateX(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.step-slide-in {
+    animation: slideFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .step-slide-in {
+        animation: none;
+    }
+}

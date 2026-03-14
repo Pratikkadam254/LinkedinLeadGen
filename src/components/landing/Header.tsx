@@ -16,7 +16,7 @@ function Header() {
 
                 <div className="header-actions">
                     <Link to="/signin" className="header-signin">Sign In</Link>
-                    <Link to="/signup" className="header-cta">Get Started</Link>
+                    <Link to="/onboarding" className="header-cta">Get Started</Link>
                 </div>
             </nav>
         </header>

@@ -73,6 +73,7 @@ export const updatePreferences = mutation({
         clerkId: v.string(),
         preferences: v.object({
             primaryGoal: v.optional(v.string()),
+            role: v.optional(v.string()),
             targetIndustries: v.optional(v.array(v.string())),
             targetCompanySize: v.optional(v.string()),
             targetTitles: v.optional(v.array(v.string())),

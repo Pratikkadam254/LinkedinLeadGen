@@ -1,0 +1,143 @@
+.url-input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.url-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.url-back-btn:hover {
+    color: var(--color-primary);
+}
+
+.url-input-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.url-input-desc {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.url-input-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.url-input-row {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.url-input-field {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-family: var(--font-sans);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.url-input-field:focus {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
+}
+
+.url-remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    background: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.url-remove-btn:hover {
+    color: var(--color-error);
+    border-color: var(--color-error);
+}
+
+.url-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1px dashed var(--color-border-medium);
+    border-radius: var(--radius-md);
+    padding: 8px 14px;
+    color: var(--color-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.url-add-btn:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.url-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.url-submit-btn:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+}
+
+.url-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.url-success {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--color-success-light);
+    border-radius: var(--radius-md);
+    color: var(--color-success);
+    font-weight: 500;
+    font-size: 0.9375rem;
+}

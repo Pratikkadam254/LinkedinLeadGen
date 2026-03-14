@@ -12,7 +12,7 @@ function DashboardPage() {
 
     useEffect(() => {
         if (user.convexId && !user.onboardingCompleted) {
-            navigate('/onboarding')
+            navigate('/onboarding?step=post-signup')
         }
     }, [user.convexId, user.onboardingCompleted, navigate])
 

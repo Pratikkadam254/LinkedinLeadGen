@@ -13,6 +13,33 @@ export interface OnboardingAnswers {
 
 export const onboardingQuestions: OnboardingQuestion[] = [
     {
+        id: 'primaryGoal',
+        title: 'What do you want to achieve on LinkedIn?',
+        description: 'This helps us tailor everything to your specific goal.',
+        type: 'single',
+        required: true,
+        options: [
+            { value: 'book_meetings', label: 'Book more meetings' },
+            { value: 'grow_network', label: 'Grow my network' },
+            { value: 'find_clients', label: 'Find new clients' },
+            { value: 'build_partnerships', label: 'Build partnerships' },
+        ],
+    },
+    {
+        id: 'role',
+        title: 'What best describes you?',
+        description: 'We\'ll personalize your outreach based on your role.',
+        type: 'single',
+        required: true,
+        options: [
+            { value: 'sales', label: 'Sales Professional' },
+            { value: 'founder', label: 'Founder / CEO' },
+            { value: 'consultant', label: 'Consultant' },
+            { value: 'recruiter', label: 'Recruiter' },
+            { value: 'biz_dev', label: 'Business Development' },
+        ],
+    },
+    {
         id: 'targetIndustry',
         title: 'Which industries do you target?',
         description: 'Select all that apply to your ideal customer profile.',

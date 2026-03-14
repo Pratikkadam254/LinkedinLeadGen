@@ -1,0 +1,159 @@
+.aha-screen {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.aha-header {
+    text-align: center;
+}
+
+.aha-header svg {
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.aha-header h2 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.aha-header p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+/* Prospect Card */
+.aha-prospect-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+}
+
+.aha-prospect-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.aha-prospect-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.aha-prospect-name {
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-size: 0.9375rem;
+}
+
+.aha-prospect-title {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+.aha-prospect-company {
+    font-size: 0.8125rem;
+    color: var(--color-text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.aha-prospect-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+}
+
+.aha-score-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-success);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8125rem;
+}
+
+.aha-score-label {
+    font-size: 0.6875rem;
+    color: var(--color-success);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Message Card */
+.aha-message-card {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-card);
+}
+
+.aha-message-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--space-md);
+}
+
+.aha-message-body {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    min-height: 80px;
+}
+
+.typewriter-cursor {
+    display: inline-block;
+    animation: cursor-blink 0.7s step-end infinite;
+    color: var(--color-primary);
+    font-weight: 300;
+    margin-left: 1px;
+}
+
+@keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.aha-message-meta {
+    margin-top: var(--space-sm);
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+    text-align: right;
+    animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
