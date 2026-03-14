@@ -1,72 +1,24 @@
-import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { X, ExternalLink, RefreshCw, Linkedin, Sparkles, AlertCircle } from 'lucide-react'
+import { X, ExternalLink, Linkedin } from 'lucide-react'
 import { type Lead } from '../../data/mockLeads'
-import { calculateLeadScore, type ScoringResult } from '../../lib/scoring'
-import AIMessageGenerator from './AIMessageGenerator'
-import { unipileService } from '../../lib/unipile'
-import { useToast } from '../ui/Toast'
 import './LeadDetailPanel.css'
 
 interface LeadDetailPanelProps {
     lead: Lead
     onClose: () => void
-    onStatusChange?: (leadId: string, status: Lead['outreachStatus']) => void
 }
 
-function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps) {
-    const { showToast } = useToast()
-
-
-    const isConnected = unipileService.isConnected()
-
-    // Calculate lead score
-    const scoringResult: ScoringResult = useMemo(() => {
-        return calculateLeadScore({
-            firstName: lead.firstName,
-            lastName: lead.lastName,
-            company: lead.company,
-            title: lead.title,
-            companySize: 100 + Math.floor(Math.random() * 200),
-            followers: 1000 + Math.floor(Math.random() * 4000),
-            lastPostDays: lead.postScraped ? Math.floor(Math.random() * 14) : 30,
-            postContent: lead.postScraped
-                ? 'Excited to share that we just closed our Series B! Looking forward to scaling...'
-                : undefined,
-            mutualConnections: Math.floor(Math.random() * 12),
-        })
-    }, [lead])
-
-    const handleSendMessage = async (message: string) => {
-        if (!isConnected) {
-            showToast('error', 'Please connect your LinkedIn account first')
-            return
-        }
-
-        try {
-            const result = await unipileService.sendConnectionRequest({
-                recipientUrl: lead.linkedInUrl,
-                message: message.slice(0, 300),
-            })
-
-            if (result.success) {
-                showToast('success', `Connection request sent to ${lead.firstName}!`)
-                onStatusChange?.(lead.id, 'sent')
-            } else {
-                showToast('error', result.error?.message || 'Failed to send message')
-            }
-        } catch {
-            showToast('error', 'An error occurred while sending')
-        }
+function LeadDetailPanel({ lead, onClose }: LeadDetailPanelProps) {
+    const getTierColor = (score: number) => {
+        if (score >= 75) return '#22C55E'
+        if (score >= 50) return '#F59E0B'
+        return '#6B7280'
     }
 
-    const getTierColor = (tier: string) => {
-        switch (tier) {
-            case 'hot': return '#22C55E'
-            case 'warm': return '#F59E0B'
-            case 'cold': return '#6B7280'
-            default: return '#6B7280'
-        }
+    const getTierLabel = (score: number) => {
+        if (score >= 75) return 'HOT'
+        if (score >= 50) return 'WARM'
+        return 'COLD'
     }
 
     return (
@@ -80,7 +32,6 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                 </div>
 
                 <div className="panel-content">
-                    {/* Profile Section */}
                     <div className="profile-section">
                         <div className="profile-avatar">
                             {lead.firstName[0]}{lead.lastName[0]}
@@ -95,142 +46,63 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                                 className="linkedin-link"
                             >
                                 <Linkedin size={14} />
-                                View LinkedIn Profile
+                                View Profile
                                 <ExternalLink size={12} />
                             </a>
                         </div>
                         <div className="overall-score">
                             <div
                                 className="score-circle"
-                                style={{
-                                    background: `linear-gradient(135deg, ${getTierColor(scoringResult.tier)}, ${getTierColor(scoringResult.tier)}99)`
-                                }}
+                                style={{ background: getTierColor(lead.score) }}
                             >
-                                <span className="score-number">{scoringResult.totalScore}</span>
+                                <span className="score-number">{lead.score}</span>
                             </div>
-                            <span
-                                className="score-tier"
-                                style={{ color: getTierColor(scoringResult.tier) }}
-                            >
-                                {scoringResult.tier.toUpperCase()}
+                            <span className="score-tier" style={{ color: getTierColor(lead.score) }}>
+                                {getTierLabel(lead.score)}
                             </span>
                         </div>
                     </div>
 
-                    {/* AI Recommendation */}
-                    <div className="ai-recommendation">
-                        <Sparkles size={14} />
-                        <span>{scoringResult.recommendation}</span>
-                    </div>
-
-                    {/* Score Breakdown */}
-                    <div className="section">
-                        <h4>Score Breakdown</h4>
-                        <div className="score-breakdown">
-                            {scoringResult.breakdown.map((item, index) => (
-                                <div key={index} className="breakdown-row">
-                                    <div className="breakdown-header">
-                                        <span className="breakdown-label">{item.label}</span>
-                                        <span className="breakdown-value">{item.score}/{item.maxScore}</span>
-                                    </div>
-                                    <div className="breakdown-bar">
-                                        <div
-                                            className="breakdown-fill"
-                                            style={{ width: `${(item.score / item.maxScore) * 100}%` }}
-                                        ></div>
-                                    </div>
-                                    <span className="breakdown-reason">{item.reason}</span>
-                                </div>
-                            ))}
+                    {lead.email && (
+                        <div className="section">
+                            <h4>Contact</h4>
+                            <p>{lead.email}</p>
                         </div>
-                    </div>
+                    )}
 
-                    {/* Recent Posts */}
-                    <div className="section">
-                        <h4>Recent Posts</h4>
-                        {lead.postScraped ? (
-                            <div className="post-card">
-                                <p>"Excited to share that we've just closed our Series B! Looking forward to scaling our team and impact in 2026..."</p>
-                                <div className="post-meta">
-                                    <span>📅 3 days ago</span>
-                                    <span>❤️ 234</span>
-                                    <span>💬 45</span>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="empty-posts">
-                                <p>Posts not yet scraped</p>
-                                <button className="btn btn-secondary btn-sm">
-                                    <RefreshCw size={14} />
-                                    Scrape Posts
-                                </button>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* AI Message Generator (Gemini-powered) */}
-                    <div className="section">
-                        <AIMessageGenerator
-                            lead={{
-                                firstName: lead.firstName,
-                                lastName: lead.lastName,
-                                company: lead.company,
-                                title: lead.title,
-                                linkedInUrl: lead.linkedInUrl,
-                                score: scoringResult.totalScore,
-                                postContent: lead.postScraped
-                                    ? 'Excited to share that we just closed our Series B! Looking forward to scaling our team and impact in 2026...'
-                                    : undefined,
-                            }}
-                            onSend={handleSendMessage}
-                        />
-                    </div>
-
-                    {/* Status Info */}
                     <div className="section status-section">
                         <div className="status-row">
-                            <span className="status-label">Message Status:</span>
-                            <span className={`status-value ${lead.messageStatus === 'ready' ? 'ready' : 'draft'}`}>
-                                {lead.messageStatus === 'ready' ? '✓ Ready to Send' : '⟳ Draft'}
+                            <span className="status-label">Message:</span>
+                            <span className={`status-value ${lead.messageStatus}`}>
+                                {lead.messageStatus === 'approved' ? 'Approved' :
+                                 lead.messageStatus === 'draft' ? 'Draft' :
+                                 lead.messageStatus === 'sent' ? 'Sent' :
+                                 lead.messageStatus === 'empty' ? 'No message' : lead.messageStatus}
                             </span>
                         </div>
                         <div className="status-row">
-                            <span className="status-label">Outreach Status:</span>
+                            <span className="status-label">Outreach:</span>
                             <span className={`status-value outreach ${lead.outreachStatus}`}>
                                 {lead.outreachStatus.charAt(0).toUpperCase() + lead.outreachStatus.slice(1)}
                             </span>
                         </div>
-                        <div className="status-row">
-                            <span className="status-label">Unipile:</span>
-                            {isConnected ? (
-                                <span className="status-value connected">🟢 Connected</span>
-                            ) : (
-                                <Link to="/dashboard/connect" className="status-link">
-                                    <AlertCircle size={12} />
-                                    Connect LinkedIn
-                                </Link>
-                            )}
-                        </div>
                     </div>
+
+                    {lead.messageStatus !== 'empty' && (
+                        <div className="section">
+                            <h4>Actions</h4>
+                            <Link to="/dashboard/approve" className="btn btn-primary" style={{ width: '100%', textAlign: 'center' }}>
+                                Review & Approve Messages
+                            </Link>
+                        </div>
+                    )}
                 </div>
 
-                {/* Panel Footer */}
                 <div className="panel-footer">
-                    <div className="footer-status">
-                        <span className={`outreach-badge ${lead.outreachStatus}`}>
-                            {lead.outreachStatus.charAt(0).toUpperCase() + lead.outreachStatus.slice(1)}
-                        </span>
-                        {isConnected ? (
-                            <span className="connected-badge">🟢 LinkedIn Connected</span>
-                        ) : (
-                            <Link to="/dashboard/connect" className="btn btn-secondary btn-sm">
-                                Connect LinkedIn
-                            </Link>
-                        )}
-                    </div>
-                    <button className="btn btn-text" onClick={onClose}>
-                        Close
-                    </button>
+                    <span className={`outreach-badge ${lead.outreachStatus}`}>
+                        {lead.outreachStatus.charAt(0).toUpperCase() + lead.outreachStatus.slice(1)}
+                    </span>
+                    <button className="btn btn-text" onClick={onClose}>Close</button>
                 </div>
             </div>
         </div>
@@ -238,4 +110,3 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
 }
 
 export default LeadDetailPanel
-

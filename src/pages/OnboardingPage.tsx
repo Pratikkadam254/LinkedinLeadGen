@@ -1,15 +1,24 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useMutation } from 'convex/react'
+import { api } from '../../convex/_generated/api'
 import Logo from '../components/ui/Logo'
 import OnboardingProgress from '../components/onboarding/OnboardingProgress'
 import OnboardingQuestion from '../components/onboarding/OnboardingQuestion'
 import { onboardingQuestions, type OnboardingAnswers } from '../data/onboardingQuestions'
+import { useSyncedUser } from '../hooks'
+import { useToast } from '../components/ui/Toast'
 import './OnboardingPage.css'
 
 function OnboardingPage() {
     const navigate = useNavigate()
     const [currentStep, setCurrentStep] = useState(0)
     const [answers, setAnswers] = useState<OnboardingAnswers>({})
+    const [saving, setSaving] = useState(false)
+
+    const syncedUser = useSyncedUser()
+    const updatePreferences = useMutation(api.users.updatePreferences)
+    const { showToast } = useToast()
 
     const totalSteps = onboardingQuestions.length
     const currentQuestion = onboardingQuestions[currentStep]
@@ -18,14 +27,34 @@ function OnboardingPage() {
         setAnswers(prev => ({ ...prev, [questionId]: value }))
     }
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (currentStep < totalSteps - 1) {
             setCurrentStep(prev => prev + 1)
         } else {
-            // Onboarding complete - save answers and go to dashboard
-            console.log('Onboarding answers:', answers)
-            // TODO: Save to Convex
-            navigate('/dashboard')
+            // Save preferences to Convex
+            if (!syncedUser.clerkId) {
+                showToast('error', 'Please sign in to save preferences')
+                return
+            }
+
+            setSaving(true)
+            try {
+                await updatePreferences({
+                    clerkId: syncedUser.clerkId,
+                    preferences: {
+                        targetIndustries: answers.targetIndustry as string[] || [],
+                        targetCompanySize: answers.companySize as string || '',
+                        targetTitles: answers.targetTitles as string[] || [],
+                        messageTone: answers.messageTone as string || 'professional',
+                    },
+                })
+                showToast('success', 'ICP saved! Let\'s upload some leads.')
+                navigate('/dashboard/upload')
+            } catch {
+                showToast('error', 'Failed to save preferences. Please try again.')
+            } finally {
+                setSaving(false)
+            }
         }
     }
 
@@ -53,15 +82,15 @@ function OnboardingPage() {
                     <span>LeadFlow AI</span>
                 </Link>
                 <button onClick={handleSkip} className="skip-btn">
-                    Skip & Upload Leads →
+                    Skip for now
                 </button>
             </header>
 
             <main className="onboarding-main">
                 <div className="onboarding-container">
                     <div className="onboarding-intro">
-                        <h1>Let's personalize your experience</h1>
-                        <p>Answer a few questions to customize your lead generation workflow.</p>
+                        <h1>Define Your Ideal Customer</h1>
+                        <p>Tell us who you want to reach. This helps AI score your leads and write better messages.</p>
                     </div>
 
                     <OnboardingProgress
@@ -82,21 +111,17 @@ function OnboardingPage() {
                                 className="btn btn-text"
                                 disabled={currentStep === 0}
                             >
-                                ← Back
+                                Back
                             </button>
                             <button
                                 onClick={handleNext}
                                 className="btn btn-primary btn-lg"
-                                disabled={!canContinue}
+                                disabled={!canContinue || saving}
                             >
-                                {isLastStep ? 'Complete Setup →' : 'Continue →'}
+                                {saving ? 'Saving...' : isLastStep ? 'Complete Setup' : 'Continue'}
                             </button>
                         </div>
                     </div>
-
-                    <p className="onboarding-tip">
-                        💡 You can always change these settings later in your preferences.
-                    </p>
                 </div>
             </main>
         </div>

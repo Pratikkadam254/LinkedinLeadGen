@@ -1,49 +1,40 @@
 import { Link } from 'react-router-dom'
-import { Check, ArrowRight } from 'lucide-react'
-import DashboardPreview from './DashboardPreview'
+import { Check } from 'lucide-react'
 import './HeroSection.css'
 
 function HeroSection() {
     return (
         <section className="hero" aria-labelledby="hero-heading">
-            <div className="container">
-                <div className="hero-content">
-                    <div className="hero-text">
-                        <h1 id="hero-heading">
-                            Transform LinkedIn Connections Into{' '}
-                            <span className="text-primary">Qualified Leads</span>
-                        </h1>
-                        <p className="hero-subtitle">
-                            AI-powered lead generation that feels human. Build meaningful
-                            relationships at scale without losing authenticity.
-                        </p>
-                        <div className="hero-cta">
-                            <Link to="/signup" className="btn btn-primary btn-lg">
-                                Start Free Trial
-                                <ArrowRight size={18} className="arrow" aria-hidden="true" />
-                            </Link>
-                            <a href="#features" className="btn btn-secondary btn-lg">
-                                See How It Works
-                            </a>
-                        </div>
-                        <div className="trust-badges" aria-label="Benefits">
-                            <span>
-                                <Check size={16} aria-hidden="true" />
-                                7-day free trial
-                            </span>
-                            <span>
-                                <Check size={16} aria-hidden="true" />
-                                No credit card required
-                            </span>
-                            <span>
-                                <Check size={16} aria-hidden="true" />
-                                Setup in 5 minutes
-                            </span>
-                        </div>
-                    </div>
-                    <div className="hero-image" aria-hidden="true">
-                        <DashboardPreview />
-                    </div>
+            <div className="hero-container">
+                <h1 id="hero-heading" className="hero-headline">
+                    LinkedIn outreach that actually works.
+                </h1>
+                <p className="hero-subtitle">
+                    Upload your leads. AI writes personalized messages. You approve and send. That simple.
+                </p>
+                <div className="hero-cta">
+                    <Link to="/signup" className="hero-cta-primary">
+                        Get Started - $59/mo
+                    </Link>
+                    <a href="#how-it-works" className="hero-cta-secondary">
+                        See how it works
+                    </a>
+                </div>
+                <div className="hero-trust" aria-label="Benefits">
+                    <span className="hero-trust-item">
+                        <Check size={16} aria-hidden="true" />
+                        No free trial needed
+                    </span>
+                    <span className="hero-trust-divider" aria-hidden="true">|</span>
+                    <span className="hero-trust-item">
+                        <Check size={16} aria-hidden="true" />
+                        Cancel anytime
+                    </span>
+                    <span className="hero-trust-divider" aria-hidden="true">|</span>
+                    <span className="hero-trust-item">
+                        <Check size={16} aria-hidden="true" />
+                        Setup in 5 minutes
+                    </span>
                 </div>
             </div>
         </section>

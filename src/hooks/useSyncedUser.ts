@@ -4,6 +4,15 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { Id } from '../../convex/_generated/dataModel';
 
+interface UserPreferences {
+    primaryGoal?: string;
+    targetIndustries?: string[];
+    targetCompanySize?: string;
+    targetTitles?: string[];
+    weeklyVolume?: string;
+    messageTone?: string;
+}
+
 interface SyncedUser {
     clerkId: string;
     convexId: Id<"users"> | null;
@@ -15,6 +24,9 @@ interface SyncedUser {
     isSignedIn: boolean;
     onboardingCompleted: boolean;
     unipileConnected: boolean;
+    preferences: UserPreferences | null;
+    plan: "free" | "pro" | "elite" | null;
+    subscriptionStatus: string | null;
 }
 
 /**
@@ -67,6 +79,9 @@ export function useSyncedUser(): SyncedUser {
         isSignedIn: !!isSignedIn,
         onboardingCompleted: convexUser?.onboardingCompleted || false,
         unipileConnected: convexUser?.unipileConnected || false,
+        preferences: (convexUser?.preferences as UserPreferences) || null,
+        plan: (convexUser?.plan as "free" | "pro" | "elite") || null,
+        subscriptionStatus: (convexUser?.subscriptionStatus as string) || null,
     };
 }
 

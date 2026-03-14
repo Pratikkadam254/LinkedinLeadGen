@@ -37,6 +37,17 @@ export function useLeadsStats(userId: Id<"users"> | undefined) {
     );
 }
 
+// Hook to get leads by message status
+export function useLeadsByMessageStatus(
+    userId: Id<"users"> | undefined,
+    messageStatus: "empty" | "draft" | "approved" | "ready" | "sent"
+) {
+    return useQuery(
+        api.leads.listByMessageStatus,
+        userId ? { userId, messageStatus } : "skip"
+    );
+}
+
 // Hook for lead mutations
 export function useLeadMutations() {
     const createLead = useMutation(api.leads.create);
@@ -48,6 +59,7 @@ export function useLeadMutations() {
     const updateOutreachStatus = useMutation(api.leads.updateOutreachStatus);
     const removeLead = useMutation(api.leads.remove);
     const bulkRemoveLeads = useMutation(api.leads.bulkRemove);
+    const bulkApprove = useMutation(api.leads.bulkApprove);
 
     return {
         createLead,
@@ -59,5 +71,6 @@ export function useLeadMutations() {
         updateOutreachStatus,
         removeLead,
         bulkRemoveLeads,
+        bulkApprove,
     };
 }

@@ -27,6 +27,27 @@ export default defineSchema({
         unipileConnected: v.boolean(),
         unipileAccountId: v.optional(v.string()),
 
+        // Subscription / billing
+        plan: v.optional(v.union(v.literal("free"), v.literal("pro"), v.literal("elite"))),
+        stripeCustomerId: v.optional(v.string()),
+        stripeSubscriptionId: v.optional(v.string()),
+        subscriptionStatus: v.optional(v.union(
+            v.literal("active"),
+            v.literal("past_due"),
+            v.literal("canceled"),
+            v.literal("trialing")
+        )),
+        planLimits: v.optional(v.object({
+            leadsPerMonth: v.number(),
+            outreachPerMonth: v.number(),
+            linkedInAccounts: v.number(),
+        })),
+        currentMonthUsage: v.optional(v.object({
+            leadsUploaded: v.number(),
+            outreachSent: v.number(),
+            resetAt: v.number(),
+        })),
+
         createdAt: v.number(),
         updatedAt: v.number(),
     })
@@ -69,6 +90,7 @@ export default defineSchema({
         messageStatus: v.union(
             v.literal("empty"),
             v.literal("draft"),
+            v.literal("approved"),
             v.literal("ready"),
             v.literal("sent")
         ),

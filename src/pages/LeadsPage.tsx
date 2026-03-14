@@ -1,12 +1,14 @@
 import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
-import { Search, Filter, Download, Upload, MoreHorizontal, Check } from 'lucide-react'
-import { UserButton as ClerkUserButton } from '@clerk/clerk-react'
-import Logo from '../components/ui/Logo'
+import { Link, useNavigate } from 'react-router-dom'
+import { Search, Filter, Upload, Check, Sparkles, Loader2 } from 'lucide-react'
+import { useAction } from 'convex/react'
+import { api } from '../../convex/_generated/api'
+import DashboardLayout from '../components/dashboard/DashboardLayout'
 import LeadsTable from '../components/dashboard/LeadsTable'
 import LeadDetailPanel from '../components/dashboard/LeadDetailPanel'
 import { useSyncedUser, useLeads } from '../hooks'
-import { mockLeads, type Lead } from '../data/mockLeads'
+import { useToast } from '../components/ui/Toast'
+import type { Lead } from '../data/mockLeads'
 import './LeadsPage.css'
 
 type SortField = 'name' | 'company' | 'score' | 'messageStatus' | 'outreachStatus'
@@ -19,16 +21,17 @@ function LeadsPage() {
     const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
     const [selectedLead, setSelectedLead] = useState<Lead | null>(null)
     const [filterStatus, setFilterStatus] = useState<string>('all')
+    const [isGenerating, setIsGenerating] = useState(false)
 
-    // Get user and leads from Convex
     const syncedUser = useSyncedUser()
     const convexLeads = useLeads(syncedUser.convexId || undefined)
-    const clerkConfigured = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+    const generateMessages = useAction(api.actions.generateMessages.generateForLeads)
+    const { showToast } = useToast()
+    const navigate = useNavigate()
 
-    // Convert Convex leads to our Lead type, or use mock data
     const leads: Lead[] = useMemo(() => {
         if (convexLeads && convexLeads.length > 0) {
-            return convexLeads.map(lead => ({
+            return convexLeads.map((lead: typeof convexLeads[number]) => ({
                 id: lead._id,
                 firstName: lead.firstName,
                 lastName: lead.lastName,
@@ -43,14 +46,11 @@ function LeadsPage() {
                 createdAt: new Date(lead.createdAt).toISOString(),
             }))
         }
-        return mockLeads
+        return []
     }, [convexLeads])
 
-    // Filter and sort leads
     const filteredLeads = useMemo(() => {
         let result = [...leads]
-
-        // Search filter
         if (searchQuery) {
             const query = searchQuery.toLowerCase()
             result = result.filter(lead =>
@@ -60,47 +60,21 @@ function LeadsPage() {
                 lead.title.toLowerCase().includes(query)
             )
         }
-
-        // Status filter
         if (filterStatus !== 'all') {
             result = result.filter(lead => lead.outreachStatus === filterStatus)
         }
-
-        // Sort
         result.sort((a, b) => {
             let aVal: string | number = ''
             let bVal: string | number = ''
-
             switch (sortField) {
-                case 'name':
-                    aVal = `${a.firstName} ${a.lastName}`
-                    bVal = `${b.firstName} ${b.lastName}`
-                    break
-                case 'company':
-                    aVal = a.company
-                    bVal = b.company
-                    break
-                case 'score':
-                    aVal = a.score
-                    bVal = b.score
-                    break
-                case 'messageStatus':
-                    aVal = a.messageStatus
-                    bVal = b.messageStatus
-                    break
-                case 'outreachStatus':
-                    aVal = a.outreachStatus
-                    bVal = b.outreachStatus
-                    break
+                case 'name': aVal = `${a.firstName} ${a.lastName}`; bVal = `${b.firstName} ${b.lastName}`; break
+                case 'company': aVal = a.company; bVal = b.company; break
+                case 'score': aVal = a.score; bVal = b.score; break
+                case 'messageStatus': aVal = a.messageStatus; bVal = b.messageStatus; break
+                case 'outreachStatus': aVal = a.outreachStatus; bVal = b.outreachStatus; break
             }
-
-            if (sortDirection === 'asc') {
-                return aVal < bVal ? -1 : aVal > bVal ? 1 : 0
-            } else {
-                return aVal > bVal ? -1 : aVal < bVal ? 1 : 0
-            }
+            return sortDirection === 'asc' ? (aVal < bVal ? -1 : 1) : (aVal > bVal ? -1 : 1)
         })
-
         return result
     }, [leads, searchQuery, filterStatus, sortField, sortDirection])
 
@@ -114,188 +88,159 @@ function LeadsPage() {
 
     const handleSelectOne = (id: string) => {
         const newSelected = new Set(selectedIds)
-        if (newSelected.has(id)) {
-            newSelected.delete(id)
-        } else {
-            newSelected.add(id)
-        }
+        if (newSelected.has(id)) newSelected.delete(id)
+        else newSelected.add(id)
         setSelectedIds(newSelected)
     }
 
     const handleSort = (field: SortField) => {
-        if (sortField === field) {
-            setSortDirection(d => d === 'asc' ? 'desc' : 'asc')
-        } else {
-            setSortField(field)
-            setSortDirection('desc')
+        if (sortField === field) setSortDirection(d => d === 'asc' ? 'desc' : 'asc')
+        else { setSortField(field); setSortDirection('desc') }
+    }
+
+    const handleGenerateMessages = async () => {
+        if (!syncedUser.convexId) return
+
+        const ids = selectedIds.size > 0
+            ? Array.from(selectedIds)
+            : filteredLeads.filter(l => l.messageStatus === 'empty').map(l => l.id)
+
+        if (ids.length === 0) {
+            showToast('error', 'No leads without messages to generate for')
+            return
         }
-    }
 
-    const handleRowClick = (lead: Lead) => {
-        setSelectedLead(lead)
-    }
-
-    const handleClosePanel = () => {
-        setSelectedLead(null)
+        setIsGenerating(true)
+        try {
+            await generateMessages({
+                userId: syncedUser.convexId,
+                leadIds: ids as any,
+                tone: syncedUser.preferences?.messageTone || 'professional',
+            })
+            showToast('success', `Generated messages for ${ids.length} leads!`)
+            navigate('/dashboard/approve')
+        } catch (error) {
+            showToast('error', 'Failed to generate messages. Check your API key.')
+        } finally {
+            setIsGenerating(false)
+        }
     }
 
     const allSelected = filteredLeads.length > 0 && selectedIds.size === filteredLeads.length
     const someSelected = selectedIds.size > 0
     const isLoading = syncedUser.isSignedIn && convexLeads === undefined
+    const emptyLeadCount = leads.filter(l => l.messageStatus === 'empty').length
 
     return (
-        <div className="leads-page">
-            <header className="leads-header">
-                <div className="leads-header-left">
-                    <Link to="/dashboard" className="leads-logo">
-                        <Logo />
-                        <span>LeadFlow AI</span>
-                    </Link>
-                </div>
-                <nav className="leads-nav">
-                    <Link to="/dashboard" className="nav-link">Dashboard</Link>
-                    <Link to="/dashboard/leads" className="nav-link active">Leads</Link>
-                    <Link to="/dashboard/connect" className="nav-link">Connect</Link>
-                </nav>
-                <div className="leads-header-right">
-                    {clerkConfigured ? (
-                        <ClerkUserButton afterSignOutUrl="/" />
-                    ) : (
-                        <div className="user-avatar">U</div>
-                    )}
-                </div>
-            </header>
-
-            <main className="leads-main">
-                <div className="leads-container">
-                    {/* Page Header */}
-                    <div className="leads-page-header">
-                        <div className="leads-title">
-                            <h1>Leads</h1>
-                            <span className="leads-count">
-                                {isLoading ? 'Loading...' : `${filteredLeads.length} leads`}
-                            </span>
-                            {convexLeads && convexLeads.length > 0 && (
-                                <span className="data-source live">● Live</span>
-                            )}
-                        </div>
-                        <div className="leads-actions">
-                            <Link to="/dashboard/upload" className="btn btn-secondary">
-                                <Upload size={16} />
-                                Import
-                            </Link>
-                            <button className="btn btn-text">
-                                <Download size={16} />
-                                Export
-                            </button>
-                        </div>
+        <DashboardLayout>
+            <div className="leads-container">
+                <div className="leads-page-header">
+                    <div className="leads-title">
+                        <h1>Leads</h1>
+                        <span className="leads-count">
+                            {isLoading ? 'Loading...' : `${filteredLeads.length} leads`}
+                        </span>
                     </div>
-
-                    {/* Toolbar */}
-                    <div className="leads-toolbar">
-                        <div className="toolbar-left">
-                            <div className="search-box">
-                                <Search size={18} />
-                                <input
-                                    type="text"
-                                    placeholder="Search leads..."
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                            </div>
-                            <div className="filter-group">
-                                <Filter size={16} />
-                                <select
-                                    value={filterStatus}
-                                    onChange={(e) => setFilterStatus(e.target.value)}
-                                >
-                                    <option value="all">All Status</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="sent">Sent</option>
-                                    <option value="accepted">Accepted</option>
-                                    <option value="replied">Replied</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        {someSelected && (
-                            <div className="toolbar-right bulk-actions">
-                                <span className="selected-count">{selectedIds.size} selected</span>
-                                <button className="btn btn-primary btn-sm">
-                                    Generate Messages
-                                </button>
-                                <button className="btn btn-secondary btn-sm">
-                                    <Check size={14} />
-                                    Approve All
-                                </button>
-                                <button className="btn btn-text btn-sm">
-                                    <MoreHorizontal size={16} />
-                                </button>
-                            </div>
+                    <div className="leads-actions">
+                        <Link to="/dashboard/upload" className="btn btn-secondary">
+                            <Upload size={16} /> Import
+                        </Link>
+                        {emptyLeadCount > 0 && (
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleGenerateMessages}
+                                disabled={isGenerating}
+                            >
+                                {isGenerating ? (
+                                    <><Loader2 size={16} className="spin-icon" /> Generating...</>
+                                ) : (
+                                    <><Sparkles size={16} /> Generate All Messages ({emptyLeadCount})</>
+                                )}
+                            </button>
                         )}
                     </div>
+                </div>
 
-                    {/* Loading State */}
-                    {isLoading && (
-                        <div className="loading-state">
-                            <div className="spinner"></div>
-                            <p>Loading leads...</p>
+                <div className="leads-toolbar">
+                    <div className="toolbar-left">
+                        <div className="search-box">
+                            <Search size={18} />
+                            <input
+                                type="text"
+                                placeholder="Search leads..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
                         </div>
-                    )}
-
-                    {/* Empty State */}
-                    {!isLoading && filteredLeads.length === 0 && (
-                        <div className="empty-state">
-                            <div className="empty-icon">📋</div>
-                            <h3>No leads yet</h3>
-                            <p>Import your first leads to get started with AI-powered outreach.</p>
-                            <Link to="/dashboard/upload" className="btn btn-primary">
-                                <Upload size={16} />
-                                Import Leads
-                            </Link>
+                        <div className="filter-group">
+                            <Filter size={16} />
+                            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="sent">Sent</option>
+                                <option value="accepted">Accepted</option>
+                                <option value="replied">Replied</option>
+                            </select>
                         </div>
-                    )}
+                    </div>
 
-                    {/* Table */}
-                    {!isLoading && filteredLeads.length > 0 && (
-                        <LeadsTable
-                            leads={filteredLeads}
-                            selectedIds={selectedIds}
-                            allSelected={allSelected}
-                            sortField={sortField}
-                            sortDirection={sortDirection}
-                            onSelectAll={handleSelectAll}
-                            onSelectOne={handleSelectOne}
-                            onSort={handleSort}
-                            onRowClick={handleRowClick}
-                        />
-                    )}
-
-                    {/* Status Legend */}
-                    {filteredLeads.length > 0 && (
-                        <div className="status-legend">
-                            <span className="legend-item">
-                                <span className="status-dot pending"></span> Pending
-                            </span>
-                            <span className="legend-item">
-                                <span className="status-dot sent"></span> Sent
-                            </span>
-                            <span className="legend-item">
-                                <span className="status-dot accepted"></span> Accepted
-                            </span>
-                            <span className="legend-item">
-                                <span className="status-dot replied"></span> Replied
-                            </span>
+                    {someSelected && (
+                        <div className="toolbar-right bulk-actions">
+                            <span className="selected-count">{selectedIds.size} selected</span>
+                            <button
+                                className="btn btn-primary btn-sm"
+                                onClick={handleGenerateMessages}
+                                disabled={isGenerating}
+                            >
+                                {isGenerating ? <Loader2 size={14} className="spin-icon" /> : <Sparkles size={14} />}
+                                Generate Messages
+                            </button>
+                            <button
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => navigate('/dashboard/approve')}
+                            >
+                                <Check size={14} /> Review & Approve
+                            </button>
                         </div>
                     )}
                 </div>
-            </main>
 
-            {/* Detail Panel */}
+                {isLoading && (
+                    <div className="empty-state">
+                        <Loader2 size={32} className="spin-icon" />
+                        <p>Loading leads...</p>
+                    </div>
+                )}
+
+                {!isLoading && filteredLeads.length === 0 && (
+                    <div className="empty-state">
+                        <h3>No leads yet</h3>
+                        <p>Import your first leads to get started with AI-powered outreach.</p>
+                        <Link to="/dashboard/upload" className="btn btn-primary">
+                            <Upload size={16} /> Import Leads
+                        </Link>
+                    </div>
+                )}
+
+                {!isLoading && filteredLeads.length > 0 && (
+                    <LeadsTable
+                        leads={filteredLeads}
+                        selectedIds={selectedIds}
+                        allSelected={allSelected}
+                        sortField={sortField}
+                        sortDirection={sortDirection}
+                        onSelectAll={handleSelectAll}
+                        onSelectOne={handleSelectOne}
+                        onSort={handleSort}
+                        onRowClick={(lead) => setSelectedLead(lead)}
+                    />
+                )}
+            </div>
+
             {selectedLead && (
-                <LeadDetailPanel lead={selectedLead} onClose={handleClosePanel} />
+                <LeadDetailPanel lead={selectedLead} onClose={() => setSelectedLead(null)} />
             )}
-        </div>
+        </DashboardLayout>
     )
 }
 

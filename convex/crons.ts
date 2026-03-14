@@ -1,13 +1,8 @@
 import { cronJobs } from "convex/server";
-import { internal } from "./_generated/api";
 
 const crons = cronJobs();
 
-crons.interval(
-    "autopilot_processor",
-    { minutes: 5 }, // Run every 5 minutes
-    internal.actions.autopilot.processBatch,
-    {}
-);
+// Cron jobs removed - autopilot processor no longer needed
+// Future: Add scheduled outreach processing here
 
 export default crons;

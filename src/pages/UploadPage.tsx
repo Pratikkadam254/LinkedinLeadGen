@@ -81,9 +81,14 @@ function UploadPage() {
         setImportProgress(0)
 
         try {
-            // Score each lead before importing
+            // Score each lead before importing using ICP preferences
             const scoredLeads = parseResult.leads.map(lead => {
-                const scoreResult = scoreLead({ title: lead.title })
+                const scoreResult = scoreLead({
+                    title: lead.title,
+                    targetTitles: syncedUser.preferences?.targetTitles,
+                    targetIndustries: syncedUser.preferences?.targetIndustries,
+                    targetCompanySize: syncedUser.preferences?.targetCompanySize,
+                })
                 return { ...lead, score: scoreResult.score }
             })
 
@@ -104,6 +109,7 @@ function UploadPage() {
                         title: l.title,
                         linkedInUrl: l.linkedInUrl,
                         email: l.email,
+                        score: l.score,
                     })),
                     source: 'csv',
                 })

@@ -122,6 +122,140 @@ export const completeOnboarding = mutation({
     },
 });
 
+// Get user by ID
+export const getById = query({
+    args: { id: v.id("users") },
+    handler: async (ctx, args) => {
+        return await ctx.db.get(args.id);
+    },
+});
+
+// Update subscription (called by Stripe webhook)
+export const updateSubscription = mutation({
+    args: {
+        clerkId: v.string(),
+        plan: v.union(v.literal("free"), v.literal("pro"), v.literal("elite")),
+        stripeCustomerId: v.string(),
+        stripeSubscriptionId: v.string(),
+        subscriptionStatus: v.union(
+            v.literal("active"),
+            v.literal("past_due"),
+            v.literal("canceled"),
+            v.literal("trialing")
+        ),
+        planLimits: v.object({
+            leadsPerMonth: v.number(),
+            outreachPerMonth: v.number(),
+            linkedInAccounts: v.number(),
+        }),
+    },
+    handler: async (ctx, args) => {
+        const user = await ctx.db
+            .query("users")
+            .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+            .first();
+
+        if (!user) throw new Error("User not found");
+
+        await ctx.db.patch(user._id, {
+            plan: args.plan,
+            stripeCustomerId: args.stripeCustomerId,
+            stripeSubscriptionId: args.stripeSubscriptionId,
+            subscriptionStatus: args.subscriptionStatus,
+            planLimits: args.planLimits,
+            currentMonthUsage: user.currentMonthUsage || {
+                leadsUploaded: 0,
+                outreachSent: 0,
+                resetAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+            },
+            updatedAt: Date.now(),
+        });
+
+        return user._id;
+    },
+});
+
+// Cancel subscription
+export const cancelSubscription = mutation({
+    args: { stripeCustomerId: v.string() },
+    handler: async (ctx, args) => {
+        const users = await ctx.db.query("users").collect();
+        const user = users.find(u => u.stripeCustomerId === args.stripeCustomerId);
+        if (!user) return;
+
+        await ctx.db.patch(user._id, {
+            plan: "free",
+            subscriptionStatus: "canceled",
+            updatedAt: Date.now(),
+        });
+    },
+});
+
+// Increment usage counters
+export const incrementUsage = mutation({
+    args: {
+        userId: v.id("users"),
+        field: v.union(v.literal("leadsUploaded"), v.literal("outreachSent")),
+        amount: v.number(),
+    },
+    handler: async (ctx, args) => {
+        const user = await ctx.db.get(args.userId);
+        if (!user) throw new Error("User not found");
+
+        const now = Date.now();
+        let usage = user.currentMonthUsage || {
+            leadsUploaded: 0,
+            outreachSent: 0,
+            resetAt: now + 30 * 24 * 60 * 60 * 1000,
+        };
+
+        // Reset if past reset date
+        if (now > usage.resetAt) {
+            usage = {
+                leadsUploaded: 0,
+                outreachSent: 0,
+                resetAt: now + 30 * 24 * 60 * 60 * 1000,
+            };
+        }
+
+        usage[args.field] += args.amount;
+
+        await ctx.db.patch(user._id, {
+            currentMonthUsage: usage,
+            updatedAt: now,
+        });
+    },
+});
+
+// Check plan limits
+export const checkPlanLimits = query({
+    args: { userId: v.id("users") },
+    handler: async (ctx, args) => {
+        const user = await ctx.db.get(args.userId);
+        if (!user || !user.planLimits) {
+            return {
+                canUploadLeads: false,
+                canSendOutreach: false,
+                leadsRemaining: 0,
+                outreachRemaining: 0,
+                hasPlan: false,
+            };
+        }
+
+        const usage = user.currentMonthUsage || { leadsUploaded: 0, outreachSent: 0, resetAt: 0 };
+        const leadsRemaining = Math.max(0, user.planLimits.leadsPerMonth - usage.leadsUploaded);
+        const outreachRemaining = Math.max(0, user.planLimits.outreachPerMonth - usage.outreachSent);
+
+        return {
+            canUploadLeads: leadsRemaining > 0,
+            canSendOutreach: outreachRemaining > 0,
+            leadsRemaining,
+            outreachRemaining,
+            hasPlan: user.plan === "pro" || user.plan === "elite",
+        };
+    },
+});
+
 // Update Unipile connection status
 export const updateUnipileConnection = mutation({
     args: {

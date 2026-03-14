@@ -4,28 +4,24 @@ import './FAQSection.css'
 
 const faqs = [
     {
-        q: 'What counts as a qualified lead?',
-        a: 'A qualified lead is someone who matches your ICP, has expressed genuine interest, and is open to a conversation. If they don\'t show, aren\'t a fit, or the engagement ends early, we replace them at no extra cost.',
+        q: 'How is this different from GoJiBerry / other tools?',
+        a: 'We focus on simplicity. No complex campaign builders or strategy layers. Upload leads, AI writes messages, you approve. Done.',
     },
     {
-        q: 'How long until I see results?',
-        a: 'Most clients start seeing qualified leads within the first 2 weeks. By week 4, you should have a predictable flow of booked meetings landing on your calendar.',
+        q: 'Do I need to give you my LinkedIn password?',
+        a: 'No. We use Unipile, a secure API integration. Your credentials are never stored by us.',
     },
     {
-        q: 'Do I need to commit to a long-term contract?',
-        a: 'No. You can pause or cancel anytime — there\'s no long-term lock-in. We earn your business every month by delivering results.',
+        q: 'What happens if I hit my monthly limit?',
+        a: "You can upgrade your plan anytime from your settings. Unused messages don't roll over.",
     },
     {
-        q: 'How is this different from hiring a sales team?',
-        a: 'LeadFlow AI combines AI-powered personalization with automated outreach at a fraction of the cost. No salaries, no training, no management overhead — just results.',
+        q: 'Can I cancel anytime?',
+        a: 'Yes. No contracts, no lock-in. Cancel from your settings page.',
     },
     {
-        q: 'What tools do you integrate with?',
-        a: 'We integrate with LinkedIn, major CRMs (Salesforce, HubSpot), email providers, Slack, and most calendar tools. Custom integrations are available on request.',
-    },
-    {
-        q: 'Can I see a demo before signing up?',
-        a: 'Absolutely! Book a free demo call and we\'ll walk you through the platform, show real results from similar clients, and create a custom strategy for your business.',
+        q: 'How does AI message generation work?',
+        a: 'We use Claude AI to analyze each lead\'s profile data and craft a personalized connection request under 300 characters that sounds human, not robotic.',
     },
 ]
 
@@ -37,18 +33,15 @@ function FAQSection() {
     }
 
     return (
-        <section id="faq" className="faq-section" aria-labelledby="faq-heading">
-            <div className="container">
-                <header className="section-header">
-                    <h2 id="faq-heading">Frequently Asked Questions</h2>
-                    <p>Quick answers to common questions about LeadFlow AI.</p>
-                </header>
+        <section className="faq" aria-labelledby="faq-heading">
+            <div className="faq-container">
+                <h2 id="faq-heading" className="faq-title">Frequently Asked Questions</h2>
 
                 <div className="faq-list">
                     {faqs.map((faq, i) => (
                         <div
                             key={i}
-                            className={`faq-item ${openIndex === i ? 'open' : ''}`}
+                            className={`faq-item ${openIndex === i ? 'faq-item-open' : ''}`}
                         >
                             <button
                                 className="faq-question"
@@ -56,7 +49,7 @@ function FAQSection() {
                                 aria-expanded={openIndex === i}
                             >
                                 <span>{faq.q}</span>
-                                <ChevronDown size={20} className="faq-chevron" />
+                                <ChevronDown size={20} className="faq-chevron" aria-hidden="true" />
                             </button>
                             <div className="faq-answer">
                                 <p>{faq.a}</p>

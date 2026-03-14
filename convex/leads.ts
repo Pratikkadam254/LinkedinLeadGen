@@ -171,6 +171,52 @@ export const create = mutation({
     },
 });
 
+// Get leads by message status
+export const listByMessageStatus = query({
+    args: {
+        userId: v.id("users"),
+        messageStatus: v.union(
+            v.literal("empty"),
+            v.literal("draft"),
+            v.literal("approved"),
+            v.literal("ready"),
+            v.literal("sent")
+        ),
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db
+            .query("leads")
+            .withIndex("by_user", (q) => q.eq("userId", args.userId))
+            .filter((q) => q.eq(q.field("messageStatus"), args.messageStatus))
+            .collect();
+    },
+});
+
+// Bulk approve messages
+export const bulkApprove = mutation({
+    args: { ids: v.array(v.id("leads")) },
+    handler: async (ctx, args) => {
+        const now = Date.now();
+        let count = 0;
+        for (const id of args.ids) {
+            const lead = await ctx.db.get(id);
+            if (!lead || lead.messageStatus !== "draft") continue;
+            await ctx.db.patch(id, {
+                messageStatus: "approved",
+                updatedAt: now,
+            });
+            await ctx.db.insert("activities", {
+                userId: lead.userId,
+                leadId: id,
+                type: "message_approved",
+                createdAt: now,
+            });
+            count++;
+        }
+        return count;
+    },
+});
+
 // Bulk import leads
 export const bulkCreate = mutation({
     args: {
@@ -182,6 +228,7 @@ export const bulkCreate = mutation({
             title: v.string(),
             linkedInUrl: v.string(),
             email: v.optional(v.string()),
+            score: v.optional(v.number()),
         })),
         source: v.optional(v.string()),
     },
@@ -198,7 +245,7 @@ export const bulkCreate = mutation({
 
             if (existing) continue; // Skip duplicates
 
-            const score = 50 + Math.floor(Math.random() * 40); // Placeholder scoring
+            const score = lead.score || (50 + Math.floor(Math.random() * 40));
             let scoreTier: "hot" | "warm" | "cold" = "cold";
             if (score >= 80) scoreTier = "hot";
             else if (score >= 60) scoreTier = "warm";
@@ -276,6 +323,7 @@ export const updateMessage = mutation({
         status: v.optional(v.union(
             v.literal("empty"),
             v.literal("draft"),
+            v.literal("approved"),
             v.literal("ready"),
             v.literal("sent")
         )),
@@ -311,7 +359,7 @@ export const approveMessage = mutation({
         if (!lead) throw new Error("Lead not found");
 
         await ctx.db.patch(args.id, {
-            messageStatus: "ready",
+            messageStatus: "approved",
             updatedAt: Date.now(),
         });
 

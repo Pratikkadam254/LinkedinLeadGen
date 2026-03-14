@@ -9,8 +9,12 @@
  */
 
 import type * as activities from "../activities.js";
+import type * as actions_generateMessages from "../actions/generateMessages.js";
+import type * as actions_sendOutreach from "../actions/sendOutreach.js";
 import type * as campaigns from "../campaigns.js";
 import type * as leads from "../leads.js";
+import type * as stripe from "../stripe.js";
+import type * as strategies from "../strategies.js";
 import type * as users from "../users.js";
 
 import type {
@@ -21,8 +25,12 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   activities: typeof activities;
+  "actions/generateMessages": typeof actions_generateMessages;
+  "actions/sendOutreach": typeof actions_sendOutreach;
   campaigns: typeof campaigns;
   leads: typeof leads;
+  stripe: typeof stripe;
+  strategies: typeof strategies;
   users: typeof users;
 }>;
 

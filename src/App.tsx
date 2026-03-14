@@ -7,16 +7,23 @@ import DashboardPage from './pages/DashboardPage'
 import OnboardingPage from './pages/OnboardingPage'
 import UploadPage from './pages/UploadPage'
 import LeadsPage from './pages/LeadsPage'
-import ConnectPage from './pages/ConnectPage'
+import ApprovalPage from './pages/ApprovalPage'
+import SettingsPage from './pages/SettingsPage'
 
-// Get the Clerk publishable key from environment
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
-// ClerkProvider with routing
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+    return (
+        <>
+            <SignedIn>{children}</SignedIn>
+            <SignedOut><SignInPage /></SignedOut>
+        </>
+    )
+}
+
 function ClerkProviderWithRoutes() {
     const navigate = useNavigate()
 
-    // If no Clerk key, show landing page without auth
     if (!PUBLISHABLE_KEY) {
         return (
             <Routes>
@@ -27,7 +34,8 @@ function ClerkProviderWithRoutes() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/dashboard/upload" element={<UploadPage />} />
                 <Route path="/dashboard/leads" element={<LeadsPage />} />
-                <Route path="/dashboard/connect" element={<ConnectPage />} />
+                <Route path="/dashboard/approve" element={<ApprovalPage />} />
+                <Route path="/dashboard/settings" element={<SettingsPage />} />
                 <Route path="*" element={<LandingPage />} />
             </Routes>
         )
@@ -45,72 +53,13 @@ function ClerkProviderWithRoutes() {
                 <Route path="/signin/*" element={<SignInPage />} />
                 <Route path="/signup/*" element={<SignUpPage />} />
 
-                {/* Protected routes - require sign in */}
-                <Route
-                    path="/onboarding"
-                    element={
-                        <>
-                            <SignedIn>
-                                <OnboardingPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/*"
-                    element={
-                        <>
-                            <SignedIn>
-                                <DashboardPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/upload"
-                    element={
-                        <>
-                            <SignedIn>
-                                <UploadPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/leads"
-                    element={
-                        <>
-                            <SignedIn>
-                                <LeadsPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/connect"
-                    element={
-                        <>
-                            <SignedIn>
-                                <ConnectPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
+                {/* Protected routes */}
+                <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
+                <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+                <Route path="/dashboard/upload" element={<ProtectedRoute><UploadPage /></ProtectedRoute>} />
+                <Route path="/dashboard/leads" element={<ProtectedRoute><LeadsPage /></ProtectedRoute>} />
+                <Route path="/dashboard/approve" element={<ProtectedRoute><ApprovalPage /></ProtectedRoute>} />
+                <Route path="/dashboard/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
 
                 {/* Fallback */}
                 <Route path="*" element={<LandingPage />} />
