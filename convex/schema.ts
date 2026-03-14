@@ -190,4 +190,103 @@ export default defineSchema({
         .index("by_user", ["userId"])
         .index("by_strategy", ["strategyId"])
         .index("by_status", ["status"]),
+
+    // ============================================
+    // CHROME EXTENSION TABLES
+    // ============================================
+
+    // Lead enrichment data from Sales Navigator
+    leadEnrichments: defineTable({
+        leadId: v.id("leads"),
+
+        // Company intelligence
+        companyHeadcount: v.optional(v.number()),
+        companyGrowthRate: v.optional(v.number()),
+        companyIndustry: v.optional(v.string()),
+        companyHeadquarters: v.optional(v.string()),
+        companyFounded: v.optional(v.number()),
+        companyType: v.optional(v.string()),
+        companyLinkedInUrl: v.optional(v.string()),
+
+        // Connection context
+        connectionDegree: v.optional(v.number()),
+        sharedConnections: v.optional(v.number()),
+        sharedGroups: v.optional(v.array(v.string())),
+        sharedExperiences: v.optional(v.array(v.string())),
+        teamLinkConnections: v.optional(v.number()),
+        inMailAvailable: v.optional(v.boolean()),
+
+        // Engagement signals
+        recentPosts: v.optional(v.array(v.object({
+            content: v.string(),
+            likes: v.number(),
+            comments: v.number(),
+            postedAt: v.number(),
+        }))),
+        profileViewCount: v.optional(v.number()),
+
+        // Sales Navigator metadata
+        salesNavProfileId: v.optional(v.string()),
+        savedToList: v.optional(v.string()),
+
+        extractedAt: v.number(),
+        updatedAt: v.number(),
+    })
+        .index("by_lead", ["leadId"]),
+
+    // Credit system
+    credits: defineTable({
+        userId: v.id("users"),
+        balance: v.number(),
+        plan: v.union(
+            v.literal("free"),
+            v.literal("starter"),
+            v.literal("pro"),
+            v.literal("enterprise")
+        ),
+        monthlyAllocation: v.number(),
+        resetDate: v.number(),
+        createdAt: v.number(),
+        updatedAt: v.number(),
+    })
+        .index("by_user", ["userId"]),
+
+    // Credit transaction log
+    creditTransactions: defineTable({
+        userId: v.id("users"),
+        amount: v.number(),
+        type: v.union(
+            v.literal("extraction"),
+            v.literal("purchase"),
+            v.literal("monthly_allocation"),
+            v.literal("refund")
+        ),
+        description: v.string(),
+        extractionId: v.optional(v.id("extractions")),
+        createdAt: v.number(),
+    })
+        .index("by_user", ["userId"])
+        .index("by_user_and_type", ["userId", "type"]),
+
+    // Extraction history
+    extractions: defineTable({
+        userId: v.id("users"),
+        searchUrl: v.string(),
+        searchFilters: v.optional(v.any()),
+        status: v.union(
+            v.literal("in_progress"),
+            v.literal("completed"),
+            v.literal("paused"),
+            v.literal("failed"),
+            v.literal("cancelled")
+        ),
+        leadsFound: v.number(),
+        leadsExtracted: v.number(),
+        creditsUsed: v.number(),
+        startedAt: v.number(),
+        completedAt: v.optional(v.number()),
+        errorMessage: v.optional(v.string()),
+    })
+        .index("by_user", ["userId"])
+        .index("by_status", ["status"]),
 });

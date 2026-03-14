@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=$(echo $TOOL_INPUT | jq -r \".file_path // empty\" 2>/dev/null); if [[ \"$FILE\" == *extension/* ]]; then echo \"Extension file changed: $FILE\" >&2; fi'"
+          }
+        ]
+      }
+    ]
+  }
+}
