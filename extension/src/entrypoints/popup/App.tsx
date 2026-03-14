@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import type { UserSession, CreditBalance, ExtractionProgress } from '../shared/types';
-import { CREDIT_PLANS } from '../shared/constants';
+import type { UserSession, CreditBalance, ExtractionProgress } from '../../shared/types';
+import { CREDIT_PLANS } from '../../shared/constants';
 
 export default function App() {
   const [session, setSession] = useState<UserSession | null>(null);
@@ -145,8 +145,6 @@ export default function App() {
 }
 
 async function handleLogin() {
-  // Open Clerk login in a new tab
-  // The callback URL will store the token in chrome.storage
   const loginUrl = 'https://leadflow-ai.vercel.app/sign-in?redirect_url=chrome-extension-callback';
   chrome.tabs.create({ url: loginUrl });
 }
