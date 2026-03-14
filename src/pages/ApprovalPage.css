@@ -1,0 +1,344 @@
+/* ApprovalPage - Batch message approval */
+
+.approval-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+/* Page Header */
+.approval-header {
+  margin-bottom: var(--space-lg);
+}
+
+.approval-header-text h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.approval-subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+/* Toolbar */
+.approval-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.select-all-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.select-all-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+/* Section Labels */
+.approval-section {
+  margin-bottom: var(--space-xl);
+}
+
+.section-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-xs);
+}
+
+.approved-label {
+  color: var(--color-success);
+}
+
+/* Message Cards */
+.message-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.message-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.message-card:hover {
+  border-color: var(--color-border-medium);
+  box-shadow: var(--shadow-md);
+}
+
+.message-card.approved {
+  border-left: 3px solid var(--color-success);
+}
+
+/* Card Left */
+.card-left {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.card-checkbox {
+  display: flex;
+  align-items: center;
+  padding-top: 2px;
+}
+
+.card-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.lead-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lead-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.lead-detail {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  text-transform: capitalize;
+  margin-top: var(--space-xs);
+  width: fit-content;
+}
+
+/* Card Center */
+.card-center {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-preview {
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: border-color var(--transition-base), background-color var(--transition-base);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message-preview:hover {
+  border-color: var(--color-border-medium);
+  background: var(--color-bg-tertiary);
+}
+
+.message-preview.approved-message {
+  cursor: default;
+  background: var(--color-success-light);
+}
+
+.message-preview.approved-message:hover {
+  border-color: transparent;
+  background: var(--color-success-light);
+}
+
+.no-message {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+.message-textarea {
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-bg-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.textarea-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-xs);
+}
+
+.char-count {
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+}
+
+.edit-actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.approved-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-success);
+  background: var(--color-success-light);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  margin-top: var(--space-xs);
+}
+
+/* Card Right */
+.card-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+/* Empty State */
+.approval-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4xl) var(--space-lg);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  color: var(--color-text-tertiary);
+}
+
+.approval-empty h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.approval-empty p {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  max-width: 400px;
+}
+
+/* Footer Send Bar */
+.approval-footer {
+  position: sticky;
+  bottom: 0;
+  background: var(--color-bg-primary);
+  border-top: 1px solid var(--color-border-light);
+  padding: var(--space-md);
+  margin: var(--space-lg) calc(-1 * var(--space-lg)) 0;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn-send {
+  padding: 12px 32px;
+  font-size: 1rem;
+  border-radius: var(--radius-full);
+}
+
+/* Spin animation for loading icons */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .approval-page {
+    padding: var(--space-md) var(--space-sm);
+  }
+
+  .message-card {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .card-left {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .card-right {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .approval-toolbar {
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}

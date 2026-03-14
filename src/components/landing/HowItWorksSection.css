@@ -1,0 +1,77 @@
+.how-it-works {
+    background: #EBF5FF;
+    padding: 80px 24px;
+}
+
+.how-container {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.how-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1F2937;
+    text-align: center;
+    margin-bottom: 48px;
+    letter-spacing: -0.02em;
+}
+
+.how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.how-step-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 32px 28px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.how-step-icon {
+    width: 56px;
+    height: 56px;
+    background: #DBEAFE;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3B82F6;
+    margin-bottom: 20px;
+}
+
+.how-step-number {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #3B82F6;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+}
+
+.how-step-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: 8px;
+}
+
+.how-step-desc {
+    font-size: 0.95rem;
+    color: #6B7280;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .how-it-works {
+        padding: 64px 20px;
+    }
+
+    .how-steps {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+        margin: 0 auto;
+    }
+}

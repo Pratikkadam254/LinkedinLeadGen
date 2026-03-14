@@ -1,0 +1,126 @@
+.hero {
+    background: #FFFFFF;
+    padding: 96px 24px 80px;
+    text-align: center;
+}
+
+.hero-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.hero-headline {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #1F2937;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #6B7280;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-cta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.hero-cta-primary {
+    display: inline-block;
+    background: #3B82F6;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.hero-cta-primary:hover {
+    background: #2563EB;
+}
+
+.hero-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    color: #3B82F6;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 14px 24px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.hero-cta-secondary:hover {
+    color: #2563EB;
+}
+
+.hero-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.875rem;
+    color: #6B7280;
+    flex-wrap: wrap;
+}
+
+.hero-trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hero-trust-item svg {
+    color: #3B82F6;
+    flex-shrink: 0;
+}
+
+.hero-trust-divider {
+    color: #D1D5DB;
+}
+
+@media (max-width: 640px) {
+    .hero {
+        padding: 64px 20px 56px;
+    }
+
+    .hero-headline {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.05rem;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-cta-primary {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero-trust {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .hero-trust-divider {
+        display: none;
+    }
+}

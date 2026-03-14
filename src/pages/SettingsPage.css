@@ -1,0 +1,500 @@
+.settings-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-2xl);
+}
+
+.settings-header {
+    margin-bottom: var(--space-xl);
+}
+
+.settings-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: var(--space-xs);
+}
+
+.settings-header p {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+}
+
+.settings-sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+/* Card */
+.settings-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.settings-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.settings-card-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1F2937;
+    margin: 0;
+}
+
+.settings-card-header svg {
+    color: #3B82F6;
+}
+
+.settings-card-body {
+    padding: 24px;
+}
+
+/* Account */
+.settings-card-body > .account-info,
+.settings-card-body > .btn-sign-out {
+    /* layout handled by parent */
+}
+
+.settings-card-body:has(.account-info) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.account-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #DBEAFE;
+    color: #3B82F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.account-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.account-email {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-top: 2px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+    white-space: nowrap;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: #3B82F6;
+    color: #FFFFFF;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #2563EB;
+}
+
+.btn-secondary {
+    background: #F3F4F6;
+    color: #1F2937;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #E5E7EB;
+}
+
+.btn-sign-out {
+    color: #6B7280;
+}
+
+.btn-full {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ICP */
+.icp-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.icp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+.icp-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.icp-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.icp-value {
+    font-size: 0.875rem;
+    color: #1F2937;
+}
+
+.icp-empty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: #DBEAFE;
+    border-radius: 8px;
+}
+
+.icp-empty-text p {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #1F2937;
+    margin-bottom: 4px;
+}
+
+.icp-empty-text span {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+/* Plan Cards */
+.plan-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg);
+}
+
+.plan-card {
+    border: 1px solid var(--color-border-light);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.plan-card-featured {
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 1px #3B82F6;
+}
+
+.plan-card-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3B82F6;
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 12px;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+.plan-card-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+.plan-icon {
+    margin-bottom: var(--space-sm);
+}
+
+.plan-icon-pro {
+    color: #3B82F6;
+}
+
+.plan-icon-elite {
+    color: #F59E0B;
+}
+
+.plan-card-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin-bottom: var(--space-xs);
+}
+
+.plan-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 2px;
+}
+
+.price-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.price-period {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    flex: 1;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: #1F2937;
+}
+
+.plan-features li svg {
+    color: #3B82F6;
+    flex-shrink: 0;
+}
+
+/* Billing Active */
+.billing-active {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.plan-overview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.plan-name-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.plan-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-active {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.status-past-due {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.status-canceled {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+/* Usage Meters */
+.usage-meters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.usage-meter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.usage-meter-label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.usage-meter-value {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #1F2937;
+}
+
+.usage-bar {
+    width: 100%;
+    height: 8px;
+    background: #F3F4F6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.usage-bar-fill {
+    height: 100%;
+    background: #3B82F6;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+/* LinkedIn */
+.linkedin-status {
+    display: flex;
+    flex-direction: column;
+}
+
+.linkedin-connected,
+.linkedin-disconnected {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+}
+
+.connection-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+.connection-badge-connected {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.connection-badge-disconnected {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+.connection-info {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.coming-soon-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #DBEAFE;
+    color: #3B82F6;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* Spin animation */
+.spin-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .settings-page {
+        padding: var(--space-lg);
+    }
+
+    .settings-card-body:has(.account-info) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .icp-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .icp-empty {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .plan-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .plan-card-badge {
+        position: static;
+        transform: none;
+        align-self: center;
+        margin-bottom: var(--space-sm);
+    }
+}
