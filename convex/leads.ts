@@ -75,9 +75,13 @@ export const listByStatus = query({
 
 // Get single lead
 export const get = query({
-    args: { id: v.id("leads") },
+    args: { id: v.id("leads"), userId: v.optional(v.id("users")) },
     handler: async (ctx, args) => {
-        return await ctx.db.get(args.id);
+        const lead = await ctx.db.get(args.id);
+        if (lead && args.userId && lead.userId !== args.userId) {
+            return null;
+        }
+        return lead;
     },
 });
 
@@ -112,7 +116,10 @@ export const getStats = query({
 
         stats.avgScore = leads.length > 0 ? Math.round(totalScore / leads.length) : 0;
 
-        return stats;
+        // Count leads with generated messages (any status except "empty")
+        const messagesGenerated = leads.filter(l => l.messageStatus !== "empty").length;
+
+        return { ...stats, messagesGenerated };
     },
 });
 

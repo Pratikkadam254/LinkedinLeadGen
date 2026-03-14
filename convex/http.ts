@@ -9,7 +9,46 @@ http.route({
     method: "POST",
     handler: httpAction(async (ctx, request) => {
         const body = await request.text();
-        // TODO: Verify webhook signature with STRIPE_WEBHOOK_SECRET in production
+
+        // Verify Stripe webhook signature
+        const sigHeader = request.headers.get("stripe-signature");
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+        if (webhookSecret && sigHeader) {
+            const parts = Object.fromEntries(
+                sigHeader.split(",").map((p) => {
+                    const [k, v] = p.split("=");
+                    return [k, v];
+                })
+            );
+            const timestamp = parts["t"];
+            const expectedSig = parts["v1"];
+            if (!timestamp || !expectedSig) {
+                return new Response("Invalid signature header", { status: 400 });
+            }
+            const payload = `${timestamp}.${body}`;
+            const encoder = new TextEncoder();
+            const key = await crypto.subtle.importKey(
+                "raw",
+                encoder.encode(webhookSecret),
+                { name: "HMAC", hash: "SHA-256" },
+                false,
+                ["sign"]
+            );
+            const sigBuffer = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
+            const computedSig = Array.from(new Uint8Array(sigBuffer))
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("");
+            if (computedSig !== expectedSig) {
+                return new Response("Invalid signature", { status: 400 });
+            }
+            // Reject if timestamp is older than 5 minutes
+            const tolerance = 300;
+            const now = Math.floor(Date.now() / 1000);
+            if (Math.abs(now - parseInt(timestamp)) > tolerance) {
+                return new Response("Timestamp too old", { status: 400 });
+            }
+        }
+
         const event = JSON.parse(body);
 
         const PLAN_LIMITS = {

@@ -20,7 +20,7 @@ export const sendApproved = action({
 
         for (const leadId of args.leadIds) {
             const lead = await ctx.runQuery(api.leads.get, { id: leadId });
-            if (!lead || lead.messageStatus !== "approved") continue;
+            if (!lead || lead.messageStatus !== "approved" || lead.outreachStatus !== "pending") continue;
 
             // Check remaining outreach limit
             if (results.length >= limits.outreachRemaining) break;

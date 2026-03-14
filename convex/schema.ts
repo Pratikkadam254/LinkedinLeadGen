@@ -52,7 +52,8 @@ export default defineSchema({
         updatedAt: v.number(),
     })
         .index("by_clerk_id", ["clerkId"])
-        .index("by_email", ["email"]),
+        .index("by_email", ["email"])
+        .index("by_stripe_customer", ["stripeCustomerId"]),
 
     // Leads table - stores imported leads
     leads: defineTable({

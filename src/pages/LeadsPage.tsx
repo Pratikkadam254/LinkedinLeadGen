@@ -73,6 +73,7 @@ function LeadsPage() {
                 case 'messageStatus': aVal = a.messageStatus; bVal = b.messageStatus; break
                 case 'outreachStatus': aVal = a.outreachStatus; bVal = b.outreachStatus; break
             }
+            if (aVal === bVal) return 0
             return sortDirection === 'asc' ? (aVal < bVal ? -1 : 1) : (aVal > bVal ? -1 : 1)
         })
         return result
@@ -168,6 +169,7 @@ function LeadsPage() {
                             <input
                                 type="text"
                                 placeholder="Search leads..."
+                                aria-label="Search leads"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />

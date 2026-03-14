@@ -21,7 +21,7 @@ function DashboardPage() {
     const accepted = stats?.accepted ?? 0
     const replied = stats?.replied ?? 0
 
-    const messagesGenerated = sent + accepted + replied
+    const messagesGenerated = stats?.messagesGenerated ?? 0
     const outreachSent = sent + accepted + replied
     const connectionsAccepted = accepted + replied
 

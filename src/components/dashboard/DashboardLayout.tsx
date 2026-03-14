@@ -27,7 +27,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <nav className="dashboard-nav">
                     {NAV_ITEMS.map(item => {
                         const Icon = item.icon
-                        const isActive = location.pathname === item.path
+                        const isActive = item.path === '/dashboard'
+                            ? location.pathname === '/dashboard'
+                            : location.pathname.startsWith(item.path)
                         return (
                             <Link
                                 key={item.path}

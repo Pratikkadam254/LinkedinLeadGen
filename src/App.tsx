@@ -1,3 +1,4 @@
+import { Component, type ReactNode } from 'react'
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
@@ -68,8 +69,30 @@ function ClerkProviderWithRoutes() {
     )
 }
 
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+    state = { hasError: false }
+    static getDerivedStateFromError() { return { hasError: true } }
+    render() {
+        if (this.state.hasError) {
+            return (
+                <div style={{ padding: '4rem', textAlign: 'center' }}>
+                    <h1>Something went wrong</h1>
+                    <p style={{ color: '#6B7280', marginTop: '1rem' }}>Please refresh the page to try again.</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        style={{ marginTop: '1.5rem', padding: '0.5rem 1.5rem', background: '#3B82F6', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                    >
+                        Refresh
+                    </button>
+                </div>
+            )
+        }
+        return this.props.children
+    }
+}
+
 function App() {
-    return <ClerkProviderWithRoutes />
+    return <ErrorBoundary><ClerkProviderWithRoutes /></ErrorBoundary>
 }
 
 export default App

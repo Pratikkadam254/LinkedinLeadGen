@@ -179,8 +179,10 @@ export const updateSubscription = mutation({
 export const cancelSubscription = mutation({
     args: { stripeCustomerId: v.string() },
     handler: async (ctx, args) => {
-        const users = await ctx.db.query("users").collect();
-        const user = users.find(u => u.stripeCustomerId === args.stripeCustomerId);
+        const user = await ctx.db
+            .query("users")
+            .withIndex("by_stripe_customer", (q) => q.eq("stripeCustomerId", args.stripeCustomerId))
+            .first();
         if (!user) return;
 
         await ctx.db.patch(user._id, {

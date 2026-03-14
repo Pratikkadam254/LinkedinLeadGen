@@ -130,16 +130,18 @@ function UploadPage() {
     }
 
     // Demo import (when not signed in)
+    const demoIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
     const handleDemoImport = () => {
         if (!parseResult) return
 
         setStep('importing')
         let progress = 0
-        const interval = setInterval(() => {
+        demoIntervalRef.current = setInterval(() => {
             progress += 15
             setImportProgress(Math.min(progress, 100))
             if (progress >= 100) {
-                clearInterval(interval)
+                if (demoIntervalRef.current) clearInterval(demoIntervalRef.current)
+                demoIntervalRef.current = null
                 setImportResult({ imported: parseResult.leads.length, skipped: parseResult.skippedRows })
                 setStep('complete')
                 showToast('success', `Demo: ${parseResult.leads.length} leads ready!`)
@@ -233,6 +235,7 @@ function UploadPage() {
                                     accept=".csv,.txt,.tsv"
                                     onChange={handleFileInput}
                                     className="file-input"
+                                    aria-label="Upload file"
                                 />
                             </div>
 
