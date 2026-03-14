@@ -132,7 +132,38 @@ _Last updated: March 14, 2026_
 
 ---
 
-## 7. LinkedIn Automation Tools (Broader Market)
+## 7. Valley AI (Signal-Based LinkedIn Outbound)
+
+**What they do:** Signal-based warm LinkedIn automation. Monitors profile views, post engagement, competitor followers, and website visitors. De-anonymizes traffic and auto-creates LinkedIn outreach campaigns.
+
+**Pricing:** Base $395/mo (1 LinkedIn account) | Growth $995/mo (3 LinkedIn accounts)
+
+**Key claims:** 60% acceptance rate, 6-10% response rates, 1,000-1,200 messages/seat/month. Meeting guarantee: 10 meetings in 90 days or work for free (Growth plan).
+
+**Revenue:** Not publicly disclosed.
+
+**Sources:**
+- [Valley AI Website](https://www.joinvalley.co/)
+- [Valley Pricing](https://www.joinvalley.co/pricing)
+
+---
+
+## 8. 11x.ai ("Alice" — Enterprise AI SDR)
+
+**What they do:** Autonomous AI SDR for email + LinkedIn. Premium enterprise positioning.
+
+**Pricing:** $5,000–$10,000+/month, annual commitment
+
+**Target:** Companies doing $100M+ ARR. Best-funded AI SDR in the category.
+
+**Revenue:** Not publicly disclosed.
+
+**Sources:**
+- [MarketBetter AI SDR Comparison](https://marketbetter.ai/blog/best-ai-sdr-tools/)
+
+---
+
+## 9. LinkedIn Automation Tools (Broader Market)
 
 | Tool | Type | Starting Price | Key Differentiator |
 |------|------|---------------|-------------------|
@@ -154,7 +185,7 @@ _Last updated: March 14, 2026_
 
 ---
 
-## 8. Other Notable Competitors
+## 10. Other Notable Competitors
 
 | Tool | Focus | Funding/Revenue |
 |------|-------|----------------|
@@ -178,6 +209,7 @@ _Last updated: March 14, 2026_
 - Apollo.io (~$100M+ ARR)
 
 **Tier 2 — Funded AI SDRs ($1M-$10M ARR):**
+- 11x.ai (best-funded, $5K-$10K/mo, enterprise-only)
 - Artisan AI (~$5M ARR, $46M raised)
 - Sally AI (~$2.5M revenue, bootstrapped)
 - AiSDR (~$500K revenue, targeting $2M ARR)
@@ -185,6 +217,7 @@ _Last updated: March 14, 2026_
 
 **Tier 3 — Emerging/Bootstrapped (<$1M ARR):**
 - Gojiberry AI (~$85K-$155K MRR, bootstrapped)
+- Valley AI ($395-$995/mo, signal-based warm outbound)
 - SalesMind AI (early-stage, bootstrapped)
 - Salee, Outreachly, Closely
 
