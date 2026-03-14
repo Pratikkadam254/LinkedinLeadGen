@@ -1,32 +1,24 @@
 .onboarding-step {
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    /* No transition needed — animation handles entry */
 }
 
-.step-active {
-    transform: translateX(0);
-    opacity: 1;
+@keyframes slideFadeIn {
+    from {
+        transform: translateX(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
-.step-exit-left {
-    transform: translateX(-100%);
-    opacity: 0;
-    transition: transform 0.25s ease, opacity 0.25s ease;
+.step-slide-in {
+    animation: slideFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.step-exit-right {
-    transform: translateX(100%);
-    opacity: 0;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-}
-
-.step-enter-right {
-    transform: translateX(100%);
-    opacity: 0;
-    transition: none;
-}
-
-.step-enter-left {
-    transform: translateX(-100%);
-    opacity: 0;
-    transition: none;
+@media (prefers-reduced-motion: reduce) {
+    .step-slide-in {
+        animation: none;
+    }
 }

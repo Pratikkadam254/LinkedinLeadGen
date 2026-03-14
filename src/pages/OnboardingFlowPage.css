@@ -144,6 +144,31 @@
     border: none !important;
 }
 
+/* Demo mode signup fallback */
+.flow-demo-signup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+.flow-demo-notice {
+    background: var(--color-primary-lighter);
+    border: 1px solid var(--color-primary-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+}
+
+.flow-demo-notice code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
     .flow-main {

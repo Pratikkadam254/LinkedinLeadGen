@@ -54,7 +54,11 @@ export function useOnboardingStorage() {
     }, [])
 
     const clear = useCallback(() => {
-        localStorage.removeItem(STORAGE_KEY)
+        try {
+            localStorage.removeItem(STORAGE_KEY)
+        } catch {
+            // localStorage unavailable
+        }
         setData({})
     }, [])
 

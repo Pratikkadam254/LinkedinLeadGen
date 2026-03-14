@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useAuth, SignUp } from '@clerk/clerk-react'
+import { useAuth as useClerkAuth, SignUp } from '@clerk/clerk-react'
 import { useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import Logo from '../components/ui/Logo'
@@ -15,6 +15,17 @@ import { useOnboardingStorage, type OnboardingData } from '../hooks/useOnboardin
 import { useSyncedUser } from '../hooks/useSyncedUser'
 import { useToast } from '../components/ui/Toast'
 import './OnboardingFlowPage.css'
+
+const CLERK_CONFIGURED = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+/** Safe wrapper — returns { isSignedIn: false } when Clerk is not configured */
+function useAuth() {
+    if (!CLERK_CONFIGURED) {
+        return { isSignedIn: false as boolean | undefined }
+    }
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useClerkAuth()
+}
 
 /** Map question IDs to localStorage field names */
 const questionToStorageKey: Record<string, keyof OnboardingData> = {
@@ -114,6 +125,11 @@ function OnboardingFlowPage() {
         }
     }
 
+    // In demo mode (no Clerk), skip signup screen and go straight to import
+    const handleDemoContinue = () => {
+        setCurrentStep(POST_SIGNUP_START_INDEX)
+    }
+
     // If signed in user already completed onboarding, redirect to dashboard
     useEffect(() => {
         if (syncedUser.onboardingCompleted && !isPostSignup) {
@@ -141,7 +157,7 @@ function OnboardingFlowPage() {
                     />
 
                     <div className="flow-content">
-                        <OnboardingStep stepIndex={currentStep}>
+                        <OnboardingStep key={currentStep}>
                             {/* Question screens */}
                             {screen?.type === 'question' && question && (
                                 <OnboardingQuestion
@@ -161,33 +177,48 @@ function OnboardingFlowPage() {
                                 <div className="flow-signup-screen">
                                     <h2>Create your free account</h2>
                                     <p>Save your profile and start reaching out to prospects.</p>
-                                    <div className="flow-clerk-wrapper">
-                                        <SignUp
-                                            routing="path"
-                                            path="/onboarding"
-                                            signInUrl="/signin"
-                                            afterSignUpUrl="/onboarding?step=post-signup"
-                                            appearance={{
-                                                elements: {
-                                                    rootBox: 'clerk-root',
-                                                    card: 'clerk-card',
-                                                    headerTitle: 'clerk-title',
-                                                    headerSubtitle: 'clerk-subtitle',
-                                                    socialButtonsBlockButton: 'clerk-social-btn',
-                                                    formButtonPrimary: 'clerk-primary-btn',
-                                                    footerAction: 'clerk-footer',
-                                                },
-                                                variables: {
-                                                    colorPrimary: '#0A66C2',
-                                                    colorBackground: '#FFFFFF',
-                                                    colorText: '#191919',
-                                                    colorTextSecondary: '#666666',
-                                                    borderRadius: '8px',
-                                                    fontFamily: 'Inter, sans-serif',
-                                                }
-                                            }}
-                                        />
-                                    </div>
+                                    {CLERK_CONFIGURED ? (
+                                        <div className="flow-clerk-wrapper">
+                                            <SignUp
+                                                routing="path"
+                                                path="/onboarding"
+                                                signInUrl="/signin"
+                                                afterSignUpUrl="/onboarding?step=post-signup"
+                                                appearance={{
+                                                    elements: {
+                                                        rootBox: 'clerk-root',
+                                                        card: 'clerk-card',
+                                                        headerTitle: 'clerk-title',
+                                                        headerSubtitle: 'clerk-subtitle',
+                                                        socialButtonsBlockButton: 'clerk-social-btn',
+                                                        formButtonPrimary: 'clerk-primary-btn',
+                                                        footerAction: 'clerk-footer',
+                                                    },
+                                                    variables: {
+                                                        colorPrimary: '#0A66C2',
+                                                        colorBackground: '#FFFFFF',
+                                                        colorText: '#191919',
+                                                        colorTextSecondary: '#666666',
+                                                        borderRadius: '8px',
+                                                        fontFamily: 'Inter, sans-serif',
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="flow-demo-signup">
+                                            <div className="flow-demo-notice">
+                                                <p>Clerk is not configured yet.</p>
+                                                <p>Add <code>VITE_CLERK_PUBLISHABLE_KEY</code> to <code>.env.local</code></p>
+                                            </div>
+                                            <button
+                                                className="flow-btn flow-btn-next"
+                                                onClick={handleDemoContinue}
+                                            >
+                                                Continue in Demo Mode
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
 

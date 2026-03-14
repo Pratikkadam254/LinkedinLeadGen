@@ -237,14 +237,8 @@ class UnipileService {
 
     // Lookup a LinkedIn profile by URL
     async lookupProfile(linkedInUrl: string): Promise<UnipileResponse<ProfileData>> {
-        if (!this.config) {
-            return {
-                success: false,
-                error: { code: 'NOT_INITIALIZED', message: 'Unipile not initialized' },
-            }
-        }
-
         // In production, calls Unipile API to scrape profile
+        // Mock implementation works without API key for demo/onboarding
         await this.simulateDelay(1500)
 
         const mockProfile: ProfileData = {
@@ -264,14 +258,8 @@ class UnipileService {
 
     // Search LinkedIn profiles by criteria
     async searchProfiles(criteria: SearchCriteria): Promise<UnipileResponse<ProfileData[]>> {
-        if (!this.config) {
-            return {
-                success: false,
-                error: { code: 'NOT_INITIALIZED', message: 'Unipile not initialized' },
-            }
-        }
-
         // In production, calls Unipile LinkedIn search API
+        // Mock implementation works without API key for demo/onboarding
         await this.simulateDelay(2000)
 
         const mockResults: ProfileData[] = [
