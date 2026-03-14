@@ -18,6 +18,7 @@ import {
     Zap,
     Crown,
     Loader2,
+    Unplug,
 } from 'lucide-react'
 import './SettingsPage.css'
 
@@ -38,6 +39,9 @@ export default function SettingsPage() {
     const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
     const [portalLoading, setPortalLoading] = useState(false)
     const [signOutLoading, setSignOutLoading] = useState(false)
+    const [linkedInLoading, setLinkedInLoading] = useState(false)
+
+    const getConnectionLink = useAction(api.actions.unipileConnect.getConnectionLink)
 
     const handleSubscribe = async (planId: 'pro' | 'elite') => {
         if (!user.clerkId) return
@@ -83,6 +87,22 @@ export default function SettingsPage() {
             showToast('error', 'Failed to sign out.')
             console.error('Sign out error:', error)
             setSignOutLoading(false)
+        }
+    }
+
+    const handleConnectLinkedIn = async () => {
+        setLinkedInLoading(true)
+        try {
+            const callbackUrl = `${window.location.origin}/dashboard/settings`
+            const result = await getConnectionLink({ callbackUrl })
+            if (result.url) {
+                window.location.href = result.url
+            }
+        } catch (error) {
+            showToast('error', 'Failed to connect LinkedIn. Make sure Unipile is configured.')
+            console.error('LinkedIn connect error:', error)
+        } finally {
+            setLinkedInLoading(false)
         }
     }
 
@@ -435,16 +455,24 @@ export default function SettingsPage() {
                                 ) : (
                                     <div className="linkedin-disconnected">
                                         <span className="connection-badge connection-badge-disconnected">
+                                            <Unplug size={14} />
                                             Not Connected
                                         </span>
                                         <span className="connection-info">
                                             Connect your LinkedIn account to enable automated
                                             outreach.
                                         </span>
-                                        <button className="btn btn-secondary" disabled>
-                                            <Linkedin size={16} />
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={handleConnectLinkedIn}
+                                            disabled={linkedInLoading}
+                                        >
+                                            {linkedInLoading ? (
+                                                <Loader2 size={16} className="spin-icon" />
+                                            ) : (
+                                                <Linkedin size={16} />
+                                            )}
                                             Connect LinkedIn
-                                            <span className="coming-soon-label">Coming soon</span>
                                         </button>
                                     </div>
                                 )}

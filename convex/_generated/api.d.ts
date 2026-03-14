@@ -11,6 +11,7 @@
 import type * as activities from "../activities.js";
 import type * as actions_generateMessages from "../actions/generateMessages.js";
 import type * as actions_sendOutreach from "../actions/sendOutreach.js";
+import type * as actions_unipileConnect from "../actions/unipileConnect.js";
 import type * as campaigns from "../campaigns.js";
 import type * as leads from "../leads.js";
 import type * as stripe from "../stripe.js";
@@ -27,6 +28,7 @@ declare const fullApi: ApiFromModules<{
   activities: typeof activities;
   "actions/generateMessages": typeof actions_generateMessages;
   "actions/sendOutreach": typeof actions_sendOutreach;
+  "actions/unipileConnect": typeof actions_unipileConnect;
   campaigns: typeof campaigns;
   leads: typeof leads;
   stripe: typeof stripe;

@@ -16,7 +16,7 @@ export const sendApproved = action({
         if (!limits.hasPlan) throw new Error("Active subscription required to send outreach");
         if (!limits.canSendOutreach) throw new Error("Monthly outreach limit reached");
 
-        const results: { leadId: string; success: boolean; mock: boolean }[] = [];
+        const results: { leadId: string; success: boolean; mock: boolean; error?: string }[] = [];
 
         for (const leadId of args.leadIds) {
             const lead = await ctx.runQuery(api.leads.get, { id: leadId });
@@ -25,38 +25,58 @@ export const sendApproved = action({
             // Check remaining outreach limit
             if (results.length >= limits.outreachRemaining) break;
 
-            if (user.unipileConnected && user.unipileAccountId) {
-                // REAL MODE: Call Unipile API to send connection request
-                // TODO: Implement when Unipile API key is available
-                // const response = await fetch(`https://api.unipile.com/api/v1/users/me/invite`, {
-                //     method: "POST",
-                //     headers: {
-                //         "Authorization": `Bearer ${process.env.UNIPILE_API_KEY}`,
-                //         "Content-Type": "application/json",
-                //     },
-                //     body: JSON.stringify({
-                //         account_id: user.unipileAccountId,
-                //         provider: "LINKEDIN",
-                //         recipient_url: lead.linkedInUrl,
-                //         message: lead.generatedMessage,
-                //     }),
-                // });
-            }
+            const uniDSN = process.env.UNIPILE_DSN;
+            const uniKey = process.env.UNIPILE_API_KEY;
 
-            // MOCK MODE: Mark as sent (simulates sending)
-            await ctx.runMutation(api.leads.markAsSent, { id: leadId });
-            results.push({ leadId: leadId as string, success: true, mock: !user.unipileConnected });
+            if (user.unipileConnected && user.unipileAccountId && uniDSN && uniKey) {
+                // REAL MODE: Call Unipile API to send connection request
+                try {
+                    const response = await fetch(`https://${uniDSN}/api/v1/users/invite`, {
+                        method: "POST",
+                        headers: {
+                            "X-API-KEY": uniKey,
+                            "Content-Type": "application/json",
+                            "Accept": "application/json",
+                        },
+                        body: JSON.stringify({
+                            account_id: user.unipileAccountId,
+                            provider: "LINKEDIN",
+                            recipient_url: lead.linkedInUrl,
+                            message: lead.generatedMessage,
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        const errBody = await response.text();
+                        console.error(`Unipile API error for ${leadId}:`, response.status, errBody);
+                        results.push({ leadId: leadId as string, success: false, mock: false, error: `API error: ${response.status}` });
+                        continue;
+                    }
+
+                    await ctx.runMutation(api.leads.markAsSent, { id: leadId });
+                    results.push({ leadId: leadId as string, success: true, mock: false });
+                } catch (err) {
+                    console.error(`Unipile request failed for ${leadId}:`, err);
+                    results.push({ leadId: leadId as string, success: false, mock: false, error: "Network error" });
+                    continue;
+                }
+            } else {
+                // MOCK MODE: Mark as sent (simulates sending when Unipile is not configured)
+                await ctx.runMutation(api.leads.markAsSent, { id: leadId });
+                results.push({ leadId: leadId as string, success: true, mock: true });
+            }
         }
 
-        // Increment usage
-        if (results.length > 0) {
+        // Increment usage for successful sends
+        const successCount = results.filter(r => r.success).length;
+        if (successCount > 0) {
             await ctx.runMutation(api.users.incrementUsage, {
                 userId: args.userId,
                 field: "outreachSent",
-                amount: results.length,
+                amount: successCount,
             });
         }
 
-        return { sent: results.length, results };
+        return { sent: successCount, results };
     },
 });

@@ -98,4 +98,63 @@ http.route({
     }),
 });
 
+// Unipile webhook — handles LinkedIn connection and message events
+http.route({
+    path: "/unipile-webhook",
+    method: "POST",
+    handler: httpAction(async (ctx, request) => {
+        const body = await request.text();
+        const event = JSON.parse(body);
+
+        const eventType = event.event || event.type;
+        const data = event.data || event;
+
+        switch (eventType) {
+            case "connection.accepted": {
+                // A connection request was accepted by the recipient
+                const linkedInUrl = data.recipient_url || data.profile_url;
+                if (linkedInUrl) {
+                    await ctx.runMutation(api.leads.updateOutreachStatus, {
+                        linkedInUrl,
+                        status: "accepted",
+                    });
+                }
+                break;
+            }
+
+            case "message.delivered": {
+                // A message was successfully delivered
+                const linkedInUrl = data.recipient_url || data.profile_url;
+                if (linkedInUrl) {
+                    await ctx.runMutation(api.leads.updateOutreachStatus, {
+                        linkedInUrl,
+                        status: "sent",
+                    });
+                }
+                break;
+            }
+
+            case "message.received": {
+                // The lead replied to our message
+                const linkedInUrl = data.sender_url || data.profile_url;
+                if (linkedInUrl) {
+                    await ctx.runMutation(api.leads.updateOutreachStatus, {
+                        linkedInUrl,
+                        status: "replied",
+                    });
+                }
+                break;
+            }
+
+            case "account.disconnected": {
+                // LinkedIn account was disconnected — notify via console
+                console.warn("Unipile: LinkedIn account disconnected", data.account_id);
+                break;
+            }
+        }
+
+        return new Response("OK", { status: 200 });
+    }),
+});
+
 export default http;

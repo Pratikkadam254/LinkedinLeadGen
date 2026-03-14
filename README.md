@@ -1,490 +1,269 @@
-# ⚡ LeadFlow AI
+# LeadFlow AI
 
-<div align="center">
+**Upload leads. AI writes messages. You approve and send.**
 
-**Intelligence Meets Opportunity**
+Simple LinkedIn outreach for founders and sales teams. No complex workflows, no multi-tool setups -- just upload a CSV, let Claude write personalized connection messages, review them, and send via LinkedIn.
 
-Transform your LinkedIn connections into qualified leads with AI-powered intelligence that feels human.
-
-[![Status](https://img.shields.io/badge/Status-Ready_for_Implementation-blue)](docs/PROJECT_OVERVIEW.md)
-[![Framework](https://img.shields.io/badge/Framework-PIV_(Cole_Medin)-green)](https://www.youtube.com/@ColeMedin)
-[![License](https://img.shields.io/badge/License-Private-red)]()
-
-[Features](#-key-features) • [Documentation](#-documentation) • [Quick Start](#-quick-start) • [Demo](#-demo)
-
-</div>
+**Pro** $59/mo | **Elite** $249/mo
 
 ---
 
-## 🎯 What is LeadFlow AI?
+## System Architecture
 
-**LeadFlow AI** is a premium B2B LinkedIn lead generation platform that combines AI-powered intelligence with human oversight to help sales professionals and consultants identify, qualify, and engage high-value prospects at scale.
-
-### The Problem
-- Manual LinkedIn prospecting takes **10-20 minutes per prospect**
-- Generic messages get ignored (low response rates)
-- No systematic way to prioritize valuable leads
-- Difficult to scale outreach without losing personalization
-
-### Our Solution
-- ⚡ **40x Time Savings:** AI handles research, scoring, and drafting in **<30 seconds**
-- 🎯 **Smart Targeting:** Multi-factor scoring (company size, influence, activity, events)
-- ✍️ **Personalized at Scale:** AI-crafted messages based on recent posts and activity
-- 🔒 **LinkedIn-Safe:** Rate-limited automation that respects platform rules
-- 📊 **Data-Driven:** Real-time analytics to optimize your outreach
-
----
-
-## ✨ Key Features
-
-### 🔍 Smart Lead Ingestion
-- **Evaboot Integration** (Primary) - Extract validated leads from Sales Navigator
-- CSV upload with validation and deduplication
-- PhantomBuster enrichment for additional data
-
-### 🤖 AI Profile Enrichment
-- Automatic scraping of followers, connections, and mutual connections
-- Last 10 LinkedIn posts analyzed for engagement signals
-- Company data extraction and validation
-- Event/conference keyword detection
-
-### 🎯 Multi-Factor Scoring
-Intelligent lead ranking based on:
-- Company size and industry relevance
-- Follower influence and network strength
-- Recent activity and engagement
-- Event participation and speaking
-- Mutual connections
-- Title/role relevance
-
-**Output:** Tier A/B/C classification for instant prioritization
-
-### ✍️ AI Message Generation
-- Powered by OpenAI GPT-4o
-- References specific post content (not generic)
-- Includes event mentions when detected
-- Tone customization (professional/casual/direct)
-- <300 characters (LinkedIn optimized)
-
-### ✅ Approval Workflow
-- Beautiful dashboard for reviewing generated messages
-- Inline editing with real-time save
-- Bulk approve for Tier A leads
-- View profile, posts, and score breakdown
-
-### 🔄 LinkedIn Automation
-- n8n workflow orchestration
-- PhantomBuster Network Booster integration
-- Rate limiting (1-3 connections/hour)
-- Random delays for human-like behavior
-- Activity logging and tracking
-
-### 📊 Analytics Dashboard
-- Connection acceptance rate tracking
-- Response rate monitoring
-- Score distribution analysis
-- Campaign performance metrics
-- ROI calculation
-
----
-
-## 🎨 Brand Identity
-
-**Design Philosophy:** Premium dark-first aesthetic with glassmorphism and intelligent micro-interactions
-
-### Visual System
-- **Primary Color:** Electric Blue `#2563EB` → Cyan `#06B6D4` gradient
-- **Typography:** Inter (body) + Outfit (display headlines)
-- **Style:** Dark backgrounds (#0A0E1A), glassmorphic cards, gradient accents
-- **Voice:** Intelligent, empowering, professional, modern, human
-
-### Design Principles
-1. **Clarity Over Cleverness** - Intuitive, user-friendly design
-2. **Data-Driven Aesthetics** - Beautiful visualizations that tell stories
-3. **Intelligent Minimalism** - Every element serves a purpose
-4. **Premium Dark-First** - Optimized for professionals working long hours
-5. **Micro-interactions Matter** - Subtle animations provide delight
-
-**Full brand guide:** [`docs/BRAND_IDENTITY.md`](docs/BRAND_IDENTITY.md)
-
----
-
-## 🏗️ Tech Stack
-
-### Frontend
 ```
-React 18 + TypeScript          - Modern, type-safe UI
-Vite                           - Lightning-fast dev server
-Tailwind CSS                   - Utility-first styling with custom design system
-React Router v6                - Client-side routing
-Lucide Icons                   - Consistent 2px stroke icons
+                          +------------------+
+                          |   Clerk Auth     |
+                          |  (SSO / Email)   |
+                          +--------+---------+
+                                   |
+                    +--------------+--------------+
+                    |                             |
+           +-------v--------+          +---------v---------+
+           |  React / Vite  |          |   Convex Backend   |
+           |   Frontend     |<-------->|  (Serverless DB +  |
+           |                |  realtime|   Functions)       |
+           +----------------+  queries +---------+---------+
+                                       |         |         |
+                              +--------+    +----+----+    +---------+
+                              |             |         |              |
+                      +-------v---+  +------v--+  +--v--------+  +--v--------+
+                      | Claude API|  | Stripe  |  | Unipile   |  | Convex DB |
+                      | (Messages)|  | (Billing)|  | (LinkedIn)|  | (Storage) |
+                      +-----------+  +---------+  +-----------+  +-----------+
 ```
 
-### Backend
+## User Flow
+
 ```
-Convex                         - Real-time serverless database + functions
-Clerk                          - Authentication and user management
-Convex Storage                 - File uploads (CSV)
-Convex Scheduled Functions     - Cron jobs for automation
+Sign Up (Clerk)
+    |
+    v
+Onboarding (4 ICP questions)
+    |  - Target industries
+    |  - Target titles
+    |  - Company size
+    |  - Message tone
+    v
+Upload CSV
+    |
+    v
+AI Scores Leads (weighted multi-factor)
+    |  - Title match, company size, activity
+    |  - Hot (80+) / Warm (60-79) / Cold (<60)
+    v
+Generate Messages (Claude claude-sonnet-4-20250514)
+    |  - Personalized per lead
+    |  - Uses ICP preferences + lead data
+    v
+Review & Approve (batch approval UI)
+    |  - Edit individual messages
+    |  - Bulk approve / reject
+    v
+Send via Unipile (LinkedIn API)
+    |  - Connection requests with message
+    |  - Rate-limited, mock mode available
+    v
+Track on Dashboard
+    - Total leads, messages generated, outreach sent
+    - Response rates, acceptance tracking
+    - Activity feed
 ```
 
-### AI & Automation
+## Data Model
+
 ```
-OpenAI GPT-4o                  - Message personalization
-Convex Vector Search           - Semantic post analysis
-n8n                            - Workflow orchestration
-PhantomBuster                  - LinkedIn-safe scraping & automation
-Evaboot                        - Lead extraction from Sales Navigator ⭐
+users
+  |-- clerkId, email, name
+  |-- preferences (ICP: industries, titles, company size, tone)
+  |-- plan (free | pro | elite), stripeCustomerId
+  |-- unipileConnected, unipileAccountId
+  |-- currentMonthUsage { leadsUploaded, outreachSent, resetAt }
+  |
+  +--< leads
+  |     |-- firstName, lastName, company, title, linkedInUrl
+  |     |-- score (0-100), scoreTier (hot | warm | cold)
+  |     |-- messageStatus (empty | draft | approved | ready | sent)
+  |     |-- outreachStatus (pending | sent | accepted | replied)
+  |     |-- generatedMessage, messageTone
+  |     +-- source (csv | manual), importedAt
+  |
+  +--< activities
+  |     |-- type (lead_imported | message_generated | connection_sent | ...)
+  |     +-- metadata, createdAt
+  |
+  +--< strategies
+  |     |-- name, rawInputs, icpDocument, offerDocument
+  |     +-- isActive
+  |
+  +--< campaigns
+        |-- name, status (active | paused | completed)
+        |-- schedule { timezone, days, hours }
+        +-- stats { sent, replied, booked, revenue }
 ```
 
-### Infrastructure
-```
-Vercel                         - Frontend hosting (auto-deploy)
-Convex Cloud                   - Backend (auto-scaling)
-Sentry                         - Error tracking
-PostHog                        - Product analytics
-```
+## Tech Stack
 
----
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, TypeScript, Vite 6 |
+| Routing | React Router v7 |
+| Backend | Convex (serverless DB + functions) |
+| Auth | Clerk |
+| AI | Claude API (claude-sonnet-4-20250514) |
+| Payments | Stripe (Checkout + Customer Portal + Webhooks) |
+| LinkedIn | Unipile API (connection requests, messaging) |
+| Icons | Lucide React |
+| Styling | Custom CSS with CSS variables (Notion-inspired light theme) |
 
-## 📚 Documentation
+## Features
 
-We've created **comprehensive documentation** covering every aspect of the project:
+1. **CSV Lead Import** -- Upload a CSV with name, company, title, LinkedIn URL. Duplicate detection by URL. Preview before import.
 
-### Core Documents
-| Document | Description | Lines |
-|----------|-------------|-------|
-| **[PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md)** | 📘 Quick reference guide - START HERE | 550+ |
-| **[BRAND_IDENTITY.md](docs/BRAND_IDENTITY.md)** | 🎨 Complete brand bible (logo, colors, voice) | 480+ |
-| **[CONTENT_STRATEGY.md](docs/CONTENT_STRATEGY.md)** | 📱 Marketing plan (personas, calendar, SEO) | 900+ |
-| **[DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)** | 🖌️ UI component library and storyboard | 1,500+ |
-| **[PIV_FRAMEWORK_PLAN.md](docs/PIV_FRAMEWORK_PLAN.md)** | 🔧 Complete technical blueprint | 1,100+ |
+2. **AI Lead Scoring** -- Multi-factor weighted algorithm scores leads 0-100. Considers title match, company size, follower influence, recent activity, mutual connections.
 
-### Quick Start Guides
-| Document | Purpose |
-|----------|---------|
-| **[QUICK_START.md](docs/QUICK_START.md)** | ⚡ Get up and running today |
-| **[ROADMAP.md](docs/ROADMAP.md)** | 📅 4-week implementation timeline |
-| **[SCOPE_OF_WORK.md](docs/SCOPE_OF_WORK.md)** | 💼 Business requirements |
+3. **AI Message Generation** -- Claude writes personalized outreach messages using your ICP preferences and each lead's profile data. Batch generation for multiple leads.
 
-### Workflows
-| Workflow | Description |
-|----------|-------------|
-| **[piv-implementation.md](.agents/workflows/piv-implementation.md)** | Step-by-step execution guide (60 steps) |
-| **[react-convex-clerk.md](.agents/workflows/react-convex-clerk.md)** | React + Convex + Clerk setup |
+4. **Batch Approval Workflow** -- Review AI-generated messages in a card-based UI. Edit individual messages, bulk approve, or regenerate. Messages flow: empty -> draft -> approved -> sent.
 
-**Total Documentation:** 114.5 KB | 4,530+ lines
+5. **LinkedIn Automation** -- Send connection requests with personalized messages via Unipile API. Webhook-driven status tracking (sent, accepted, replied). Mock mode when Unipile isn't configured.
 
----
+6. **Subscription Billing** -- Stripe-powered with two tiers. Pro ($59/mo): 500 leads, 200 outreach/month. Elite ($249/mo): 2,000 leads, 800 outreach/month. Usage tracking with monthly resets.
 
-## 🚀 Quick Start
+## Pricing
 
-### Prerequisites
-- Node.js 18+ installed
-- Git installed
-- Accounts for: [Clerk](https://clerk.com), [Convex](https://convex.dev), [OpenAI](https://platform.openai.com), [Evaboot](https://evaboot.com)
+| | Pro | Elite |
+|---|---|---|
+| Price | $59/mo | $249/mo |
+| Leads/month | 500 | 2,000 |
+| Outreach/month | 200 | 800 |
+| LinkedIn accounts | 1 | 3 |
+| Autopilot mode | -- | Yes |
 
-### Installation (10 minutes)
+## Quick Start
 
-```powershell
-# 1. Clone repository
-git clone <your-repo-url>
-cd LeadGenSaaS
-
-# 2. Install dependencies
+```bash
+# 1. Clone and install
+git clone <repo-url>
+cd LinkedinLeadGen
 npm install
 
-# 3. Set up environment variables
-Copy-Item .env.example .env.local
-# Fill in your API keys (see docs/QUICK_START.md)
+# 2. Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Clerk and Convex keys
 
-# 4. Initialize Convex backend
+# 3. Start Convex backend (in a separate terminal)
 npx convex dev
 
-# 5. Start development server (new terminal)
+# 4. Start frontend
 npm run dev
+
+# 5. Open http://localhost:5173
 ```
 
-Visit **http://localhost:5173** 🎉
+## Environment Variables
 
-**Detailed setup:** [`docs/QUICK_START.md`](docs/QUICK_START.md)
+### Frontend (.env.local)
 
----
+| Variable | Description |
+|----------|-------------|
+| `VITE_CLERK_PUBLISHABLE_KEY` | Clerk publishable key from [dashboard.clerk.com](https://dashboard.clerk.com) |
+| `VITE_CONVEX_URL` | Convex deployment URL from [dashboard.convex.dev](https://dashboard.convex.dev) |
 
-## 🎬 Demo
+### Backend (Convex Dashboard > Settings > Environment Variables)
 
-### Live Landing Page Demo
-Open [`demo/landing-page.html`](demo/landing-page.html) in your browser to see:
-- ✅ Premium dark-first design
-- ✅ Glassmorphic cards with backdrop blur
-- ✅ Gradient buttons with hover glow
-- ✅ Smooth animations on scroll
-- ✅ Responsive mobile-first layout
-- ✅ Complete brand implementation
+| Variable | Description |
+|----------|-------------|
+| `ANTHROPIC_API_KEY` | Claude API key from [console.anthropic.com](https://console.anthropic.com) |
+| `STRIPE_SECRET_KEY` | Stripe secret key (use `sk_test_` for development) |
+| `STRIPE_PRO_PRICE_ID` | Stripe Price ID for Pro plan |
+| `STRIPE_ELITE_PRICE_ID` | Stripe Price ID for Elite plan |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (`whsec_...`) |
+| `UNIPILE_DSN` | Unipile DSN (e.g. `api1.unipile.com:13337`) |
+| `UNIPILE_API_KEY` | Unipile API access token |
+| `APP_URL` | Your app's public URL (e.g. `http://localhost:5173`) |
 
-### Screenshots
-*(Coming soon after implementation begins)*
-
----
-
-## 📊 Database Schema
-
-### Core Tables
-```typescript
-companies    - Company profiles (name, industry, size, location)
-people       - Lead profiles (contact info, enrichment, scores)
-posts        - LinkedIn posts (content, engagement, AI analysis)
-campaigns    - Outreach campaigns (targeting, templates, limits)
-activities   - Activity log (connections sent, accepted, replied)
-users        - User accounts (via Clerk integration)
-```
-
-**Full schema:** [`docs/PIV_FRAMEWORK_PLAN.md`](docs/PIV_FRAMEWORK_PLAN.md#14-database-schema-plan) Section 1.4
-
----
-
-## 🎓 PIV Framework Methodology
-
-This project follows **Cole Medin's PIV Framework** for agentic AI coding:
-
-### 1. ✅ PLAN (Complete)
-- Clear requirements documented (4,530+ lines)
-- Database schema defined (6 tables)
-- Features broken into atomic tasks
-- Architecture decided and documented
-- Brand identity established
-- Content strategy planned
-- Design system created
-
-### 2. 🚀 IMPLEMENT (Next)
-- Build one feature at a time
-- Reference PIV plan for context
-- Use design system for all UI
-- Apply brand tokens consistently
-- Test after each feature
-
-### 3. ✓ VALIDATE (Continuous)
-- Functionality tests
-- Performance checks (page load <2s)
-- UX validation
-- Accessibility audit (WCAG AA)
-- Bug fixes and refinement
-
-**Learn more:** [Cole Medin on YouTube](https://www.youtube.com/@ColeMedin)
-
----
-
-## 🗓️ Development Roadmap
-
-### ✅ Phase 0: Planning (Complete)
-- [x] Requirements gathering
-- [x] Technical architecture
-- [x] Database schema
-- [x] Feature breakdown
-- [x] Brand identity system
-- [x] Content strategy
-- [x] Design system
-- [x] Implementation roadmap
-
-### 🚧 Phase 1: Foundation (Week 1)
-- [ ] React + Vite + TypeScript setup
-- [ ] Design tokens implementation (CSS variables)
-- [ ] Convex backend initialized
-- [ ] Clerk authentication
-- [ ] Base component library
-
-### 📋 Phase 2: Data Layer (Week 2)
-- [ ] Evaboot CSV upload feature
-- [ ] PhantomBuster integration
-- [ ] Profile enrichment pipeline
-- [ ] Database CRUD operations
-
-### 🤖 Phase 3: Intelligence (Week 3)
-- [ ] Multi-factor scoring engine
-- [ ] AI message generation (OpenAI GPT-4o)
-- [ ] Event keyword detection
-- [ ] Quality testing
-
-### 🎨 Phase 4: User Interface (Week 4)
-- [ ] Approval dashboard
-- [ ] Analytics charts
-- [ ] n8n automation workflows
-- [ ] Final testing & polish
-
-**Detailed timeline:** [`docs/ROADMAP.md`](docs/ROADMAP.md)
-
----
-
-## 📈 Success Metrics
-
-### Product Metrics
-- **Time Savings:** 40x faster (30s vs 10-20 min per prospect)
-- **Message Quality:** >80% approval rate (minimal edits needed)
-- **Connection Acceptance:** >50% (industry average: 35%)
-- **Lead Enrichment:** >95% success rate
-
-### Business Metrics
-- User sign-ups: 100 in Month 1
-- Active users: >60% weekly activity
-- NPS score: >50
-- Churn: <10% monthly
-
-### Content Metrics
-- Blog traffic: +200% YoY
-- Email subscribers: 5,000 in Q1
-- LinkedIn engagement: >8% rate
-- Trial conversions: 5% from content
-
----
-
-## 🛠️ Development Commands
-
-```powershell
-# Development
-npx convex dev          # Terminal 1: Convex backend
-npm run dev             # Terminal 2: React frontend
-
-# Build for production
-npm run build
-npx convex deploy --prod
-
-# Deploy frontend
-vercel deploy --prod
-
-# Code quality
-npm run lint
-npm run format
-npm run type-check
-```
-
----
-
-## 🔒 Security & Compliance
-
-- ✅ Only public LinkedIn data stored
-- ✅ API keys encrypted in environment variables
-- ✅ Clerk handles authentication securely
-- ✅ Rate limiting prevents LinkedIn bans
-- ✅ GDPR-compliant delete endpoint
-- ✅ Privacy policy included
-- ✅ Accessibility (WCAG AA compliance)
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-LeadGenSaaS/
-├── .agents/
-│   └── workflows/              # Implementation guides
-├── convex/                     # Backend (Convex)
-│   ├── schema.ts              # Database schema
-│   ├── people.ts              # Lead CRUD
-│   ├── scoring.ts             # Scoring algorithm
-│   └── messageGeneration.ts   # AI message gen
-├── src/                       # Frontend (React)
-│   ├── components/            # UI components
-│   │   ├── ui/               # Base components (design system)
-│   │   ├── dashboard/        # Dashboard features
-│   │   └── leads/            # Lead management
-│   ├── pages/                # Route pages
-│   ├── hooks/                # Custom React hooks
-│   ├── lib/                  # Utilities
-│   └── styles/               # Global styles & design tokens
-├── demo/                      # Demo files
-│   └── landing-page.html     # Live landing page demo
-├── docs/                      # Documentation (4,530+ lines)
-│   ├── PROJECT_OVERVIEW.md   # Quick reference (START HERE)
-│   ├── BRAND_IDENTITY.md     # Brand bible
-│   ├── CONTENT_STRATEGY.md   # Marketing plan
-│   ├── DESIGN_SYSTEM.md      # UI library
-│   ├── PIV_FRAMEWORK_PLAN.md # Technical blueprint
-│   ├── QUICK_START.md        # Setup guide
-│   ├── ROADMAP.md            # Timeline
-│   └── SCOPE_OF_WORK.md      # Requirements
-└── .env.example               # Environment template
+src/
+  pages/
+    LandingPage.tsx          # Marketing page with hero, pricing, FAQ
+    SignInPage.tsx            # Clerk sign-in
+    SignUpPage.tsx            # Clerk sign-up
+    OnboardingPage.tsx        # 4-question ICP setup wizard
+    DashboardPage.tsx         # Stats overview + activity feed
+    UploadPage.tsx            # CSV upload with preview + step indicator
+    LeadsPage.tsx             # Lead table with search, sort, filter
+    ApprovalPage.tsx          # Batch message approval workflow
+    SettingsPage.tsx          # Account, ICP, billing, LinkedIn connection
+  components/
+    landing/                  # HeroSection, PricingSection, FAQSection, etc.
+    dashboard/                # DashboardLayout, LeadsTable, LeadDetailPanel
+    onboarding/               # OnboardingProgress, OnboardingQuestion
+    ui/                       # Toast, Logo
+  hooks/                      # useSyncedUser, useLeads, useActivities
+  contexts/                   # UnipileContext
+  lib/
+    csvParser.ts              # CSV parsing + validation
+    leadScoring.ts            # Multi-factor scoring algorithm
+    aiMessages.ts             # Claude prompt templates
+    unipile.ts                # Unipile type definitions
+    convex.tsx                # Convex client setup
+
+convex/
+  schema.ts                   # Database schema (users, leads, activities, ...)
+  users.ts                    # User CRUD, subscription management
+  leads.ts                    # Lead CRUD, scoring, message status
+  activities.ts               # Activity log queries
+  campaigns.ts                # Campaign management
+  strategies.ts               # Strategy/ICP document management
+  stripe.ts                   # Checkout session + portal creation
+  http.ts                     # Stripe webhook + Unipile webhook handlers
+  actions/
+    generateMessages.ts       # Claude API calls for message generation
+    sendOutreach.ts           # Unipile API calls for LinkedIn outreach
+    unipileConnect.ts         # Unipile hosted auth link generation
 ```
 
----
+## API Integrations
 
-## 🎯 Next Steps
+### Claude API
+- Model: `claude-sonnet-4-20250514`
+- Used for: Generating personalized LinkedIn outreach messages
+- Called from: `convex/actions/generateMessages.ts`
+- Auth: `x-api-key` header with `ANTHROPIC_API_KEY`
 
-### Today (2 hours)
-- [ ] Read [`docs/PROJECT_OVERVIEW.md`](docs/PROJECT_OVERVIEW.md)
-- [ ] Review brand identity in [`docs/BRAND_IDENTITY.md`](docs/BRAND_IDENTITY.md)
-- [ ] Get API keys (Clerk, Convex, OpenAI, Evaboot)
+### Stripe
+- Checkout Sessions for subscription signup
+- Customer Portal for billing management
+- Webhooks: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
+- Webhook signature verification: HMAC-SHA256 via Web Crypto API
+- Called from: `convex/stripe.ts` (actions) and `convex/http.ts` (webhook handler)
 
-### This Week (10-15 hours)
-- [ ] Complete environment setup
-- [ ] Initialize Convex schema
-- [ ] Set up Clerk authentication
-- [ ] Create base components with design system
-- [ ] Test Evaboot export/import workflow
+### Unipile
+- Base URL: `https://{UNIPILE_DSN}/api/v1/`
+- Auth: `X-API-KEY` header (not Bearer token)
+- Endpoints used:
+  - `POST /users/invite` -- Send LinkedIn connection request
+  - `POST /hosted/accounts/link` -- Generate hosted auth link for account connection
+  - `GET /accounts/{id}` -- Check account connection status
+- Webhooks: `connection.accepted`, `message.delivered`, `message.received`
+- Mock mode: When `UNIPILE_DSN` is not set, outreach is simulated locally
 
-### This Month (80-100 hours)
-- [ ] Complete Week 1: Foundation
-- [ ] Complete Week 2: Data Layer
-- [ ] Complete Week 3: Intelligence
-- [ ] Complete Week 4: UI & Automation
-- [ ] Internal beta testing
+## Deployment
 
-**Start here:** [`docs/QUICK_START.md`](docs/QUICK_START.md)
-
----
-
-## 🔗 Resources
-
-- **Cole Medin (PIV Framework):** https://www.youtube.com/@ColeMedin
-- **Convex Documentation:** https://docs.convex.dev
-- **Clerk Authentication:** https://clerk.com/docs
-- **Evaboot (Lead Extraction):** https://www.evaboot.com
-- **PhantomBuster API:** https://docs.phantombuster.com
-- **OpenAI API:** https://platform.openai.com/docs
-- **Tailwind CSS:** https://tailwindcss.com
-- **Lucide Icons:** https://lucide.dev
-
----
-
-## 👥 Team & Credits
-
-- **Framework:** Cole Medin's PIV Framework
-- **Client:** RE ALINE (Andrew Line) → Vistage (Mary Forte)
-- **Budget:** $1,000 (at-cost engineering)
-- **Timeline:** 4 weeks to MVP
-- **Brand Name:** LeadFlow AI
-- **Tagline:** Intelligence Meets Opportunity
-
----
-
-## 📝 Current Status
-
-```
-Planning Phase:      ████████████████████ 100% ✅
-Brand & Design:      ████████████████████ 100% ✅
-Week 1 (Foundation): ░░░░░░░░░░░░░░░░░░░░   0%
-Week 2 (Data Layer): ░░░░░░░░░░░░░░░░░░░░   0%
-Week 3 (Intelligence):░░░░░░░░░░░░░░░░░░░░   0%
-Week 4 (UI/Auto):    ░░░░░░░░░░░░░░░░░░░░   0%
+**Frontend**: Deploy to Vercel
+```bash
+npm run build    # outputs to dist/
 ```
 
-**Overall:** 30% (Planning + Brand/Design Complete, Implementation Starting)
+**Backend**: Deploy Convex
+```bash
+npx convex deploy
+```
 
----
+Set all environment variables in both Vercel (frontend vars) and Convex Dashboard (backend vars).
 
-## 📄 License
+## License
 
-Private project - All rights reserved
-
----
-
-<div align="center">
-
-**Built with ❤️ using Cole Medin's PIV Framework**
-
-**LeadFlow AI** - Intelligence Meets Opportunity
-
-*Transform your LinkedIn connections into qualified leads*
-
-**Last Updated:** February 9, 2026
-
-</div>
+Private -- All rights reserved.

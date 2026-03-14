@@ -408,10 +408,11 @@ export const markAsSent = mutation({
     },
 });
 
-// Update outreach status (from webhook)
+// Update outreach status by lead ID
 export const updateOutreachStatus = mutation({
     args: {
-        id: v.id("leads"),
+        id: v.optional(v.id("leads")),
+        linkedInUrl: v.optional(v.string()),
         status: v.union(
             v.literal("pending"),
             v.literal("sent"),
@@ -420,12 +421,20 @@ export const updateOutreachStatus = mutation({
         ),
     },
     handler: async (ctx, args) => {
-        const lead = await ctx.db.get(args.id);
-        if (!lead) throw new Error("Lead not found");
+        let lead;
+        if (args.id) {
+            lead = await ctx.db.get(args.id);
+        } else if (args.linkedInUrl) {
+            lead = await ctx.db
+                .query("leads")
+                .withIndex("by_linkedin_url", (q) => q.eq("linkedInUrl", args.linkedInUrl!))
+                .first();
+        }
+        if (!lead) return null;
 
         const now = Date.now();
 
-        await ctx.db.patch(args.id, {
+        await ctx.db.patch(lead._id, {
             outreachStatus: args.status,
             outreachRespondedAt: args.status !== "pending" && args.status !== "sent" ? now : undefined,
             updatedAt: now,
@@ -440,12 +449,12 @@ export const updateOutreachStatus = mutation({
 
         await ctx.db.insert("activities", {
             userId: lead.userId,
-            leadId: args.id,
+            leadId: lead._id,
             type: activityType,
             createdAt: now,
         });
 
-        return args.id;
+        return lead._id;
     },
 });
 
