@@ -175,7 +175,7 @@ class DetectionMonitor {
     if (this.isInSafeMode) return;
     this.isInSafeMode = true;
 
-    console.warn('[LeadFlow] SAFE MODE ACTIVATED — threats detected');
+    // Safe mode activated — go dormant
 
     // Notify all listeners
     this.safeModeCallbacks.forEach((cb) => cb());

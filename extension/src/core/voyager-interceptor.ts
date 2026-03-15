@@ -65,25 +65,26 @@ function getInjectedScript(): string {
       };
 
       // ============================================
-      // PATCH XMLHttpRequest
+      // PATCH XMLHttpRequest (WeakMap to avoid property pollution)
       // ============================================
+      const xhrMeta = new WeakMap();
       const originalXHROpen = XMLHttpRequest.prototype.open;
       const originalXHRSend = XMLHttpRequest.prototype.send;
 
       XMLHttpRequest.prototype.open = function(method, url, ...rest) {
-        this._lfUrl = typeof url === 'string' ? url : String(url);
-        this._lfMethod = method;
+        xhrMeta.set(this, { url: typeof url === 'string' ? url : String(url), method });
         return originalXHROpen.apply(this, [method, url, ...rest]);
       };
 
       XMLHttpRequest.prototype.send = function(...args) {
-        if (isVoyagerUrl(this._lfUrl)) {
+        const meta = xhrMeta.get(this);
+        if (meta && isVoyagerUrl(meta.url)) {
           this.addEventListener('load', function() {
             try {
               const data = JSON.parse(this.responseText);
               window.dispatchEvent(new CustomEvent('__lf_voyager_response', {
                 detail: {
-                  url: this._lfUrl,
+                  url: meta.url,
                   data,
                   source: 'xhr',
                   timestamp: Date.now()

@@ -7,10 +7,16 @@ export default function App() {
   const [credits, setCredits] = useState<CreditBalance | null>(null);
   const [progress, setProgress] = useState<ExtractionProgress | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch auth state from service worker
     chrome.runtime.sendMessage({ type: 'GET_AUTH_STATE' }, (response) => {
+      if (chrome.runtime.lastError) {
+        setError('Failed to connect to extension service worker.');
+        setLoading(false);
+        return;
+      }
       if (response?.session) {
         setSession(response.session);
       }
@@ -19,15 +25,26 @@ export default function App() {
 
     // Fetch credit balance
     chrome.runtime.sendMessage({ type: 'CHECK_CREDITS' }, (response) => {
+      if (chrome.runtime.lastError) {
+        setError('Failed to fetch credit balance.');
+        return;
+      }
+      if (response?.error) {
+        setError(response.error);
+        return;
+      }
       if (response?.balance) {
         setCredits(response.balance);
       }
     });
 
-    // Listen for extraction progress updates
-    const listener = (message: { type: string; progress?: ExtractionProgress }) => {
+    // Listen for extraction progress updates and errors
+    const listener = (message: { type: string; progress?: ExtractionProgress; error?: string }) => {
       if (message.type === 'EXTRACTION_PROGRESS' && message.progress) {
         setProgress(message.progress);
+      }
+      if (message.type === 'EXTRACTION_ERROR' && message.error) {
+        setError(message.error);
       }
     };
 
@@ -79,6 +96,14 @@ export default function App() {
       </div>
 
       <div style={styles.body}>
+        {/* Error Banner */}
+        {error && (
+          <div style={styles.errorBanner}>
+            <span>{error}</span>
+            <button style={styles.errorDismiss} onClick={() => setError(null)}>×</button>
+          </div>
+        )}
+
         {/* Credit Balance */}
         <div style={styles.card}>
           <div style={styles.cardHeader}>
@@ -305,5 +330,27 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '12px',
     cursor: 'pointer',
     marginTop: '8px',
+  },
+  errorBanner: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '10px 12px',
+    background: '#fef2f2',
+    border: '1px solid #fecaca',
+    borderRadius: '8px',
+    marginBottom: '12px',
+    fontSize: '12px',
+    color: '#dc2626',
+    lineHeight: '1.4',
+  },
+  errorDismiss: {
+    background: 'none',
+    border: 'none',
+    color: '#dc2626',
+    fontSize: '16px',
+    cursor: 'pointer',
+    padding: '0 0 0 8px',
+    flexShrink: 0,
   },
 };

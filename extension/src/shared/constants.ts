@@ -122,4 +122,4 @@ export const CREDIT_PLANS = {
 // ============================================
 // CONVEX CONFIGURATION
 // ============================================
-export const CONVEX_URL = 'https://YOUR_CONVEX_URL.convex.cloud'; // Set via env
+export const CONVEX_URL = (import.meta as any).env?.WXT_CONVEX_URL || 'https://YOUR_CONVEX_URL.convex.cloud';

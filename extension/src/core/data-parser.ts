@@ -71,7 +71,7 @@ function parseVoyagerProfile(profile: Record<string, unknown>): ExtractedLead | 
 
     // Extract location
     const geoRegion = profile.geoRegion as string
-      || (profile.location as Record<string, unknown>)?.geo?.full as string
+      || ((profile.location as Record<string, any>)?.geo as Record<string, any>)?.full as string
       || '';
 
     // Connection data

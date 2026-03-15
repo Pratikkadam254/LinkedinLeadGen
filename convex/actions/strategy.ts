@@ -1,5 +1,6 @@
 import { action } from "../_generated/server";
 import { v } from "convex/values";
+// @ts-ignore - GoogleGenerativeAI types
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 declare const process: { env: { GEMINI_API_KEY: string } };
@@ -11,12 +12,12 @@ export const generateICP = action({
         businessDescription: v.string(),
         targetAudienceHints: v.string(),
     },
-    handler: async (ctx, args) => {
+    handler: async (_ctx, args) => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         const prompt = `
       You are an expert B2B Marketing Strategist.
-      
+
       Create a detailed IDEAL CUSTOMER PROFILE (ICP) based on the following:
       - Business: ${args.businessDescription}
       - Target Hints: ${args.targetAudienceHints}
@@ -27,7 +28,7 @@ export const generateICP = action({
       3. Key Pain Points (Emotional & Logical)
       4. Goals & Desires
       5. Objections to buying
-      
+
       Keep it actionable and specific.
     `;
 
@@ -42,7 +43,7 @@ export const generateOffer = action({
         icpDocument: v.string(),
         primaryOffer: v.string(),
     },
-    handler: async (ctx, args) => {
+    handler: async (_ctx, args) => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
         const prompt = `

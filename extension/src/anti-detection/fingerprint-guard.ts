@@ -15,19 +15,10 @@
  * Called on page navigation and when entering safe mode.
  */
 export function cleanupInjectedElements(): void {
-  // Remove extract button host
-  const extractHost = document.getElementById('__lf-extract-host');
-  if (extractHost) extractHost.remove();
+  // Remove all LeadFlow-injected elements (marked with data attribute)
+  document.querySelectorAll('[data-lf-host]').forEach((el) => el.remove());
 
-  // Remove progress panel host
-  const progressHost = document.getElementById('__lf-progress-host');
-  if (progressHost) progressHost.remove();
-
-  // Remove results summary host
-  const summaryHost = document.getElementById('__lf-summary-host');
-  if (summaryHost) summaryHost.remove();
-
-  // Remove any injected scripts (should already be removed, but just in case)
+  // Remove any injected scripts
   document.querySelectorAll('script[data-lf]').forEach((el) => el.remove());
 }
 
@@ -39,7 +30,7 @@ export function startProbeMonitor(): () => void {
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       if (entry.name.includes('chrome-extension://')) {
-        console.warn('[LeadFlow] Extension probe detected:', entry.name);
+        // Extension probe detected — trigger safe mode silently
         // Trigger safe mode via service worker
         chrome.runtime.sendMessage({ type: 'SAFE_MODE' });
       }
@@ -71,9 +62,9 @@ export function verifyNoGlobalLeaks(): boolean {
   ];
 
   for (const name of suspiciousGlobals) {
-    if ((window as Record<string, unknown>)[name] !== undefined) {
-      console.error(`[LeadFlow] LEAK DETECTED: window.${name} exists!`);
-      delete (window as Record<string, unknown>)[name];
+    if ((window as unknown as Record<string, unknown>)[name] !== undefined) {
+      // Leak detected — clean up silently
+      delete (window as unknown as Record<string, unknown>)[name];
       return false;
     }
   }

@@ -20,6 +20,25 @@ export function initConvexClient(url: string): void {
 }
 
 /**
+ * Retry wrapper with exponential backoff.
+ * Retries up to 3 times with 1s, 2s, 4s delays.
+ */
+async function withRetry<T>(fn: () => Promise<T>, maxRetries = 3): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      if (attempt < maxRetries) {
+        await new Promise((r) => setTimeout(r, 1000 * Math.pow(2, attempt)));
+      }
+    }
+  }
+  throw lastError;
+}
+
+/**
  * Get the authenticated Convex client.
  * Sets the auth token from the stored Clerk session.
  */
@@ -57,8 +76,8 @@ export async function importLeads(
 ): Promise<{ imported: number; creditsUsed: number }> {
   const c = await getAuthenticatedClient();
 
-  // Call the Convex mutation: api.extensions.importFromExtension
-  const result = await c.mutation('extensions:importFromExtension' as never, {
+  // Call the Convex mutation with retry: api.extensions.importFromExtension
+  const result = await withRetry(() => c.mutation('extensions:importFromExtension' as never, {
     leads: leads.map((lead) => ({
       firstName: lead.firstName,
       lastName: lead.lastName,
@@ -88,7 +107,7 @@ export async function importLeads(
       salesNavProfileId: lead.salesNavProfileId,
     })),
     extractionId,
-  } as never);
+  } as never));
 
   return result as { imported: number; creditsUsed: number };
 }

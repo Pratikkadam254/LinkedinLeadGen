@@ -8,9 +8,13 @@
  */
 
 import { SELECTORS } from '../shared/constants';
-import type { ExtractionProgress, ExtractionSummary, ExtractionConfig } from '../shared/types';
+import type { ExtractedLead, ExtractionProgress, ExtractionSummary, ExtractionConfig } from '../shared/types';
+import { downloadCSV } from '../core/csv-exporter';
 
 let shadowRoot: ShadowRoot | null = null;
+let lastExtractedLeads: ExtractedLead[] = [];
+// Randomized host ID per session to avoid detection by static ID queries
+const HOST_ID = `__el-${Math.random().toString(36).slice(2, 10)}`;
 
 /**
  * Inject the overlay UI into Sales Navigator.
@@ -29,11 +33,12 @@ export function injectOverlayUI(
   }
 
   // Don't inject twice
-  if (document.getElementById('__lf-extract-host')) return;
+  if (document.getElementById(HOST_ID)) return;
 
   // Create shadow host
   const host = document.createElement('div');
-  host.id = '__lf-extract-host';
+  host.id = HOST_ID;
+  host.setAttribute('data-lf-host', '');
   host.style.display = 'inline-flex';
   host.style.alignItems = 'center';
   host.style.marginLeft = '8px';
@@ -272,6 +277,9 @@ export function injectOverlayUI(
         <button class="lf-btn-primary-full" id="lf-view-dashboard">
           View in Dashboard
         </button>
+        <button class="lf-btn-secondary" id="lf-download-csv" style="width:100%;margin-top:8px;">
+          Download CSV
+        </button>
       </div>
     </div>
   `;
@@ -303,8 +311,14 @@ export function injectOverlayUI(
   });
 
   viewDashboardBtn?.addEventListener('click', () => {
-    // Open the LeadFlow web dashboard
     window.open('https://leadflow-ai.vercel.app/dashboard/leads', '_blank');
+  });
+
+  const downloadCsvBtn = shadowRoot.getElementById('lf-download-csv');
+  downloadCsvBtn?.addEventListener('click', () => {
+    if (lastExtractedLeads.length > 0) {
+      downloadCSV(lastExtractedLeads);
+    }
   });
 }
 
@@ -346,7 +360,8 @@ export function updateOverlayProgress(progress: ExtractionProgress): void {
 /**
  * Show the extraction summary panel.
  */
-export function showOverlaySummary(summary: ExtractionSummary): void {
+export function showOverlaySummary(summary: ExtractionSummary, leads?: ExtractedLead[]): void {
+  if (leads) lastExtractedLeads = leads;
   if (!shadowRoot) return;
 
   const panel = shadowRoot.getElementById('lf-progress-panel');
@@ -372,7 +387,7 @@ export function showOverlaySummary(summary: ExtractionSummary): void {
  * Remove the overlay completely.
  */
 export function removeOverlay(): void {
-  const host = document.getElementById('__lf-extract-host');
+  const host = document.getElementById(HOST_ID);
   if (host) host.remove();
   shadowRoot = null;
 }
