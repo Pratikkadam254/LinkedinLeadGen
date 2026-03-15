@@ -8,6 +8,8 @@ import OnboardingPage from './pages/OnboardingPage'
 import UploadPage from './pages/UploadPage'
 import LeadsPage from './pages/LeadsPage'
 import ConnectPage from './pages/ConnectPage'
+import ExtractionsPage from './pages/ExtractionsPage'
+import WebhooksPage from './pages/WebhooksPage'
 
 // Get the Clerk publishable key from environment
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -27,6 +29,8 @@ function ClerkProviderWithRoutes() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/dashboard/upload" element={<UploadPage />} />
                 <Route path="/dashboard/leads" element={<LeadsPage />} />
+                <Route path="/dashboard/extractions" element={<ExtractionsPage />} />
+                <Route path="/dashboard/webhooks" element={<WebhooksPage />} />
                 <Route path="/dashboard/connect" element={<ConnectPage />} />
                 <Route path="*" element={<LandingPage />} />
             </Routes>
@@ -91,6 +95,32 @@ function ClerkProviderWithRoutes() {
                         <>
                             <SignedIn>
                                 <LeadsPage />
+                            </SignedIn>
+                            <SignedOut>
+                                <SignInPage />
+                            </SignedOut>
+                        </>
+                    }
+                />
+                <Route
+                    path="/dashboard/extractions"
+                    element={
+                        <>
+                            <SignedIn>
+                                <ExtractionsPage />
+                            </SignedIn>
+                            <SignedOut>
+                                <SignInPage />
+                            </SignedOut>
+                        </>
+                    }
+                />
+                <Route
+                    path="/dashboard/webhooks"
+                    element={
+                        <>
+                            <SignedIn>
+                                <WebhooksPage />
                             </SignedIn>
                             <SignedOut>
                                 <SignInPage />

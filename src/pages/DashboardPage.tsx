@@ -1,5 +1,7 @@
 import { useUser, UserButton } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
+import { useQuery } from "convex/react"
+import { api } from "../../convex/_generated/api"
 import Logo from '../components/ui/Logo'
 import { useSyncedUser, useLeadsStats, useActivitySummary } from '../hooks'
 import { mockLeads } from '../data/mockLeads'
@@ -29,6 +31,7 @@ function DashboardDemo() {
                 <nav className="dashboard-nav">
                     <Link to="/dashboard" className="nav-link active">Dashboard</Link>
                     <Link to="/dashboard/leads" className="nav-link">Leads</Link>
+                    <Link to="/dashboard/extractions" className="nav-link">Extractions</Link>
                     <Link to="/dashboard/connect" className="nav-link">Connect</Link>
                 </nav>
                 <div className="dashboard-header-right">
@@ -85,6 +88,7 @@ function DashboardWithClerk() {
     // Get real stats from Convex (falls back to undefined if not connected)
     const stats = useLeadsStats(syncedUser.convexId || undefined)
     const activitySummary = useActivitySummary(syncedUser.convexId || undefined, 7)
+    const creditBalance = useQuery(api.credits.getBalance)
 
     // Compute stats - use Convex data if available, fall back to mock
     const displayStats = stats || {
@@ -111,6 +115,7 @@ function DashboardWithClerk() {
                 <nav className="dashboard-nav">
                     <Link to="/dashboard" className="nav-link active">Dashboard</Link>
                     <Link to="/dashboard/leads" className="nav-link">Leads</Link>
+                    <Link to="/dashboard/extractions" className="nav-link">Extractions</Link>
                     <Link to="/dashboard/connect" className="nav-link">Connect</Link>
                 </nav>
                 <div className="dashboard-header-right">
@@ -181,6 +186,12 @@ function DashboardWithClerk() {
                                 <div className="stat-number">{displayStats.replied}</div>
                                 <div className="stat-label">Replies</div>
                             </div>
+                            {creditBalance && (
+                                <div className="stat-card">
+                                    <div className="stat-number">{creditBalance.balance}</div>
+                                    <div className="stat-label">Credits ({creditBalance.plan})</div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

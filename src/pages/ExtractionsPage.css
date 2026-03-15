@@ -1,0 +1,151 @@
+.extractions-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-secondary);
+}
+
+.extractions-page-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-2xl);
+}
+
+.extractions-page-header h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.extractions-count {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    background: var(--color-bg-secondary);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+}
+
+.extractions-table-wrapper {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.extractions-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.extractions-table thead {
+    background: var(--color-bg-secondary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.extractions-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+}
+
+.extractions-table td {
+    padding: 14px 16px;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.extractions-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.extractions-table tbody tr:hover {
+    background: var(--color-bg-secondary);
+}
+
+.col-name {
+    font-weight: 500;
+}
+
+.col-date {
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
+}
+
+.leads-found {
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+}
+
+.extraction-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.extraction-status-badge.blue {
+    background: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.extraction-status-badge.green {
+    background: #DCFCE7;
+    color: #15803D;
+}
+
+.extraction-status-badge.red {
+    background: #FEE2E2;
+    color: #B91C1C;
+}
+
+.extraction-status-badge.yellow {
+    background: #FEF3C7;
+    color: #A16207;
+}
+
+.extraction-status-badge.gray {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xl);
+    color: var(--color-text-secondary);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2xl);
+    text-align: center;
+}
+
+.empty-state .empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.empty-state p {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}

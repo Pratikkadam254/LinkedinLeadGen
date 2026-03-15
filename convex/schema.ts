@@ -270,6 +270,20 @@ export default defineSchema({
         .index("by_user", ["userId"])
         .index("by_user_and_type", ["userId", "type"]),
 
+    // Webhook endpoints
+    webhookEndpoints: defineTable({
+        userId: v.id("users"),
+        url: v.string(),
+        name: v.string(),
+        events: v.array(v.string()),
+        secret: v.string(),
+        isActive: v.boolean(),
+        failureCount: v.number(),
+        lastFiredAt: v.optional(v.number()),
+        createdAt: v.number(),
+    })
+        .index("by_user", ["userId"]),
+
     // Extraction history
     extractions: defineTable({
         userId: v.id("users"),

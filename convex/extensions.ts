@@ -161,7 +161,7 @@ export const importFromExtension = mutation({
         }
 
         // Deduct credits
-        if (imported > 0) {
+        if (imported > 0 && creditRecord) {
             await ctx.db.patch(creditRecord._id, {
                 balance: creditRecord.balance - imported,
                 updatedAt: now,
@@ -188,6 +188,7 @@ export const createExtraction = mutation({
     args: {
         searchUrl: v.string(),
         searchFilters: v.optional(v.any()),
+        name: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
@@ -204,6 +205,7 @@ export const createExtraction = mutation({
             userId: user._id,
             searchUrl: args.searchUrl,
             searchFilters: args.searchFilters,
+            name: args.name,
             status: "in_progress",
             leadsFound: 0,
             leadsExtracted: 0,
@@ -270,5 +272,27 @@ export const getExtractions = query({
             .withIndex("by_user", (q) => q.eq("userId", user._id))
             .order("desc")
             .take(50);
+    },
+});
+
+/**
+ * Internal mutation: clean up stale extractions that have been in_progress for over 24 hours.
+ */
+export const cleanupStaleExtractions = internalMutation({
+    handler: async (ctx) => {
+        const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
+        const stale = await ctx.db
+            .query("extractions")
+            .withIndex("by_status", (q) => q.eq("status", "in_progress"))
+            .filter((q) => q.lt(q.field("startedAt"), twentyFourHoursAgo))
+            .collect();
+
+        for (const extraction of stale) {
+            await ctx.db.patch(extraction._id, {
+                status: "failed" as const,
+                errorMessage: "Extraction timed out after 24 hours",
+                completedAt: Date.now(),
+            });
+        }
     },
 });

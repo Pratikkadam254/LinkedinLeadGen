@@ -440,6 +440,38 @@ export function injectOverlayUI(
         </button>
       </div>
     </div>
+
+    <div class="lf-modal-overlay lf-hidden" id="lf-config-modal">
+      <div class="lf-modal">
+        <div class="lf-modal-header">
+          <h3>Configure Extraction</h3>
+        </div>
+        <div class="lf-modal-body">
+          <div class="lf-form-group">
+            <label for="lf-extraction-name">Extraction Name</label>
+            <input type="text" id="lf-extraction-name" value="" />
+          </div>
+          <div class="lf-form-group">
+            <label>Lead Count</label>
+            <div class="lf-range-row">
+              <input type="range" id="lf-lead-count-slider" min="25" max="2500" value="100" step="25" />
+              <span class="lf-range-value" id="lf-lead-count-display">100</span>
+            </div>
+            <div style="font-size:11px;color:#6b7280;margin-top:4px;">
+              Available: <span id="lf-available-leads">--</span> leads
+            </div>
+          </div>
+          <div class="lf-credit-info">
+            <span>Credit cost</span>
+            <span class="lf-credit-cost" id="lf-credit-cost">100 credits</span>
+          </div>
+          <div class="lf-modal-actions">
+            <button class="lf-btn-cancel" id="lf-config-cancel">Cancel</button>
+            <button class="lf-btn-launch" id="lf-config-launch">Launch Extraction</button>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
 
   actionBar.appendChild(host);
@@ -450,8 +482,53 @@ export function injectOverlayUI(
   const cancelBtn = shadowRoot.getElementById('lf-cancel-btn');
   const viewDashboardBtn = shadowRoot.getElementById('lf-view-dashboard');
 
+  const configModal = shadowRoot.getElementById('lf-config-modal');
+  const extractionNameInput = shadowRoot.getElementById('lf-extraction-name') as HTMLInputElement;
+  const leadCountSlider = shadowRoot.getElementById('lf-lead-count-slider') as HTMLInputElement;
+  const leadCountDisplay = shadowRoot.getElementById('lf-lead-count-display');
+  const creditCostDisplay = shadowRoot.getElementById('lf-credit-cost');
+  const availableLeadsDisplay = shadowRoot.getElementById('lf-available-leads');
+  const configCancelBtn = shadowRoot.getElementById('lf-config-cancel');
+  const configLaunchBtn = shadowRoot.getElementById('lf-config-launch');
+
   extractBtn?.addEventListener('click', () => {
-    onExtract();
+    // Set default extraction name
+    const dateStr = new Date().toISOString().slice(0, 10);
+    if (extractionNameInput) extractionNameInput.value = `Extraction ${dateStr}`;
+
+    // Set available leads count
+    const totalResults = getTotalResultCount();
+    if (availableLeadsDisplay) {
+      availableLeadsDisplay.textContent = totalResults !== null ? String(totalResults) : '--';
+    }
+
+    // Reset slider
+    if (leadCountSlider) leadCountSlider.value = '100';
+    if (leadCountDisplay) leadCountDisplay.textContent = '100';
+    if (creditCostDisplay) creditCostDisplay.textContent = '100 credits';
+
+    // Show modal
+    if (configModal) configModal.classList.remove('lf-hidden');
+  });
+
+  leadCountSlider?.addEventListener('input', () => {
+    const val = leadCountSlider.value;
+    if (leadCountDisplay) leadCountDisplay.textContent = val;
+    if (creditCostDisplay) creditCostDisplay.textContent = `${val} credits`;
+  });
+
+  configCancelBtn?.addEventListener('click', () => {
+    if (configModal) configModal.classList.add('lf-hidden');
+  });
+
+  configLaunchBtn?.addEventListener('click', () => {
+    const config: ExtractionConfig = {
+      name: extractionNameInput?.value || undefined,
+      maxLeads: parseInt(leadCountSlider?.value || '100', 10),
+      searchUrl: window.location.href,
+    };
+    if (configModal) configModal.classList.add('lf-hidden');
+    onExtract(config);
   });
 
   pauseBtn?.addEventListener('click', () => {
@@ -476,6 +553,13 @@ export function injectOverlayUI(
   downloadCsvBtn?.addEventListener('click', () => {
     if (lastExtractedLeads.length > 0) {
       downloadCSV(lastExtractedLeads);
+    }
+  });
+
+  const downloadQualifiedCsvBtn = shadowRoot.getElementById('lf-download-qualified-csv');
+  downloadQualifiedCsvBtn?.addEventListener('click', () => {
+    if (lastExtractedLeads.length > 0) {
+      downloadQualifiedCSV(lastExtractedLeads);
     }
   });
 }
@@ -539,6 +623,11 @@ export function showOverlaySummary(summary: ExtractionSummary, leads?: Extracted
   if (creditsEl) creditsEl.textContent = String(summary.creditsUsed);
   if (companyEl) companyEl.textContent = String(summary.dataQuality.withCompanyData);
   if (connectionEl) connectionEl.textContent = String(summary.dataQuality.withConnectionData);
+
+  const qualifiedEl = shadowRoot.getElementById('lf-summary-qualified');
+  const unqualifiedEl = shadowRoot.getElementById('lf-summary-unqualified');
+  if (qualifiedEl) qualifiedEl.textContent = String(summary.matchedLeads);
+  if (unqualifiedEl) unqualifiedEl.textContent = String(summary.unmatchedLeads);
 }
 
 /**

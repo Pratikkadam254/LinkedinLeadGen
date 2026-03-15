@@ -105,6 +105,8 @@ export async function importLeads(
       lastPostDays: lead.lastPostDays,
       profileViewCount: lead.profileViewCount,
       salesNavProfileId: lead.salesNavProfileId,
+      filterMatch: lead.filterMatch,
+      filterMismatchReasons: lead.filterMismatchReasons,
     })),
     extractionId,
   } as never));

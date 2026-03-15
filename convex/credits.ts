@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -163,6 +163,40 @@ export const getTransactions = query({
             .withIndex("by_user", (q) => q.eq("userId", user._id))
             .order("desc")
             .take(100);
+    },
+});
+
+/**
+ * Internal mutation: reset monthly credits for expired records.
+ * Called by cron job daily at midnight.
+ */
+export const resetMonthlyCredits = internalMutation({
+    handler: async (ctx) => {
+        const now = Date.now();
+        const expiredCredits = await ctx.db
+            .query("credits")
+            .filter((q) => q.lt(q.field("resetDate"), now))
+            .collect();
+
+        for (const record of expiredCredits) {
+            const nextMonth = new Date();
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            nextMonth.setDate(1);
+
+            await ctx.db.patch(record._id, {
+                balance: record.monthlyAllocation,
+                resetDate: nextMonth.getTime(),
+                updatedAt: now,
+            });
+
+            await ctx.db.insert("creditTransactions", {
+                userId: record.userId,
+                amount: record.monthlyAllocation,
+                type: "monthly_allocation" as const,
+                description: "Monthly credit allocation reset",
+                createdAt: now,
+            });
+        }
     },
 });
 
