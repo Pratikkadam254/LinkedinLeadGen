@@ -41,6 +41,8 @@ function LeadsPage() {
                 outreachStatus: lead.outreachStatus,
                 postScraped: lead.postScraped,
                 createdAt: new Date(lead.createdAt).toISOString(),
+                filterMatch: lead.filterMatch,
+                filterMismatchReasons: lead.filterMismatchReasons,
             }))
         }
         return mockLeads

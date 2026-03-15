@@ -278,6 +278,45 @@
     font-style: italic;
 }
 
+/* Filter Mismatch Reasons */
+.mismatch-reasons-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.mismatch-reason {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    color: #991B1B;
+    line-height: 1.5;
+}
+
+.mismatch-reason::before {
+    content: "!";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #FCA5A5;
+    color: #7F1D1D;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
 /* Post Card */
 .post-card {
     background: var(--color-bg-secondary);

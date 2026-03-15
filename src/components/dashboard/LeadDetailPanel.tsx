@@ -145,6 +145,20 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                         </div>
                     </div>
 
+                    {/* Filter Mismatch Reasons */}
+                    {lead.filterMismatchReasons && lead.filterMismatchReasons.length > 0 && (
+                        <div className="section">
+                            <h4>Filter Mismatch Reasons</h4>
+                            <ul className="mismatch-reasons-list">
+                                {lead.filterMismatchReasons.map((reason, index) => (
+                                    <li key={index} className="mismatch-reason">
+                                        {reason}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
                     {/* Recent Posts */}
                     <div className="section">
                         <h4>Recent Posts</h4>

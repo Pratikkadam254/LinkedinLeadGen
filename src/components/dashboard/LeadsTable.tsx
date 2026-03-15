@@ -89,6 +89,7 @@ function LeadsTable({
                         <th className="col-status sortable" onClick={() => onSort('outreachStatus')}>
                             Status {renderSortIcon('outreachStatus')}
                         </th>
+                        <th className="col-qualified">Qualified</th>
                         <th className="col-post">Post</th>
                         <th className="col-actions"></th>
                     </tr>
@@ -140,6 +141,17 @@ function LeadsTable({
                             </td>
                             <td className="col-status">
                                 {getOutreachBadge(lead.outreachStatus)}
+                            </td>
+                            <td className="col-qualified">
+                                {lead.filterMatch === true && (
+                                    <span className="qualified-badge match">MATCH</span>
+                                )}
+                                {lead.filterMatch === false && (
+                                    <span className="qualified-badge no-match">NO MATCH</span>
+                                )}
+                                {lead.filterMatch === undefined && (
+                                    <span className="qualified-badge unknown">—</span>
+                                )}
                             </td>
                             <td className="col-post">
                                 {lead.postScraped ? (

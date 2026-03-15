@@ -12,6 +12,8 @@ export interface Lead {
     outreachStatus: 'pending' | 'sent' | 'accepted' | 'replied'
     postScraped: boolean
     createdAt: string
+    filterMatch?: boolean
+    filterMismatchReasons?: string[]
 }
 
 export const mockLeads: Lead[] = [
