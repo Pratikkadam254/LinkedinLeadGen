@@ -5,6 +5,8 @@
  * the extension. Triggers safe mode when threats are detected.
  */
 
+import { SAFE_MODE_DURATION_MS } from '../shared/constants';
+
 export type ThreatLevel = 'none' | 'low' | 'medium' | 'high' | 'critical';
 
 interface ThreatEvent {
@@ -183,11 +185,11 @@ class DetectionMonitor {
     // Notify service worker
     chrome.runtime.sendMessage({ type: 'SAFE_MODE' });
 
-    // Auto-exit safe mode after 5 minutes
+    // Auto-exit safe mode after cooldown period (15 minutes)
     setTimeout(() => {
       this.isInSafeMode = false;
       this.threats = [];
-    }, 5 * 60 * 1000);
+    }, SAFE_MODE_DURATION_MS);
   }
 
   /**

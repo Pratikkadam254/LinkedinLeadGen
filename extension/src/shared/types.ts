@@ -7,6 +7,7 @@ export interface ExtractedLead {
   title: string;
   company: string;
   linkedInUrl: string;
+  email?: string;
   location?: string;
 
   // Enrichment data (Sales Navigator specific)

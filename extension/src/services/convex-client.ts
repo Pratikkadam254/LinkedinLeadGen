@@ -84,7 +84,7 @@ export async function importLeads(
       title: lead.title,
       company: lead.company,
       linkedInUrl: lead.linkedInUrl,
-      email: undefined,
+      email: lead.email,
       location: lead.location,
       // Enrichment data
       companyHeadcount: lead.companyHeadcount,

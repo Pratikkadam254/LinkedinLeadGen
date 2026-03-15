@@ -98,12 +98,16 @@ function parseVoyagerProfile(profile: Record<string, unknown>): ExtractedLead | 
 
     const premium = profile.premium as boolean || false;
 
+    // Guess email from name + company domain
+    const email = guessEmail(firstName, lastName, companyLinkedInUrl);
+
     return {
       firstName,
       lastName,
       title: cleanTitle(headline),
       company: cleanCompanyName(company),
       linkedInUrl,
+      email,
       location: geoRegion || undefined,
       connectionDegree,
       sharedConnections,
@@ -232,6 +236,32 @@ export function cleanCompanyName(name: string): string {
   cleaned = fixCasing(cleaned);
 
   return cleaned.trim();
+}
+
+/**
+ * Guess a professional email from name and company LinkedIn URL.
+ * Uses common B2B email patterns (first.last@domain).
+ */
+export function guessEmail(
+  firstName: string,
+  lastName: string,
+  companyLinkedInUrl?: string
+): string | undefined {
+  if (!firstName || !lastName || !companyLinkedInUrl) return undefined;
+
+  // Extract company slug from LinkedIn URL
+  const match = companyLinkedInUrl.match(/linkedin\.com\/company\/([^/]+)/);
+  if (!match) return undefined;
+
+  const slug = match[1].toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!slug) return undefined;
+
+  // Most common B2B pattern: first.last@company.com
+  const first = firstName.toLowerCase().replace(/[^a-z]/g, '');
+  const last = lastName.toLowerCase().replace(/[^a-z]/g, '');
+  if (!first || !last) return undefined;
+
+  return `${first}.${last}@${slug}.com`;
 }
 
 /**

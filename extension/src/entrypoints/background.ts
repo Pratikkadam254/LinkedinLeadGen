@@ -213,10 +213,24 @@ export default defineBackground(() => {
   });
 
   async function refreshAuth(): Promise<void> {
-    const session = await getUserSession();
-    if (session?.clerkToken) {
-      // Token refresh would happen here via Clerk SDK
-      // For now, the popup handles re-authentication
+    try {
+      const session = await getUserSession();
+      if (!session?.clerkToken) return;
+
+      // Attempt to refresh the Clerk token by re-initializing the Convex client
+      // with the existing token. If the token is expired, the next Convex call
+      // will fail and the user will be prompted to re-authenticate via the popup.
+      initConvexClient(CONVEX_URL);
+
+      // Validate token is still working by making a lightweight query
+      const balance = await checkCredits();
+      if (balance) {
+        console.log('[LeadFlow] Auth token still valid, credits:', balance.balance);
+      }
+    } catch (error) {
+      console.warn('[LeadFlow] Auth token expired or invalid, user needs to re-authenticate:', error);
+      // Clear the stored session so popup shows login
+      await saveUserSession({ isAuthenticated: false });
     }
   }
 

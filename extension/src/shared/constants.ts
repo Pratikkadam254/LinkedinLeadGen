@@ -12,6 +12,7 @@ export const MIN_SCROLL_DELAY_MS = 800;
 export const MAX_SCROLL_DELAY_MS = 2500;
 export const MAX_SESSION_DURATION_MS = 45 * 60 * 1000; // 45 minutes
 export const BATCH_SIZE = 50; // Leads per Convex mutation call
+export const SAFE_MODE_DURATION_MS = 15 * 60 * 1000; // 15 minutes cooldown when detection suspected
 
 // ============================================
 // VOYAGER API ENDPOINTS (LinkedIn internal)
