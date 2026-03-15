@@ -44,6 +44,8 @@ export default defineSchema({
         title: v.string(),
         linkedInUrl: v.string(),
         email: v.optional(v.string()),
+        filterMatch: v.optional(v.boolean()),
+        filterMismatchReasons: v.optional(v.array(v.string())),
 
         // Scoring data
         score: v.number(),
@@ -273,6 +275,9 @@ export default defineSchema({
         userId: v.id("users"),
         searchUrl: v.string(),
         searchFilters: v.optional(v.any()),
+        name: v.optional(v.string()),
+        matchCount: v.optional(v.number()),
+        noMatchCount: v.optional(v.number()),
         status: v.union(
             v.literal("in_progress"),
             v.literal("completed"),

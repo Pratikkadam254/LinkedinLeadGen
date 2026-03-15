@@ -17,6 +17,7 @@ import { injectVoyagerInterceptor, onVoyagerResponse } from '../core/voyager-int
 import { parseVoyagerSearchResults, deduplicateLeads, mergeLeadData } from '../core/data-parser';
 import { extractCurrentPageLeads, detectPageType, waitForSelector } from '../core/dom-scraper';
 import { autoScrollExtraction, type ExtractionCallbacks } from '../core/auto-scroller';
+import { parseSalesNavFilters, validateLeadAgainstFilters, hasActiveFilters, type SearchFilters } from '../core/filter-validator';
 import { startProbeMonitor, setupNavigationCleanup, cleanupInjectedElements } from '../anti-detection/fingerprint-guard';
 import { startMouseSimulation } from '../anti-detection/behavior-simulator';
 import { detectionMonitor } from '../anti-detection/detection-monitor';
@@ -39,6 +40,7 @@ export default defineContentScript({
     let isCancelled = false;
     const voyagerLeadCache: Map<string, Partial<ExtractedLead>> = new Map();
     let cleanupFunctions: (() => void)[] = [];
+    let currentSearchFilters: SearchFilters = {};
 
     // ============================================
     // INITIALIZATION
@@ -78,7 +80,10 @@ export default defineContentScript({
         }
       });
 
-      // 5. Wait for the page to fully load, then inject overlay UI
+      // 5. Parse search filters from current URL
+      currentSearchFilters = parseSalesNavFilters(window.location.href);
+
+      // 6. Wait for the page to fully load, then inject overlay UI
       await waitForSelector(SELECTORS.actionBar, { timeout: 10000 });
       injectOverlayUI(handleStartExtraction);
 
@@ -144,10 +149,11 @@ export default defineContentScript({
         return;
       }
 
-      // Default config
+      // Default config with parsed search filters
       const extractionConfig: ExtractionConfig = config || {
         maxLeads: Math.min(requestScheduler.getRemainingQuota(), 2500),
         searchUrl: window.location.href,
+        searchFilters: currentSearchFilters as Record<string, unknown>,
       };
 
       isExtracting = true;
@@ -179,6 +185,15 @@ export default defineContentScript({
 
           const uniqueLeads = deduplicateLeads(enrichedLeads);
 
+          // Validate each lead against search filters
+          if (hasActiveFilters(currentSearchFilters)) {
+            for (const lead of uniqueLeads) {
+              const result = validateLeadAgainstFilters(lead, currentSearchFilters);
+              lead.filterMatch = result.isMatch;
+              lead.filterMismatchReasons = result.mismatches.map((m) => m.reason);
+            }
+          }
+
           // Send batch to service worker
           chrome.runtime.sendMessage({
             type: 'LEADS_EXTRACTED',
@@ -202,31 +217,28 @@ export default defineContentScript({
 
           await requestScheduler.recordExtraction(allLeads.length);
 
-          showOverlaySummary({
+          const matched = allLeads.filter((l) => l.filterMatch !== false).length;
+          const unmatched = allLeads.filter((l) => l.filterMatch === false).length;
+
+          const summary = {
             totalLeads: allLeads.length,
             creditsUsed: allLeads.length,
             duration: Date.now() - startTime,
             searchUrl: extractionConfig.searchUrl,
+            matchedLeads: matched,
+            unmatchedLeads: unmatched,
             dataQuality: {
               withCompanyData: allLeads.filter((l) => l.companyHeadcount).length,
               withConnectionData: allLeads.filter((l) => l.connectionDegree).length,
               withEngagementData: allLeads.filter((l) => l.followers).length,
             },
-          });
+          };
+
+          showOverlaySummary(summary, allLeads);
 
           chrome.runtime.sendMessage({
             type: 'EXTRACTION_COMPLETE',
-            summary: {
-              totalLeads: allLeads.length,
-              creditsUsed: allLeads.length,
-              duration: Date.now() - startTime,
-              searchUrl: extractionConfig.searchUrl,
-              dataQuality: {
-                withCompanyData: allLeads.filter((l) => l.companyHeadcount).length,
-                withConnectionData: allLeads.filter((l) => l.connectionDegree).length,
-                withEngagementData: allLeads.filter((l) => l.followers).length,
-              },
-            },
+            summary,
           } as ExtensionMessage);
         },
 

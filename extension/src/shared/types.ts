@@ -36,6 +36,15 @@ export interface ExtractedLead {
   // Sales Navigator metadata
   salesNavProfileId?: string;
   savedToList?: string;
+
+  // Filter match validation (Evaboot parity)
+  filterMatch?: boolean;
+  filterMismatchReasons?: string[];
+
+  // Additional fields for enhanced export
+  yearsAtPosition?: number;
+  numConnections?: number;
+  companyWebsite?: string;
 }
 
 export interface PostData {
@@ -46,6 +55,7 @@ export interface PostData {
 }
 
 export interface ExtractionConfig {
+  name?: string;
   maxLeads: number;
   searchUrl: string;
   searchFilters?: Record<string, unknown>;
@@ -98,6 +108,8 @@ export interface ExtractionSummary {
   creditsUsed: number;
   duration: number;
   searchUrl: string;
+  matchedLeads: number;
+  unmatchedLeads: number;
   dataQuality: {
     withCompanyData: number;
     withConnectionData: number;

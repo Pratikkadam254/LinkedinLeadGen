@@ -98,6 +98,27 @@ function parseVoyagerProfile(profile: Record<string, unknown>): ExtractedLead | 
 
     const premium = profile.premium as boolean || false;
 
+    // Years at current position
+    let yearsAtPosition: number | undefined;
+    if (currentPositions && currentPositions.length > 0) {
+      const startDate = currentPositions[0].startDate as Record<string, number> | undefined;
+      if (startDate?.year) {
+        const startMs = new Date(startDate.year, (startDate.month || 1) - 1).getTime();
+        yearsAtPosition = Math.round(((Date.now() - startMs) / (365 * 24 * 60 * 60 * 1000)) * 10) / 10;
+      }
+    }
+
+    // Number of connections
+    const numConnections = (profile.numConnections as number)
+      || (profile.connectionsCount as number)
+      || undefined;
+
+    // Company website
+    const companyWebsite = (company_data?.website as string)
+      || (company_data?.companyPageUrl as string)
+      || (company_data?.websiteUrl as string)
+      || undefined;
+
     // Guess email from name + company domain
     const email = guessEmail(firstName, lastName, companyLinkedInUrl);
 
@@ -117,6 +138,9 @@ function parseVoyagerProfile(profile: Record<string, unknown>): ExtractedLead | 
       followers,
       inMailAvailable: premium,
       salesNavProfileId: profile.objectUrn as string || profile.entityUrn as string || undefined,
+      yearsAtPosition,
+      numConnections,
+      companyWebsite,
     };
   } catch (error) {
     console.warn('[LeadFlow] Failed to parse Voyager profile:', error);
@@ -311,5 +335,8 @@ export function mergeLeadData(
     profileViewCount: apiLead.profileViewCount ?? domLead.profileViewCount,
     salesNavProfileId: apiLead.salesNavProfileId ?? domLead.salesNavProfileId,
     savedToList: apiLead.savedToList ?? domLead.savedToList,
+    yearsAtPosition: apiLead.yearsAtPosition ?? domLead.yearsAtPosition,
+    numConnections: apiLead.numConnections ?? domLead.numConnections,
+    companyWebsite: apiLead.companyWebsite ?? domLead.companyWebsite,
   };
 }

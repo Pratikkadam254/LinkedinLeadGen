@@ -9,7 +9,8 @@
 
 import { SELECTORS } from '../shared/constants';
 import type { ExtractedLead, ExtractionProgress, ExtractionSummary, ExtractionConfig } from '../shared/types';
-import { downloadCSV } from '../core/csv-exporter';
+import { downloadCSV, downloadQualifiedCSV } from '../core/csv-exporter';
+import { getTotalResultCount } from '../core/dom-scraper';
 
 let shadowRoot: ShadowRoot | null = null;
 let lastExtractedLeads: ExtractedLead[] = [];
@@ -212,6 +213,152 @@ export function injectOverlayUI(
         margin-top: 12px;
       }
 
+      .lf-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10001;
+      }
+
+      .lf-modal {
+        background: white;
+        border-radius: 12px;
+        width: 400px;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        overflow: hidden;
+      }
+
+      .lf-modal-header {
+        padding: 16px 20px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+      }
+
+      .lf-modal-header h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .lf-modal-body {
+        padding: 20px;
+      }
+
+      .lf-form-group {
+        margin-bottom: 16px;
+      }
+
+      .lf-form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 6px;
+      }
+
+      .lf-form-group input[type="text"],
+      .lf-form-group input[type="number"] {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 13px;
+        font-family: inherit;
+        outline: none;
+      }
+
+      .lf-form-group input:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+      }
+
+      .lf-range-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .lf-range-row input[type="range"] {
+        flex: 1;
+        accent-color: #6366f1;
+      }
+
+      .lf-range-row .lf-range-value {
+        min-width: 50px;
+        text-align: right;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1f2937;
+      }
+
+      .lf-credit-info {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 14px;
+        background: #f3f4f6;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #4b5563;
+        margin-bottom: 16px;
+      }
+
+      .lf-credit-info .lf-credit-cost {
+        font-weight: 600;
+        color: #6366f1;
+      }
+
+      .lf-modal-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .lf-modal-actions .lf-btn-cancel {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        background: white;
+        color: #374151;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .lf-modal-actions .lf-btn-cancel:hover {
+        background: #f9fafb;
+      }
+
+      .lf-modal-actions .lf-btn-launch {
+        flex: 2;
+        padding: 10px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .lf-modal-actions .lf-btn-launch:hover {
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      }
+
+      .lf-stat-qualified .lf-stat-value {
+        color: #16a34a;
+      }
+
+      .lf-stat-unqualified .lf-stat-value {
+        color: #dc2626;
+      }
+
       .lf-hidden { display: none; }
     </style>
 
@@ -274,11 +421,22 @@ export function injectOverlayUI(
           <span>With connection data</span>
           <span class="lf-stat-value" id="lf-summary-connection">0</span>
         </div>
+        <div class="lf-stat lf-stat-qualified">
+          <span>Qualified</span>
+          <span class="lf-stat-value" id="lf-summary-qualified">0</span>
+        </div>
+        <div class="lf-stat lf-stat-unqualified">
+          <span>Unqualified</span>
+          <span class="lf-stat-value" id="lf-summary-unqualified">0</span>
+        </div>
         <button class="lf-btn-primary-full" id="lf-view-dashboard">
           View in Dashboard
         </button>
         <button class="lf-btn-secondary" id="lf-download-csv" style="width:100%;margin-top:8px;">
           Download CSV
+        </button>
+        <button class="lf-btn-secondary" id="lf-download-qualified-csv" style="width:100%;margin-top:8px;">
+          Download Qualified Only
         </button>
       </div>
     </div>

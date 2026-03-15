@@ -1,4 +1,4 @@
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 /**
@@ -39,6 +39,8 @@ export const importFromExtension = mutation({
             lastPostDays: v.optional(v.number()),
             profileViewCount: v.optional(v.number()),
             salesNavProfileId: v.optional(v.string()),
+            filterMatch: v.optional(v.boolean()),
+            filterMismatchReasons: v.optional(v.array(v.string())),
         })),
         extractionId: v.string(),
     },
@@ -53,20 +55,34 @@ export const importFromExtension = mutation({
             .first();
         if (!user) throw new Error("User not found");
 
+        // Validate extraction belongs to user
+        if (args.extractionId) {
+            const extraction = await ctx.db
+                .query("extractions")
+                .filter((q) => q.eq(q.field("_id"), args.extractionId as any))
+                .first();
+            if (extraction && extraction.userId !== user._id) {
+                throw new Error("Unauthorized: extraction belongs to another user");
+            }
+        }
+
         // Check credits
         const creditRecord = await ctx.db
             .query("credits")
             .withIndex("by_user", (q) => q.eq("userId", user._id))
             .first();
 
-        if (!creditRecord || creditRecord.balance < args.leads.length) {
+        const availableCredits = creditRecord ? creditRecord.balance : 0;
+        if (availableCredits <= 0) {
             throw new Error("Insufficient credits");
         }
+        // Only process leads we can afford
+        const leadsToProcess = args.leads.slice(0, availableCredits);
 
         const now = Date.now();
         let imported = 0;
 
-        for (const lead of args.leads) {
+        for (const lead of leadsToProcess) {
             // Deduplication: check if lead with same LinkedIn URL exists
             if (lead.linkedInUrl) {
                 const existing = await ctx.db
@@ -85,6 +101,8 @@ export const importFromExtension = mutation({
                 title: lead.title,
                 linkedInUrl: lead.linkedInUrl,
                 email: lead.email,
+                filterMatch: lead.filterMatch,
+                filterMismatchReasons: lead.filterMismatchReasons,
                 score: 0, // Will be scored in enrichment pipeline
                 scoreTier: "cold" as const,
                 companySize: lead.companyHeadcount,
@@ -159,7 +177,7 @@ export const importFromExtension = mutation({
             });
         }
 
-        return { imported, creditsUsed: imported };
+        return { imported, creditsUsed: imported, skipped: args.leads.length - leadsToProcess.length };
     },
 });
 

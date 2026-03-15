@@ -22,6 +22,11 @@ const CSV_HEADERS = [
   'Connection Degree',
   'Shared Connections',
   'Followers',
+  'Qualified',
+  'No Match Reasons',
+  'Company Website',
+  'Years In Position',
+  'Connections',
 ] as const;
 
 function escapeCsvField(value: string | number | undefined | null): string {
@@ -55,12 +60,26 @@ export function leadsToCSV(leads: ExtractedLead[]): string {
       lead.connectionDegree,
       lead.sharedConnections,
       lead.followers,
+      lead.filterMatch === undefined ? '' : (lead.filterMatch ? 'MATCH' : 'NO_MATCH'),
+      lead.filterMismatchReasons?.join('; ') || '',
+      lead.companyWebsite || '',
+      lead.yearsAtPosition || '',
+      lead.numConnections || '',
     ].map(escapeCsvField);
 
     rows.push(row.join(','));
   }
 
   return rows.join('\n');
+}
+
+/**
+ * Download only qualified (matched) leads as CSV.
+ */
+export function downloadQualifiedCSV(leads: ExtractedLead[], filename?: string): void {
+  const qualified = leads.filter((l) => l.filterMatch !== false);
+  const name = filename || `leadflow-qualified-${new Date().toISOString().slice(0, 10)}.csv`;
+  downloadCSV(qualified, name);
 }
 
 /**
