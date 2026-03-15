@@ -11,12 +11,15 @@
 import type * as activities from "../activities.js";
 import type * as campaigns from "../campaigns.js";
 import type * as credits from "../credits.js";
+import type * as crons from "../crons.js";
 import type * as extensions from "../extensions.js";
 import type * as leads from "../leads.js";
 import type * as strategies from "../strategies.js";
 import type * as users from "../users.js";
+import type * as webhooks from "../webhooks.js";
 import type * as actions_autopilot from "../actions/autopilot.js";
 import type * as actions_strategy from "../actions/strategy.js";
+import type * as actions_webhook_fire from "../actions/webhook-fire.js";
 
 import type {
   ApiFromModules,
@@ -28,12 +31,15 @@ declare const fullApi: ApiFromModules<{
   activities: typeof activities;
   campaigns: typeof campaigns;
   credits: typeof credits;
+  crons: typeof crons;
   extensions: typeof extensions;
   leads: typeof leads;
   strategies: typeof strategies;
   users: typeof users;
+  webhooks: typeof webhooks;
   "actions/autopilot": typeof actions_autopilot;
   "actions/strategy": typeof actions_strategy;
+  "actions/webhook-fire": typeof actions_webhook_fire;
 }>;
 
 /**

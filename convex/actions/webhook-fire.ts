@@ -24,7 +24,7 @@ export const fireWebhook = internalAction({
     const key = await crypto.subtle.importKey(
       "raw",
       encoder.encode(endpoint.secret),
-      { name: "HMAC", algorithm: "SHA-256" },
+      { name: "HMAC", hash: "SHA-256" },
       false,
       ["sign"]
     );

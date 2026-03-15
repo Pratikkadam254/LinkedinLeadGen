@@ -1,5 +1,6 @@
 import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
+import { internal } from "./_generated/api";
 
 /**
  * Import leads from the Chrome extension.
@@ -175,6 +176,50 @@ export const importFromExtension = mutation({
                 description: `Extracted ${imported} leads from Sales Navigator`,
                 createdAt: now,
             });
+
+            // Fire credits.low webhook if balance drops below 20%
+            const newBalance = creditRecord.balance - imported;
+            const threshold = Math.floor((creditRecord.monthlyAllocation || 100) * 0.2);
+            if (newBalance <= threshold && newBalance >= 0) {
+                const lowCreditWebhooks = await ctx.db
+                    .query("webhookEndpoints")
+                    .withIndex("by_user", (q) => q.eq("userId", user._id))
+                    .filter((q) => q.eq(q.field("isActive"), true))
+                    .collect();
+
+                for (const webhook of lowCreditWebhooks.filter((w) => w.events.includes("credits.low"))) {
+                    await ctx.scheduler.runAfter(0, internal.actions["webhook-fire"].fireWebhook, {
+                        webhookId: webhook._id,
+                        event: "credits.low",
+                        payload: { balance: newBalance, threshold },
+                    });
+                }
+            }
+        }
+
+        // Fire webhooks for lead.imported event
+        if (imported > 0) {
+            const webhooks = await ctx.db
+                .query("webhookEndpoints")
+                .withIndex("by_user", (q) => q.eq("userId", user._id))
+                .filter((q) => q.eq(q.field("isActive"), true))
+                .collect();
+
+            const leadImportWebhooks = webhooks.filter((w) =>
+                w.events.includes("lead.imported")
+            );
+
+            for (const webhook of leadImportWebhooks) {
+                await ctx.scheduler.runAfter(0, internal.actions["webhook-fire"].fireWebhook, {
+                    webhookId: webhook._id,
+                    event: "lead.imported",
+                    payload: {
+                        imported,
+                        creditsUsed: imported,
+                        extractionId: args.extractionId,
+                    },
+                });
+            }
         }
 
         return { imported, creditsUsed: imported, skipped: args.leads.length - leadsToProcess.length };
@@ -213,6 +258,29 @@ export const createExtraction = mutation({
             startedAt: now,
         });
 
+        // Fire webhooks for extraction.started event
+        const webhooks = await ctx.db
+            .query("webhookEndpoints")
+            .withIndex("by_user", (q) => q.eq("userId", user._id))
+            .filter((q) => q.eq(q.field("isActive"), true))
+            .collect();
+
+        const startWebhooks = webhooks.filter((w) =>
+            w.events.includes("extraction.started")
+        );
+
+        for (const webhook of startWebhooks) {
+            await ctx.scheduler.runAfter(0, internal.actions["webhook-fire"].fireWebhook, {
+                webhookId: webhook._id,
+                event: "extraction.started",
+                payload: {
+                    extractionId,
+                    searchUrl: args.searchUrl,
+                    name: args.name,
+                },
+            });
+        }
+
         return extractionId;
     },
 });
@@ -244,12 +312,38 @@ export const completeExtraction = mutation({
         creditsUsed: v.number(),
     },
     handler: async (ctx, args) => {
+        const extraction = await ctx.db.get(args.extractionId);
+        if (!extraction) throw new Error("Extraction not found");
+
         await ctx.db.patch(args.extractionId, {
             status: "completed" as const,
             leadsExtracted: args.totalLeads,
             creditsUsed: args.creditsUsed,
             completedAt: Date.now(),
         });
+
+        // Fire webhooks for extraction.completed event
+        const webhooks = await ctx.db
+            .query("webhookEndpoints")
+            .withIndex("by_user", (q) => q.eq("userId", extraction.userId))
+            .filter((q) => q.eq(q.field("isActive"), true))
+            .collect();
+
+        const completionWebhooks = webhooks.filter((w) =>
+            w.events.includes("extraction.completed")
+        );
+
+        for (const webhook of completionWebhooks) {
+            await ctx.scheduler.runAfter(0, internal.actions["webhook-fire"].fireWebhook, {
+                webhookId: webhook._id,
+                event: "extraction.completed",
+                payload: {
+                    extractionId: args.extractionId,
+                    totalLeads: args.totalLeads,
+                    creditsUsed: args.creditsUsed,
+                },
+            });
+        }
     },
 });
 
