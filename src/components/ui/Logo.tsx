@@ -1,8 +1,19 @@
 import './Logo.css'
 
-function Logo() {
+interface LogoProps {
+    size?: number;
+}
+
+function Logo({ size = 32 }: LogoProps) {
     return (
-        <svg className="logo-icon" viewBox="0 0 32 32" fill="currentColor">
+        <svg
+            className="logo-icon"
+            viewBox="0 0 32 32"
+            fill="currentColor"
+            width={size}
+            height={size}
+            style={{ width: size, height: size }}
+        >
             <circle cx="8" cy="8" r="4" opacity="0.6" />
             <circle cx="24" cy="8" r="4" />
             <circle cx="16" cy="24" r="4" />

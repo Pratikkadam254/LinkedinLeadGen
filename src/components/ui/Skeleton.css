@@ -1,0 +1,33 @@
+.skeleton-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Text variant */
+.skeleton--text {
+  height: 14px;
+  width: 100%;
+  border-radius: var(--radius-xs);
+  margin-bottom: 8px;
+}
+
+.skeleton-group .skeleton--text:last-child {
+  margin-bottom: 0;
+}
+
+/* Circular variant */
+.skeleton--circular {
+  border-radius: 50%;
+}
+
+/* Rectangular variant */
+.skeleton--rectangular {
+  border-radius: var(--radius-sm);
+}
+
+/* Card variant */
+.skeleton--card {
+  border-radius: var(--radius-lg);
+  min-height: 120px;
+  width: 100%;
+}

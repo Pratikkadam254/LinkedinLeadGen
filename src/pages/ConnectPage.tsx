@@ -10,7 +10,6 @@ import {
     RefreshCw,
     Unplug
 } from 'lucide-react'
-import Logo from '../components/ui/Logo'
 import { unipileService, initializeUnipile, type LinkedInAccount } from '../lib/unipile'
 import './ConnectPage.css'
 
@@ -108,18 +107,7 @@ function ConnectPage() {
 
     return (
         <div className="connect-page">
-            <header className="connect-header">
-                <Link to="/dashboard" className="connect-logo">
-                    <Logo />
-                    <span>LeadFlow AI</span>
-                </Link>
-                <nav className="connect-nav">
-                    <Link to="/dashboard" className="nav-link">← Back to Dashboard</Link>
-                </nav>
-            </header>
-
-            <main className="connect-main">
-                <div className="connect-container">
+            <div className="connect-container">
                     <div className="connect-intro">
                         <div className="linkedin-icon-wrapper">
                             <Linkedin size={32} />
@@ -298,8 +286,7 @@ function ConnectPage() {
                             </details>
                         </div>
                     </div>
-                </div>
-            </main>
+            </div>
         </div>
     )
 }

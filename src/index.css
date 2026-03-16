@@ -1,46 +1,56 @@
-/* LeadFlow AI - Production-Ready Design System */
+/* LeadFlow AI - Notion-Inspired Design System */
 
 :root {
-  /* Primary Colors - LinkedIn Blue */
-  --color-primary: #0A66C2;
-  --color-primary-light: #70B5F9;
-  --color-primary-lighter: #D0E8FF;
-  --color-primary-dark: #084EA0;
-  --color-primary-darker: #064D7A;
+  /* Primary Colors — Soft Indigo-Blue */
+  --color-primary: #4F6BED;
+  --color-primary-hover: #3D56D4;
+  --color-primary-light: #A8B8F8;
+  --color-primary-lighter: #EEF1FE;
+  --color-primary-dark: #3448B5;
+  --color-primary-darker: #2A3A8F;
+  --color-primary-subtle: #F5F7FF;
 
-  /* Backgrounds */
+  /* Backgrounds — Notion-style warm neutrals with blue undertone */
   --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #F3F2EF;
-  --color-bg-tertiary: #EEF3F8;
+  --color-bg-secondary: #F7F8FC;
+  --color-bg-tertiary: #ECEEF5;
+  --color-bg-sidebar: #F0F2F9;
+  --color-bg-hover: #F0F2FA;
 
-  /* Text Colors */
-  --color-text-primary: #191919;
-  --color-text-secondary: #666666;
-  --color-text-tertiary: #8E8E8E;
+  /* Text Colors — Softer than pure black */
+  --color-text-primary: #1A1D2E;
+  --color-text-secondary: #5F6581;
+  --color-text-tertiary: #9499B3;
+  --color-text-on-primary: #FFFFFF;
 
-  /* Status Colors */
-  --color-success: #057642;
-  --color-success-light: #DCFCE7;
-  --color-warning: #B24020;
-  --color-warning-light: #FEF3C7;
-  --color-error: #B90000;
-  --color-error-light: #FEE2E2;
+  /* Status Colors — Muted pastels */
+  --color-success: #2D9D6F;
+  --color-success-light: #E8F8F0;
+  --color-warning: #E5A320;
+  --color-warning-light: #FFF8E6;
+  --color-error: #E04545;
+  --color-error-light: #FEF0F0;
+  --color-info: #4F6BED;
+  --color-info-light: #EEF1FE;
 
-  /* Borders */
-  --color-border-light: #E8E8E8;
-  --color-border-medium: #D9D9D9;
+  /* Borders — Nearly invisible, Notion-style */
+  --color-border-light: rgba(0, 0, 0, 0.06);
+  --color-border-medium: rgba(0, 0, 0, 0.10);
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
-  --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-focus: 0 0 0 3px rgba(10, 102, 194, 0.25);
+  /* Shadows — Ultra-soft, Notion-inspired */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 0 0 1px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-sidebar: 1px 0 3px rgba(0, 0, 0, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(79, 107, 237, 0.2);
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-  /* Spacing */
+  /* Spacing — Generous whitespace */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
@@ -49,22 +59,26 @@
   --space-2xl: 48px;
   --space-3xl: 64px;
   --space-4xl: 96px;
+  --space-5xl: 128px;
 
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* Border Radius — Curves and Boulders */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
   --radius-full: 9999px;
 
-  /* Transitions - explicit properties, never 'all' */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* Transitions */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+  --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ==================== 
-   Reset & Base Styles 
+/* ====================
+   Reset & Base Styles
    ==================== */
 *,
 *::before,
@@ -97,13 +111,14 @@ body {
   font-family: var(--font-sans);
   background: var(--color-bg-secondary);
   color: var(--color-text-primary);
+  font-size: 0.875rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ==================== 
-   Accessibility 
+/* ====================
+   Accessibility
    ==================== */
 
 /* Skip to main content link */
@@ -125,7 +140,7 @@ body {
   top: 16px;
 }
 
-/* Focus visible styles - never outline:none without replacement */
+/* Focus visible styles */
 *:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
@@ -149,8 +164,8 @@ body {
   border: 0;
 }
 
-/* ==================== 
-   Typography 
+/* ====================
+   Typography
    ==================== */
 
 /* Tabular nums for statistics/numbers */
@@ -166,6 +181,7 @@ h4,
 h5,
 h6 {
   text-wrap: balance;
+  color: var(--color-text-primary);
 }
 
 /* Scroll margin for anchor links */
@@ -173,7 +189,7 @@ h6 {
   scroll-margin-top: 80px;
 }
 
-/* ==================== 
+/* ====================
    Links & Buttons
    ==================== */
 
@@ -199,8 +215,8 @@ img {
   display: block;
 }
 
-/* ==================== 
-   Utility Classes 
+/* ====================
+   Utility Classes
    ==================== */
 
 .container {
@@ -209,8 +225,8 @@ img {
   padding: 0 var(--space-lg);
 }
 
-/* ==================== 
-   Button System 
+/* ====================
+   Button System
    ==================== */
 
 .btn {
@@ -219,15 +235,15 @@ img {
   justify-content: center;
   gap: var(--space-sm);
   font-family: var(--font-sans);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.875rem;
-  padding: 10px 20px;
-  border-radius: var(--radius-full);
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   text-decoration: none;
   position: relative;
-  /* Explicit transitions - never use 'all' */
+  height: 36px;
   transition:
     background-color var(--transition-base),
     color var(--transition-base),
@@ -243,31 +259,30 @@ img {
 /* Primary Button */
 .btn-primary {
   background: var(--color-primary);
-  color: white;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: var(--color-text-on-primary);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-dark);
-  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.3);
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
   box-shadow: var(--shadow-focus);
 }
 
 /* Secondary Button */
 .btn-secondary {
   background: transparent;
-  color: var(--color-primary);
-  border: 1.5px solid var(--color-primary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-medium);
 }
 
 .btn-secondary:hover {
-  background: var(--color-primary-lighter);
-  border-color: var(--color-primary-dark);
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-medium);
+  color: var(--color-text-primary);
 }
 
 .btn-secondary:focus-visible {
@@ -279,18 +294,42 @@ img {
   background: transparent;
   color: var(--color-text-secondary);
   border: none;
-  padding: 10px 12px;
+  padding: 8px 12px;
 }
 
 .btn-text:hover {
   color: var(--color-primary);
-  background: rgba(10, 102, 194, 0.08);
+  background: var(--color-bg-hover);
+}
+
+/* Danger Button */
+.btn-danger {
+  background: transparent;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+}
+
+.btn-danger:hover {
+  background: var(--color-error-light);
 }
 
 /* Large Button */
 .btn-lg {
-  padding: 14px 28px;
-  font-size: 1rem;
+  padding: 10px 24px;
+  font-size: 0.9375rem;
+  height: 40px;
+}
+
+/* Small Button */
+.btn-sm {
+  padding: 4px 12px;
+  font-size: 0.8125rem;
+  height: 32px;
+}
+
+/* Pill variant for CTAs */
+.btn-pill {
+  border-radius: var(--radius-full);
 }
 
 /* Button with arrow indicator */
@@ -302,8 +341,58 @@ img {
   transform: translateX(4px);
 }
 
-/* ==================== 
-   Loading States 
+/* ====================
+   Form Elements
+   ==================== */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="url"],
+textarea,
+select {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  height: 40px;
+  transition:
+    border-color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+textarea {
+  height: auto;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* ====================
+   Loading States
    ==================== */
 
 @keyframes shimmer {
@@ -318,22 +407,22 @@ img {
 
 .skeleton {
   background: linear-gradient(90deg,
-      var(--color-bg-secondary) 0%,
-      var(--color-bg-tertiary) 50%,
-      var(--color-bg-secondary) 100%);
+      var(--color-bg-tertiary) 0%,
+      var(--color-bg-secondary) 50%,
+      var(--color-bg-tertiary) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-sm);
 }
 
-/* ==================== 
-   Animations 
+/* ====================
+   Animations
    ==================== */
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
 
   to {
@@ -364,12 +453,38 @@ img {
   }
 }
 
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-fade-in-up {
-  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: fadeInUp 0.4s ease forwards;
 }
 
 .animate-fade-in {
   animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease forwards;
 }
 
 /* Staggered animation delays */
@@ -393,8 +508,8 @@ img {
   animation-delay: 0.5s;
 }
 
-/* ==================== 
-   Selection Styles 
+/* ====================
+   Selection Styles
    ==================== */
 
 ::selection {

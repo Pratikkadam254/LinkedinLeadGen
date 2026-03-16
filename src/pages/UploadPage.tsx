@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Upload, FileSpreadsheet, AlertCircle, CheckCircle2, X, ArrowLeft, Loader2, FileText, Table } from 'lucide-react'
-import Logo from '../components/ui/Logo'
+import { Upload, FileSpreadsheet, AlertCircle, CheckCircle2, X, Loader2, FileText, Table } from 'lucide-react'
 import { useToast } from '../components/ui/Toast'
 import { useSyncedUser, useLeadMutations } from '../hooks'
 import { parseCSV, validateFile, readFileAsText, type ParseResult } from '../lib/csvParser'
@@ -163,23 +162,7 @@ function UploadPage() {
 
     return (
         <div className="upload-page">
-            <header className="upload-header">
-                <div className="upload-header-left">
-                    <Link to="/dashboard" className="upload-logo">
-                        <Logo />
-                        <span>LeadFlow AI</span>
-                    </Link>
-                </div>
-                <div className="upload-header-right">
-                    <Link to="/dashboard" className="btn btn-text">
-                        <ArrowLeft size={16} />
-                        Back to Dashboard
-                    </Link>
-                </div>
-            </header>
-
-            <main className="upload-main">
-                <div className="upload-container">
+            <div className="upload-container">
                     {/* Step indicator */}
                     <div className="step-indicator">
                         <div className={`step-item ${step === 'upload' ? 'active' : 'done'}`}>
@@ -390,8 +373,7 @@ function UploadPage() {
                             </div>
                         </div>
                     )}
-                </div>
-            </main>
+            </div>
         </div>
     )
 }

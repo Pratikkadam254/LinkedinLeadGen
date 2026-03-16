@@ -1,8 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, Filter, Download, Upload, MoreHorizontal, Check } from 'lucide-react'
-import { UserButton as ClerkUserButton } from '@clerk/clerk-react'
-import Logo from '../components/ui/Logo'
 import LeadsTable from '../components/dashboard/LeadsTable'
 import LeadDetailPanel from '../components/dashboard/LeadDetailPanel'
 import { useSyncedUser, useLeads } from '../hooks'
@@ -23,8 +21,6 @@ function LeadsPage() {
     // Get user and leads from Convex
     const syncedUser = useSyncedUser()
     const convexLeads = useLeads(syncedUser.convexId || undefined)
-    const clerkConfigured = !!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
-
     // Convert Convex leads to our Lead type, or use mock data
     const leads: Lead[] = useMemo(() => {
         if (convexLeads && convexLeads.length > 0) {
@@ -145,29 +141,7 @@ function LeadsPage() {
 
     return (
         <div className="leads-page">
-            <header className="leads-header">
-                <div className="leads-header-left">
-                    <Link to="/dashboard" className="leads-logo">
-                        <Logo />
-                        <span>LeadFlow AI</span>
-                    </Link>
-                </div>
-                <nav className="leads-nav">
-                    <Link to="/dashboard" className="nav-link">Dashboard</Link>
-                    <Link to="/dashboard/leads" className="nav-link active">Leads</Link>
-                    <Link to="/dashboard/connect" className="nav-link">Connect</Link>
-                </nav>
-                <div className="leads-header-right">
-                    {clerkConfigured ? (
-                        <ClerkUserButton afterSignOutUrl="/" />
-                    ) : (
-                        <div className="user-avatar">U</div>
-                    )}
-                </div>
-            </header>
-
-            <main className="leads-main">
-                <div className="leads-container">
+            <div className="leads-container">
                     {/* Page Header */}
                     <div className="leads-page-header">
                         <div className="leads-title">
@@ -288,8 +262,7 @@ function LeadsPage() {
                             </span>
                         </div>
                     )}
-                </div>
-            </main>
+            </div>
 
             {/* Detail Panel */}
             {selectedLead && (

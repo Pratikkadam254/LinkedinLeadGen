@@ -1,8 +1,8 @@
-import { useUser, UserButton } from '@clerk/clerk-react'
+import { useUser } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
-import Logo from '../components/ui/Logo'
 import { useSyncedUser, useLeadsStats, useActivitySummary } from '../hooks'
 import { mockLeads } from '../data/mockLeads'
+import PageHeader from '../components/layout/PageHeader'
 import './DashboardPage.css'
 
 function DashboardPage() {
@@ -18,62 +18,39 @@ function DashboardPage() {
 
 function DashboardDemo() {
     return (
-        <div className="dashboard-layout">
-            <header className="dashboard-header">
-                <div className="dashboard-header-left">
-                    <Link to="/" className="dashboard-logo">
-                        <Logo />
-                        <span>LeadFlow AI</span>
-                    </Link>
-                </div>
-                <nav className="dashboard-nav">
-                    <Link to="/dashboard" className="nav-link active">Dashboard</Link>
-                    <Link to="/dashboard/leads" className="nav-link">Leads</Link>
-                    <Link to="/dashboard/connect" className="nav-link">Connect</Link>
-                </nav>
-                <div className="dashboard-header-right">
-                    <div className="user-menu">
-                        <div className="user-avatar">DM</div>
-                        <span>Demo User</span>
-                    </div>
-                </div>
-            </header>
-
-            <main className="dashboard-main">
-                <div className="container">
-                    <div className="welcome-section">
-                        <h1>Welcome to LeadFlow AI! 👋</h1>
-                        <p>You're in demo mode. Add your Clerk key to enable authentication.</p>
-                    </div>
+        <div className="dashboard-content">
+            <PageHeader
+                title="Welcome to LeadFlow AI! 👋"
+                subtitle="You're in demo mode. Add your Clerk key to enable authentication."
+                breadcrumbs={[{ label: 'Dashboard' }]}
+            />
 
                     <QuickActions />
 
-                    <div className="stats-overview">
-                        <div className="stats-header">
-                            <h2>Overview</h2>
-                            <Link to="/dashboard/leads" className="view-all-link">View All Leads →</Link>
-                        </div>
-                        <div className="stats-grid">
-                            <div className="stat-card">
-                                <div className="stat-number">{mockLeads.length}</div>
-                                <div className="stat-label">Total Leads</div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-number">{mockLeads.filter(l => l.messageStatus === 'sent').length}</div>
-                                <div className="stat-label">Messages Sent</div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-number">{Math.round(mockLeads.filter(l => l.outreachStatus === 'accepted' || l.outreachStatus === 'replied').length / mockLeads.length * 100)}%</div>
-                                <div className="stat-label">Accept Rate</div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-number">{mockLeads.filter(l => l.outreachStatus === 'replied').length}</div>
-                                <div className="stat-label">Replies</div>
-                            </div>
-                        </div>
+            <div className="stats-overview">
+                <div className="stats-header">
+                    <h2>Overview</h2>
+                    <Link to="/dashboard/leads" className="view-all-link">View All Leads →</Link>
+                </div>
+                <div className="stats-grid">
+                    <div className="stat-card">
+                        <div className="stat-number">{mockLeads.length}</div>
+                        <div className="stat-label">Total Leads</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-number">{mockLeads.filter(l => l.messageStatus === 'sent').length}</div>
+                        <div className="stat-label">Messages Sent</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-number">{Math.round(mockLeads.filter(l => l.outreachStatus === 'accepted' || l.outreachStatus === 'replied').length / mockLeads.length * 100)}%</div>
+                        <div className="stat-label">Accept Rate</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-number">{mockLeads.filter(l => l.outreachStatus === 'replied').length}</div>
+                        <div className="stat-label">Replies</div>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     )
 }
@@ -100,91 +77,72 @@ function DashboardWithClerk() {
         : 0
 
     return (
-        <div className="dashboard-layout">
-            <header className="dashboard-header">
-                <div className="dashboard-header-left">
-                    <Link to="/" className="dashboard-logo">
-                        <Logo />
-                        <span>LeadFlow AI</span>
-                    </Link>
+        <div className="dashboard-content">
+            <PageHeader
+                title={`Welcome back, ${user?.firstName || 'there'}! 👋`}
+                subtitle="Here's what's happening with your leads today."
+                breadcrumbs={[{ label: 'Dashboard' }]}
+            />
+
+            {!syncedUser.onboardingCompleted && (
+                <div className="onboarding-prompt">
+                    <span>⚡</span>
+                    <p>Complete your setup to get personalized recommendations.</p>
+                    <Link to="/onboarding" className="btn btn-sm btn-primary">Complete Setup</Link>
                 </div>
-                <nav className="dashboard-nav">
-                    <Link to="/dashboard" className="nav-link active">Dashboard</Link>
-                    <Link to="/dashboard/leads" className="nav-link">Leads</Link>
-                    <Link to="/dashboard/connect" className="nav-link">Connect</Link>
-                </nav>
-                <div className="dashboard-header-right">
-                    <UserButton afterSignOutUrl="/" />
-                </div>
-            </header>
+            )}
 
-            <main className="dashboard-main">
-                <div className="container">
-                    <div className="welcome-section">
-                        <h1>Welcome back, {user?.firstName || 'there'}! 👋</h1>
-                        <p>Here's what's happening with your leads today.</p>
-                        {!syncedUser.onboardingCompleted && (
-                            <div className="onboarding-prompt">
-                                <span>⚡</span>
-                                <p>Complete your setup to get personalized recommendations.</p>
-                                <Link to="/onboarding" className="btn btn-sm btn-primary">Complete Setup</Link>
-                            </div>
-                        )}
-                    </div>
+            <QuickActions unipileConnected={syncedUser.unipileConnected} />
 
-                    <QuickActions unipileConnected={syncedUser.unipileConnected} />
-
-                    {/* Activity Summary */}
-                    {activitySummary && (
-                        <div className="activity-summary">
-                            <h2>Last 7 Days</h2>
-                            <div className="activity-grid">
-                                <div className="activity-item">
-                                    <span className="activity-value">{activitySummary.leadsImported}</span>
-                                    <span className="activity-label">Leads Imported</span>
-                                </div>
-                                <div className="activity-item">
-                                    <span className="activity-value">{activitySummary.connectionsSent}</span>
-                                    <span className="activity-label">Connections Sent</span>
-                                </div>
-                                <div className="activity-item">
-                                    <span className="activity-value">{activitySummary.connectionsAccepted}</span>
-                                    <span className="activity-label">Accepted</span>
-                                </div>
-                                <div className="activity-item">
-                                    <span className="activity-value">{activitySummary.repliesReceived}</span>
-                                    <span className="activity-label">Replies</span>
-                                </div>
-                            </div>
+            {/* Activity Summary */}
+            {activitySummary && (
+                <div className="activity-summary">
+                    <h2>Last 7 Days</h2>
+                    <div className="activity-grid">
+                        <div className="activity-item">
+                            <span className="activity-value">{activitySummary.leadsImported}</span>
+                            <span className="activity-label">Leads Imported</span>
                         </div>
-                    )}
-
-                    <div className="stats-overview">
-                        <div className="stats-header">
-                            <h2>Overview</h2>
-                            <Link to="/dashboard/leads" className="view-all-link">View All Leads →</Link>
+                        <div className="activity-item">
+                            <span className="activity-value">{activitySummary.connectionsSent}</span>
+                            <span className="activity-label">Connections Sent</span>
                         </div>
-                        <div className="stats-grid">
-                            <div className="stat-card">
-                                <div className="stat-number">{displayStats.total}</div>
-                                <div className="stat-label">Total Leads</div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-number">{displayStats.sent}</div>
-                                <div className="stat-label">Messages Sent</div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-number">{acceptRate}%</div>
-                                <div className="stat-label">Accept Rate</div>
-                            </div>
-                            <div className="stat-card">
-                                <div className="stat-number">{displayStats.replied}</div>
-                                <div className="stat-label">Replies</div>
-                            </div>
+                        <div className="activity-item">
+                            <span className="activity-value">{activitySummary.connectionsAccepted}</span>
+                            <span className="activity-label">Accepted</span>
+                        </div>
+                        <div className="activity-item">
+                            <span className="activity-value">{activitySummary.repliesReceived}</span>
+                            <span className="activity-label">Replies</span>
                         </div>
                     </div>
                 </div>
-            </main>
+            )}
+
+            <div className="stats-overview">
+                <div className="stats-header">
+                    <h2>Overview</h2>
+                    <Link to="/dashboard/leads" className="view-all-link">View All Leads →</Link>
+                </div>
+                <div className="stats-grid">
+                    <div className="stat-card">
+                        <div className="stat-number">{displayStats.total}</div>
+                        <div className="stat-label">Total Leads</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-number">{displayStats.sent}</div>
+                        <div className="stat-label">Messages Sent</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-number">{acceptRate}%</div>
+                        <div className="stat-label">Accept Rate</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-number">{displayStats.replied}</div>
+                        <div className="stat-label">Replies</div>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
