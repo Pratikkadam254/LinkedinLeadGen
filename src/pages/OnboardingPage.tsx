@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Logo from '../components/ui/Logo'
-import OnboardingProgress from '../components/onboarding/OnboardingProgress'
 import OnboardingQuestion from '../components/onboarding/OnboardingQuestion'
+import Card from '../components/ui/Card'
 import { onboardingQuestions, type OnboardingAnswers } from '../data/onboardingQuestions'
 import './OnboardingPage.css'
 
@@ -45,31 +46,38 @@ function OnboardingPage() {
         ? (Array.isArray(currentAnswer) ? currentAnswer.length > 0 : !!currentAnswer)
         : true
 
+    const progressPercentage = ((currentStep + 1) / totalSteps) * 100
+
     return (
         <div className="onboarding-page">
+            {/* Top progress bar */}
+            <div className="onboarding-top-bar">
+                <div
+                    className="onboarding-top-bar__fill"
+                    style={{ width: `${progressPercentage}%` }}
+                />
+            </div>
+
+            {/* Header */}
             <header className="onboarding-header">
                 <Link to="/" className="onboarding-logo">
                     <Logo />
                     <span>LeadFlow AI</span>
                 </Link>
-                <button onClick={handleSkip} className="skip-btn">
-                    Skip & Upload Leads →
+                <button onClick={handleSkip} className="btn btn-text onboarding-skip-btn">
+                    Skip
                 </button>
             </header>
 
             <main className="onboarding-main">
                 <div className="onboarding-container">
-                    <div className="onboarding-intro">
-                        <h1>Let's personalize your experience</h1>
-                        <p>Answer a few questions to customize your lead generation workflow.</p>
-                    </div>
+                    {/* Step counter */}
+                    <p className="onboarding-step-counter">
+                        Step {currentStep + 1} of {totalSteps}
+                    </p>
 
-                    <OnboardingProgress
-                        currentStep={currentStep + 1}
-                        totalSteps={totalSteps}
-                    />
-
-                    <div className="onboarding-card">
+                    {/* Question card */}
+                    <Card padding="lg" className="onboarding-card">
                         <OnboardingQuestion
                             question={currentQuestion}
                             value={currentAnswer}
@@ -82,21 +90,19 @@ function OnboardingPage() {
                                 className="btn btn-text"
                                 disabled={currentStep === 0}
                             >
-                                ← Back
+                                <ChevronLeft size={18} />
+                                Back
                             </button>
                             <button
                                 onClick={handleNext}
                                 className="btn btn-primary btn-lg"
                                 disabled={!canContinue}
                             >
-                                {isLastStep ? 'Complete Setup →' : 'Continue →'}
+                                {isLastStep ? 'Complete Setup' : 'Continue'}
+                                <ChevronRight size={18} />
                             </button>
                         </div>
-                    </div>
-
-                    <p className="onboarding-tip">
-                        💡 You can always change these settings later in your preferences.
-                    </p>
+                    </Card>
                 </div>
             </main>
         </div>

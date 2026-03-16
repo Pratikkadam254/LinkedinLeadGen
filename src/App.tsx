@@ -8,6 +8,7 @@ import OnboardingPage from './pages/OnboardingPage'
 import UploadPage from './pages/UploadPage'
 import LeadsPage from './pages/LeadsPage'
 import ConnectPage from './pages/ConnectPage'
+import DashboardLayout from './components/layout/DashboardLayout'
 
 // Get the Clerk publishable key from environment
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -24,10 +25,12 @@ function ClerkProviderWithRoutes() {
                 <Route path="/signin" element={<SignInPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/onboarding" element={<OnboardingPage />} />
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/dashboard/upload" element={<UploadPage />} />
-                <Route path="/dashboard/leads" element={<LeadsPage />} />
-                <Route path="/dashboard/connect" element={<ConnectPage />} />
+                <Route path="/dashboard" element={<DashboardLayout />}>
+                    <Route index element={<DashboardPage />} />
+                    <Route path="upload" element={<UploadPage />} />
+                    <Route path="leads" element={<LeadsPage />} />
+                    <Route path="connect" element={<ConnectPage />} />
+                </Route>
                 <Route path="*" element={<LandingPage />} />
             </Routes>
         )
@@ -60,57 +63,23 @@ function ClerkProviderWithRoutes() {
                     }
                 />
                 <Route
-                    path="/dashboard/*"
+                    path="/dashboard"
                     element={
                         <>
                             <SignedIn>
-                                <DashboardPage />
+                                <DashboardLayout />
                             </SignedIn>
                             <SignedOut>
                                 <SignInPage />
                             </SignedOut>
                         </>
                     }
-                />
-                <Route
-                    path="/dashboard/upload"
-                    element={
-                        <>
-                            <SignedIn>
-                                <UploadPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/leads"
-                    element={
-                        <>
-                            <SignedIn>
-                                <LeadsPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
-                <Route
-                    path="/dashboard/connect"
-                    element={
-                        <>
-                            <SignedIn>
-                                <ConnectPage />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInPage />
-                            </SignedOut>
-                        </>
-                    }
-                />
+                >
+                    <Route index element={<DashboardPage />} />
+                    <Route path="upload" element={<UploadPage />} />
+                    <Route path="leads" element={<LeadsPage />} />
+                    <Route path="connect" element={<ConnectPage />} />
+                </Route>
 
                 {/* Fallback */}
                 <Route path="*" element={<LandingPage />} />

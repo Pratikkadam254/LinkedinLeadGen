@@ -1,13 +1,14 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react'
-import { CheckCircle, AlertCircle, Info, X } from 'lucide-react'
+import { CheckCircle, AlertTriangle, XCircle, Info, X } from 'lucide-react'
 import './Toast.css'
 
-type ToastType = 'success' | 'error' | 'info'
+type ToastType = 'success' | 'warning' | 'error' | 'info'
 
 interface Toast {
     id: string
     type: ToastType
     message: string
+    exiting?: boolean
 }
 
 interface ToastContextType {
@@ -25,13 +26,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }
 
     const removeToast = (id: string) => {
-        setToasts(prev => prev.filter(toast => toast.id !== id))
+        setToasts(prev => prev.map(t => t.id === id ? { ...t, exiting: true } : t))
+        setTimeout(() => {
+            setToasts(prev => prev.filter(toast => toast.id !== id))
+        }, 200)
     }
 
     return (
         <ToastContext.Provider value={{ showToast }}>
             {children}
-            <div className="toast-container">
+            <div className="toast-container" role="status" aria-live="polite">
                 {toasts.map(toast => (
                     <ToastItem
                         key={toast.id}
@@ -52,15 +56,16 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: () => void }) 
 
     const icons = {
         success: <CheckCircle size={18} />,
-        error: <AlertCircle size={18} />,
+        warning: <AlertTriangle size={18} />,
+        error: <XCircle size={18} />,
         info: <Info size={18} />,
     }
 
     return (
-        <div className={`toast toast-${toast.type}`}>
+        <div className={`toast toast-${toast.type}${toast.exiting ? ' toast--exiting' : ''}`}>
             <span className="toast-icon">{icons[toast.type]}</span>
             <span className="toast-message">{toast.message}</span>
-            <button className="toast-close" onClick={onRemove}>
+            <button className="toast-close" onClick={onRemove} aria-label="Dismiss notification">
                 <X size={14} />
             </button>
         </div>

@@ -30,7 +30,7 @@ function PricingSection() {
                         <div className="pricing-plan">Growth</div>
                         <div className="pricing-model">Pay Per Qualified Lead</div>
 
-                        <Link to="/signup" className="btn btn-primary btn-lg pricing-cta">
+                        <Link to="/signup" className="btn btn-primary btn-pill btn-lg pricing-cta">
                             Get Started
                             <ArrowRight size={18} className="arrow" />
                         </Link>

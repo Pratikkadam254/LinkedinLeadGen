@@ -1,3 +1,5 @@
+/* AIMessageGenerator - Notion-Inspired Redesign */
+
 .ai-message-gen {
     background: var(--color-bg-primary);
     border: 1px solid var(--color-border-light);
@@ -10,7 +12,7 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--space-md) var(--space-lg);
-    background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+    background: var(--color-primary-lighter);
     border-bottom: 1px solid var(--color-border-light);
 }
 
@@ -38,11 +40,11 @@
     cursor: pointer;
     padding: 4px 8px;
     border-radius: var(--radius-sm);
-    transition: all 0.2s;
+    transition: all var(--transition-base);
 }
 
 .options-toggle:hover {
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(79, 107, 237, 0.1);
     color: var(--color-primary);
 }
 
@@ -63,7 +65,6 @@
         opacity: 0;
         transform: translateY(-8px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -80,65 +81,91 @@
     margin-bottom: var(--space-sm);
 }
 
-/* Tone Selector */
-.tone-selector {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-xs);
+/* Tone Pill Group - Horizontal connected pills */
+.tone-pill-group {
+    display: flex;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-full);
+    overflow: hidden;
     margin-bottom: var(--space-md);
 }
 
-.tone-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: var(--space-sm) var(--space-xs);
-    background: var(--color-bg-primary);
-    border: 1.5px solid var(--color-border-light);
-    border-radius: var(--radius-md);
+.tone-pill {
+    flex: 1;
+    padding: 6px 12px;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--color-border-light);
     cursor: pointer;
-    transition: all 0.2s;
     font-size: 0.75rem;
+    font-weight: 500;
     color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
 }
 
-.tone-btn:hover {
-    border-color: var(--color-primary-light);
-    background: var(--color-primary-lighter);
+.tone-pill:last-child {
+    border-right: none;
 }
 
-.tone-btn.active {
-    border-color: var(--color-primary);
-    background: var(--color-primary-lighter);
-    color: var(--color-primary);
+.tone-pill:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+}
+
+.tone-pill.active {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
     font-weight: 600;
 }
 
-.tone-emoji {
-    font-size: 1.25rem;
-}
-
-/* Toggle Options */
+/* Toggle Switch */
 .option-toggles {
     display: flex;
-    gap: var(--space-lg);
+    flex-direction: column;
+    gap: var(--space-sm);
 }
 
-.toggle-option {
+.toggle-switch-label {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    justify-content: space-between;
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
     cursor: pointer;
+    margin-bottom: 0;
 }
 
-.toggle-option input[type="checkbox"] {
+.toggle-switch {
+    width: 36px;
+    height: 20px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-full);
+    position: relative;
+    cursor: pointer;
+    transition: background var(--transition-base);
+    flex-shrink: 0;
+}
+
+.toggle-switch.active {
+    background: var(--color-primary);
+}
+
+.toggle-switch-handle {
     width: 16px;
     height: 16px;
-    accent-color: var(--color-primary);
-    cursor: pointer;
+    background: var(--color-bg-primary);
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform var(--transition-base);
+    box-shadow: var(--shadow-xs);
+}
+
+.toggle-switch.active .toggle-switch-handle {
+    transform: translateX(16px);
 }
 
 /* Generate Button */
@@ -178,18 +205,18 @@
 }
 
 .score-badge.p-high {
-    background: #DCFCE7;
-    color: #166534;
+    background: var(--color-success-light);
+    color: var(--color-success);
 }
 
 .score-badge.p-mid {
-    background: #FEF3C7;
-    color: #92400E;
+    background: var(--color-warning-light);
+    color: var(--color-warning);
 }
 
 .score-badge.p-low {
-    background: #FEE2E2;
-    color: #991B1B;
+    background: var(--color-error-light);
+    color: var(--color-error);
 }
 
 .char-badge {
@@ -225,17 +252,17 @@
     border-radius: var(--radius-md);
     font-family: inherit;
     font-size: 0.875rem;
-    line-height: 1.6;
+    line-height: 1.7;
     color: var(--color-text-primary);
     background: var(--color-bg-primary);
     resize: vertical;
-    transition: border-color 0.2s;
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .message-editor:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    box-shadow: var(--shadow-focus);
 }
 
 .message-editor.over-limit {
@@ -248,17 +275,29 @@
     margin-top: var(--space-xs);
 }
 
-/* Message Actions */
+/* Message Actions - Icon buttons */
 .message-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: var(--space-md);
+    gap: var(--space-sm);
+}
+
+.action-icon-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
 }
 
 .action-group {
     display: flex;
     gap: var(--space-sm);
+    align-items: center;
 }
 
 .spin-icon {
@@ -273,13 +312,14 @@
 
 /* Responsive */
 @media (max-width: 640px) {
-    .tone-selector {
-        grid-template-columns: repeat(2, 1fr);
+    .tone-pill-group {
+        flex-wrap: wrap;
+        border-radius: var(--radius-md);
     }
 
-    .option-toggles {
-        flex-direction: column;
-        gap: var(--space-sm);
+    .tone-pill {
+        flex: 1 1 45%;
+        border-bottom: 1px solid var(--color-border-light);
     }
 
     .message-actions {
