@@ -184,7 +184,7 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                             <span className="panel-status-label">Message</span>
                             <StatusBadge
                                 status={lead.messageStatus === 'ready' ? 'success' : lead.messageStatus === 'sent' ? 'sent' : 'warning'}
-                                label={lead.messageStatus === 'ready' ? 'Ready' : lead.messageStatus === 'sent' ? 'Sent' : 'Draft'}
+                                label={lead.messageStatus === 'ready' ? 'Ready' : lead.messageStatus === 'sent' ? 'Sent' : lead.messageStatus === 'draft' ? 'Draft' : 'Empty'}
                                 size="sm"
                             />
                         </div>

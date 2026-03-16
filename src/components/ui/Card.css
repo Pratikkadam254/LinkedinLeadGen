@@ -25,6 +25,9 @@
   padding: 32px;
 }
 
+/* Default variant (base styles apply) */
+.card--default {}
+
 /* Interactive variant */
 .card--interactive {
   cursor: pointer;
