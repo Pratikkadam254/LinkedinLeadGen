@@ -10,4 +10,13 @@ export default defineConfig({
             '@': path.resolve(__dirname, './src'),
         },
     },
+    test: {
+        environment: 'jsdom',
+        globals: true,
+        include: ['**/*.scenario.ts', '**/*.{test,spec}.{ts,tsx}'],
+        define: {
+            'import.meta.env.VITE_GEMINI_API_KEY': 'undefined',
+            'import.meta.env.VITE_UNIPILE_API_KEY': 'undefined',
+        },
+    },
 })
