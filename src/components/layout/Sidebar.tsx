@@ -1,18 +1,18 @@
 import { useState, useEffect, useCallback } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import {
-  LayoutDashboard,
+  SquaresFour,
   Users,
   Rocket,
   Brain,
-  Upload,
-  Link as LinkIcon,
-  Settings,
-  ChevronLeft,
-  ChevronRight,
-  Menu,
+  UploadSimple,
+  LinkSimple,
+  GearSix,
+  CaretLeft,
+  CaretRight,
+  List,
   X,
-} from 'lucide-react'
+} from '@phosphor-icons/react'
 import { UserButton } from '@clerk/clerk-react'
 import Logo from '../ui/Logo'
 import './Sidebar.css'
@@ -64,7 +64,7 @@ function Sidebar() {
         onClick={toggleMobile}
         aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
       >
-        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+        {mobileOpen ? <X size={20} /> : <List size={20} />}
       </button>
 
       {/* Backdrop for mobile */}
@@ -94,7 +94,7 @@ function Sidebar() {
               }
             >
               <span className="sidebar-nav-item-icon">
-                <LayoutDashboard size={20} />
+                <SquaresFour size={20} />
               </span>
               <span className="sidebar-nav-item-text">Dashboard</span>
             </NavLink>
@@ -149,7 +149,7 @@ function Sidebar() {
               }
             >
               <span className="sidebar-nav-item-icon">
-                <Upload size={20} />
+                <UploadSimple size={20} />
               </span>
               <span className="sidebar-nav-item-text">Import Leads</span>
             </NavLink>
@@ -161,7 +161,7 @@ function Sidebar() {
               }
             >
               <span className="sidebar-nav-item-icon">
-                <LinkIcon size={20} />
+                <LinkSimple size={20} />
               </span>
               <span className="sidebar-nav-item-text">Connect</span>
             </NavLink>
@@ -184,7 +184,7 @@ function Sidebar() {
             }
           >
             <span className="sidebar-nav-item-icon">
-              <Settings size={20} />
+              <GearSix size={20} />
             </span>
             <span className="sidebar-nav-item-text">Settings</span>
             <span className="sidebar-badge-soon">Soon</span>
@@ -192,7 +192,7 @@ function Sidebar() {
 
           <button className="sidebar-collapse-btn" onClick={toggleCollapsed}>
             <span className="sidebar-collapse-btn-icon">
-              {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+              {collapsed ? <CaretRight size={20} /> : <CaretLeft size={20} />}
             </span>
             <span className="sidebar-collapse-btn-text">
               {collapsed ? 'Expand' : 'Collapse'}

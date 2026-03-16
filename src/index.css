@@ -48,7 +48,7 @@
   --shadow-focus: 0 0 0 3px rgba(79, 107, 237, 0.2);
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
   /* Spacing — Generous whitespace */
   --space-xs: 4px;

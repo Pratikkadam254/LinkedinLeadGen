@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Brain, Search, Rocket, TrendingUp } from 'lucide-react'
+import { Brain, MagnifyingGlass, Rocket, TrendUp } from '@phosphor-icons/react'
 import './HowItWorksSection.css'
 
 const steps = [
@@ -17,7 +17,7 @@ const steps = [
     },
     {
         id: 'source',
-        icon: Search,
+        icon: MagnifyingGlass,
         title: 'Source the right leads',
         summary: 'We find leads from unique sources and filter them to match your ICP.',
         details: [
@@ -41,7 +41,7 @@ const steps = [
     },
     {
         id: 'scale',
-        icon: TrendingUp,
+        icon: TrendUp,
         title: 'Scale what works',
         summary: 'We monitor replies, booking rate, and meeting quality — then tighten targeting.',
         details: [
@@ -75,7 +75,7 @@ function HowItWorksSection() {
                             className={`step-tab ${activeStep === i ? 'active' : ''}`}
                             onClick={() => setActiveStep(i)}
                         >
-                            <step.icon size={18} />
+                            <step.icon size={18} weight={activeStep === i ? "fill" : "regular"} />
                             <span>{step.title}</span>
                         </button>
                     ))}
@@ -98,7 +98,7 @@ function HowItWorksSection() {
                     </div>
                     <div className="step-visual">
                         <div className="step-illustration">
-                            <currentStep.icon size={64} strokeWidth={1} />
+                            <currentStep.icon size={64} weight="duotone" />
                             <span className="step-label">{currentStep.title}</span>
                         </div>
                     </div>

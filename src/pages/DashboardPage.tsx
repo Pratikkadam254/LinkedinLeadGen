@@ -1,6 +1,6 @@
 import { useUser } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
-import { Users, Send, TrendingUp, MessageSquare, Upload, Settings, Link2, Check, Clock, UserPlus, Mail, ArrowRight } from 'lucide-react'
+import { Users, PaperPlaneTilt, TrendUp, ChatCenteredDots, UploadSimple, GearSix, LinkSimple, Check, Clock, UserPlus, Envelope, ArrowRight } from '@phosphor-icons/react'
 import { useSyncedUser, useLeadsStats, useActivitySummary } from '../hooks'
 import { mockLeads } from '../data/mockLeads'
 import PageHeader from '../components/layout/PageHeader'
@@ -35,7 +35,7 @@ function DashboardDemo() {
                 <Card className="onboarding-card">
                     <div className="onboarding-card-inner">
                         <span className="onboarding-icon">
-                            <Settings size={18} />
+                            <GearSix size={18} />
                         </span>
                         <p>You're in demo mode. Add your Clerk key to enable authentication.</p>
                     </div>
@@ -85,7 +85,7 @@ function DashboardWithClerk() {
                     <Card className="onboarding-card">
                         <div className="onboarding-card-inner">
                             <span className="onboarding-icon">
-                                <TrendingUp size={18} />
+                                <TrendUp size={18} />
                             </span>
                             <p>Complete your setup to get personalized recommendations.</p>
                             <Link to="/onboarding" className="btn btn-primary btn-sm">Complete Setup</Link>
@@ -121,9 +121,9 @@ interface StatCardsProps {
 function StatCards({ total, sent, acceptRate, replied }: StatCardsProps) {
     const stats = [
         { icon: <Users size={20} />, value: total, label: 'Total Leads', color: 'blue' },
-        { icon: <Send size={20} />, value: sent, label: 'Messages Sent', color: 'green' },
-        { icon: <TrendingUp size={20} />, value: `${acceptRate}%`, label: 'Accept Rate', color: 'purple' },
-        { icon: <MessageSquare size={20} />, value: replied, label: 'Replies', color: 'amber' },
+        { icon: <PaperPlaneTilt size={20} />, value: sent, label: 'Messages Sent', color: 'green' },
+        { icon: <TrendUp size={20} />, value: `${acceptRate}%`, label: 'Accept Rate', color: 'purple' },
+        { icon: <ChatCenteredDots size={20} />, value: replied, label: 'Replies', color: 'amber' },
     ]
 
     return (
@@ -150,12 +150,12 @@ interface RecentActivityProps {
 function RecentActivity({ activitySummary }: RecentActivityProps) {
     const items = activitySummary ? [
         { icon: <UserPlus size={16} />, text: `${activitySummary.leadsImported} leads imported`, time: 'Last 7 days', color: 'blue' },
-        { icon: <Send size={16} />, text: `${activitySummary.connectionsSent} connections sent`, time: 'Last 7 days', color: 'green' },
+        { icon: <PaperPlaneTilt size={16} />, text: `${activitySummary.connectionsSent} connections sent`, time: 'Last 7 days', color: 'green' },
         { icon: <Check size={16} />, text: `${activitySummary.connectionsAccepted} accepted`, time: 'Last 7 days', color: 'purple' },
-        { icon: <Mail size={16} />, text: `${activitySummary.repliesReceived} replies received`, time: 'Last 7 days', color: 'amber' },
+        { icon: <Envelope size={16} />, text: `${activitySummary.repliesReceived} replies received`, time: 'Last 7 days', color: 'amber' },
     ] : [
         { icon: <UserPlus size={16} />, text: `${mockLeads.length} leads in pipeline`, time: 'Current', color: 'blue' },
-        { icon: <Send size={16} />, text: `${mockLeads.filter(l => l.messageStatus === 'sent').length} messages sent`, time: 'Current', color: 'green' },
+        { icon: <PaperPlaneTilt size={16} />, text: `${mockLeads.filter(l => l.messageStatus === 'sent').length} messages sent`, time: 'Current', color: 'green' },
         { icon: <Check size={16} />, text: `${mockLeads.filter(l => l.outreachStatus === 'accepted').length} accepted`, time: 'Current', color: 'purple' },
         { icon: <Clock size={16} />, text: `${mockLeads.filter(l => l.outreachStatus === 'pending').length} pending outreach`, time: 'Current', color: 'amber' },
     ]
@@ -188,21 +188,21 @@ function RecentActivity({ activitySummary }: RecentActivityProps) {
 function QuickActions({ unipileConnected = false }: { unipileConnected?: boolean }) {
     const actions = [
         {
-            icon: <Upload size={20} />,
+            icon: <UploadSimple size={20} />,
             title: 'Import Leads',
             desc: 'Upload CSV, Excel, or connect Google Sheets',
             to: '/dashboard/upload',
             color: 'blue',
         },
         {
-            icon: <Settings size={20} />,
+            icon: <GearSix size={20} />,
             title: 'Setup Preferences',
             desc: 'Customize your lead scoring and messaging',
             to: '/onboarding',
             color: 'purple',
         },
         {
-            icon: unipileConnected ? <Check size={20} /> : <Link2 size={20} />,
+            icon: unipileConnected ? <Check size={20} /> : <LinkSimple size={20} />,
             title: unipileConnected ? 'LinkedIn Connected' : 'Connect LinkedIn',
             desc: unipileConnected ? 'Ready to send messages' : 'Link via Unipile for automation',
             to: '/dashboard/connect',

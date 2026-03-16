@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Upload, FileSpreadsheet, CheckCircle2, X, Loader2, FileText, Table, Check, ChevronRight } from 'lucide-react'
+import { UploadSimple, FileXls, CheckCircle, X, SpinnerGap, FileText, Table, Check, CaretRight } from '@phosphor-icons/react'
 import { useToast } from '../components/ui/Toast'
 import { useSyncedUser, useLeadMutations } from '../hooks'
 import { parseCSV, validateFile, readFileAsText, type ParseResult } from '../lib/csvParser'
@@ -174,7 +174,7 @@ function UploadPage() {
 
     const getFileIcon = (name: string) => {
         if (name.endsWith('.csv')) return <FileText size={24} />
-        if (name.endsWith('.xlsx') || name.endsWith('.xls')) return <FileSpreadsheet size={24} />
+        if (name.endsWith('.xlsx') || name.endsWith('.xls')) return <FileXls size={24} />
         return <Table size={24} />
     }
 
@@ -222,7 +222,7 @@ function UploadPage() {
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     <div className="dropzone__icon">
-                                        <Upload size={48} />
+                                        <UploadSimple size={48} weight="duotone" />
                                     </div>
                                     <h3 className="dropzone__title">Drop your file here</h3>
                                     <p className="dropzone__subtitle">or click to browse</p>
@@ -339,7 +339,7 @@ function UploadPage() {
                                 onClick={syncedUser.convexId ? handleImport : handleDemoImport}
                             >
                                 Import {parseResult.leads.length} Leads
-                                <ChevronRight size={18} />
+                                <CaretRight size={18} />
                             </button>
 
                             <div className="preview-secondary-action">
@@ -355,7 +355,7 @@ function UploadPage() {
                         <div className="importing-content animate-fade-in-up">
                             <Card variant="default" padding="lg">
                                 <div className="importing-inner">
-                                    <Loader2 size={48} className="spin-icon" />
+                                    <SpinnerGap size={48} className="spin-icon" />
                                     <h2>Importing Leads...</h2>
                                     <p>Scoring and importing your leads into LeadFlow AI</p>
                                     <div className="progress-bar">
@@ -373,7 +373,7 @@ function UploadPage() {
                             <Card variant="default" padding="lg">
                                 <div className="complete-inner">
                                     <div className="complete-icon">
-                                        <CheckCircle2 size={48} />
+                                        <CheckCircle size={48} weight="duotone" />
                                     </div>
                                     <h2>Import Complete!</h2>
                                     <p>{importResult.imported} leads imported and scored successfully</p>
@@ -383,7 +383,7 @@ function UploadPage() {
                                     <div className="complete-actions">
                                         <Link to="/dashboard/leads" className="btn btn-primary btn-lg btn-pill">
                                             View Leads
-                                            <ChevronRight size={18} />
+                                            <CaretRight size={18} />
                                         </Link>
                                         <button className="btn btn-secondary btn-pill" onClick={handleReset}>
                                             Import More

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Check, ArrowRight } from 'lucide-react'
+import { Check, ArrowRight } from '@phosphor-icons/react'
 import './PricingSection.css'
 
 const features = [

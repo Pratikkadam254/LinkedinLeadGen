@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Sparkles, RefreshCw, Copy, Check, Send, ChevronDown } from 'lucide-react'
+import { Sparkle, ArrowsClockwise, Copy, Check, PaperPlaneTilt, CaretDown } from '@phosphor-icons/react'
 import { aiMessageService, type MessageTone, type GeneratedMessage, type LeadContext, type UserContext } from '../../lib/aiMessages'
 import { useToast } from '../ui/Toast'
 import './AIMessageGenerator.css'
@@ -135,14 +135,14 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
         <div className="ai-message-gen">
             <div className="ai-gen-header">
                 <div className="ai-gen-title">
-                    <Sparkles size={18} />
+                    <Sparkle size={18} />
                     <h3>AI Message Generator</h3>
                 </div>
                 <button
                     className="options-toggle"
                     onClick={() => setShowOptions(!showOptions)}
                 >
-                    Options <ChevronDown size={14} className={showOptions ? 'rotated' : ''} />
+                    Options <CaretDown size={14} className={showOptions ? 'rotated' : ''} />
                 </button>
             </div>
 
@@ -192,12 +192,12 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
                 >
                     {isGenerating ? (
                         <>
-                            <RefreshCw size={16} className="spin-icon" />
+                            <ArrowsClockwise size={16} className="spin-icon" />
                             Generating...
                         </>
                     ) : (
                         <>
-                            <Sparkles size={16} />
+                            <Sparkle size={16} />
                             Generate Message for {lead.firstName}
                         </>
                     )}
@@ -241,7 +241,7 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
                             disabled={isGenerating}
                             title="Regenerate"
                         >
-                            <RefreshCw size={16} className={isGenerating ? 'spin-icon' : ''} />
+                            <ArrowsClockwise size={16} className={isGenerating ? 'spin-icon' : ''} />
                         </button>
 
                         <div className="action-group">
@@ -254,7 +254,7 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
                                     onClick={handleSend}
                                     disabled={isOverLimit || !editedMessage}
                                 >
-                                    <Send size={14} />
+                                    <PaperPlaneTilt size={14} />
                                     Send
                                 </button>
                             )}

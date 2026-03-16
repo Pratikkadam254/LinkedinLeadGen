@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
-    Linkedin,
+    LinkedinLogo,
     Check,
-    AlertCircle,
-    ExternalLink,
-    Shield,
-    Zap,
-    RefreshCw,
-    Unplug,
-    ChevronDown
-} from 'lucide-react'
+    WarningCircle,
+    ArrowSquareOut,
+    ShieldCheck,
+    Lightning,
+    ArrowsClockwise,
+    PlugsConnected,
+    CaretDown
+} from '@phosphor-icons/react'
 import { unipileService, initializeUnipile, type LinkedInAccount } from '../lib/unipile'
 import PageHeader from '../components/layout/PageHeader'
 import Card from '../components/ui/Card'
@@ -147,7 +147,7 @@ function ConnectPage() {
                 <div className="connect-container">
                     {error && (
                         <div className="connect-error-banner">
-                            <AlertCircle size={16} />
+                            <WarningCircle size={16} />
                             <span>{error}</span>
                         </div>
                     )}
@@ -158,28 +158,28 @@ function ConnectPage() {
                             <Card padding="lg" className="connect-card">
                                 <div className="connect-card__inner">
                                     <div className="connect-linkedin-icon">
-                                        <Linkedin size={28} />
+                                        <LinkedinLogo size={28} />
                                     </div>
                                     <h2 className="connect-card__title">Connect LinkedIn</h2>
                                     <p className="connect-card__desc">Link your LinkedIn account to automate connection requests and messaging</p>
 
                                     <div className="connect-benefits">
                                         <div className="connect-benefit">
-                                            <Zap size={24} />
+                                            <Lightning size={24} />
                                             <div>
                                                 <h4>Automated Outreach</h4>
                                                 <p>Send connection requests and messages automatically</p>
                                             </div>
                                         </div>
                                         <div className="connect-benefit">
-                                            <Shield size={24} />
+                                            <ShieldCheck size={24} />
                                             <div>
                                                 <h4>LinkedIn-Safe</h4>
                                                 <p>Built-in rate limiting to protect your account</p>
                                             </div>
                                         </div>
                                         <div className="connect-benefit">
-                                            <RefreshCw size={24} />
+                                            <ArrowsClockwise size={24} />
                                             <div>
                                                 <h4>Real-time Sync</h4>
                                                 <p>Track responses and engagement instantly</p>
@@ -194,12 +194,12 @@ function ConnectPage() {
                                     >
                                         {isConnecting ? (
                                             <>
-                                                <RefreshCw size={18} className="spinning" />
+                                                <ArrowsClockwise size={18} className="spinning" />
                                                 Connecting...
                                             </>
                                         ) : (
                                             <>
-                                                <Linkedin size={18} />
+                                                <LinkedinLogo size={18} />
                                                 Connect LinkedIn Account
                                             </>
                                         )}
@@ -207,7 +207,7 @@ function ConnectPage() {
 
                                     <p className="connect-note">
                                         We use <a href="https://unipile.com" target="_blank" rel="noopener noreferrer">
-                                            Unipile <ExternalLink size={12} />
+                                            Unipile <ArrowSquareOut size={12} />
                                         </a> for secure LinkedIn integration
                                     </p>
                                 </div>
@@ -227,7 +227,7 @@ function ConnectPage() {
                                                 onClick={() => toggleFaq(index)}
                                             >
                                                 <span>{item.question}</span>
-                                                <ChevronDown size={18} className="connect-faq__chevron" />
+                                                <CaretDown size={18} className="connect-faq__chevron" />
                                             </button>
                                             <div className="connect-faq__answer">
                                                 <p>{item.answer}</p>
@@ -258,7 +258,7 @@ function ConnectPage() {
                                             rel="noopener noreferrer"
                                             className="profile-link"
                                         >
-                                            View Profile <ExternalLink size={12} />
+                                            View Profile <ArrowSquareOut size={12} />
                                         </a>
                                     </div>
                                     <Check size={24} className="check-icon" />
@@ -269,7 +269,7 @@ function ConnectPage() {
                             <div className="connect-limits-header">
                                 <h4>Daily Limits</h4>
                                 <button onClick={handleRefreshLimits} className="btn btn-text btn-sm">
-                                    <RefreshCw size={14} />
+                                    <ArrowsClockwise size={14} />
                                     Refresh
                                 </button>
                             </div>
@@ -312,7 +312,7 @@ function ConnectPage() {
                                     className="btn btn-danger btn-lg"
                                     disabled={isConnecting}
                                 >
-                                    <Unplug size={16} />
+                                    <PlugsConnected size={16} />
                                     Disconnect
                                 </button>
                             </div>

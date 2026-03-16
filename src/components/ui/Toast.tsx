@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext, ReactNode } from 'react'
-import { CheckCircle, AlertTriangle, XCircle, Info, X } from 'lucide-react'
+import { CheckCircle, Warning, XCircle, Info, X } from '@phosphor-icons/react'
 import './Toast.css'
 
 type ToastType = 'success' | 'warning' | 'error' | 'info'
@@ -56,7 +56,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: () => void }) 
 
     const icons = {
         success: <CheckCircle size={18} />,
-        warning: <AlertTriangle size={18} />,
+        warning: <Warning size={18} />,
         error: <XCircle size={18} />,
         info: <Info size={18} />,
     }

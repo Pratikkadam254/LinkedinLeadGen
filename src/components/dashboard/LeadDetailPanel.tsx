@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { X, ExternalLink, RefreshCw, Linkedin, Sparkles, AlertCircle } from 'lucide-react'
+import { X, ArrowSquareOut, ArrowsClockwise, LinkedinLogo, Sparkle, WarningCircle } from '@phosphor-icons/react'
 import { type Lead } from '../../data/mockLeads'
 import { calculateLeadScore, type ScoringResult } from '../../lib/scoring'
 import StatusBadge from '../ui/StatusBadge'
@@ -85,9 +85,9 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                                 rel="noopener noreferrer"
                                 className="panel-linkedin-link"
                             >
-                                <Linkedin size={14} />
+                                <LinkedinLogo size={14} />
                                 View LinkedIn
-                                <ExternalLink size={12} />
+                                <ArrowSquareOut size={12} />
                             </a>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
 
                     {/* AI Recommendation */}
                     <div className="panel-recommendation">
-                        <Sparkles size={14} />
+                        <Sparkle size={14} />
                         <span>{scoringResult.recommendation}</span>
                     </div>
 
@@ -153,7 +153,7 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                             <div className="panel-empty-posts">
                                 <p>Posts not yet scraped</p>
                                 <button className="btn btn-secondary btn-sm">
-                                    <RefreshCw size={14} />
+                                    <ArrowsClockwise size={14} />
                                     Scrape Posts
                                 </button>
                             </div>
@@ -201,7 +201,7 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                                 <StatusBadge status="success" label="Connected" size="sm" />
                             ) : (
                                 <Link to="/dashboard/connect" className="panel-connect-link">
-                                    <AlertCircle size={12} />
+                                    <WarningCircle size={12} />
                                     Connect
                                 </Link>
                             )}

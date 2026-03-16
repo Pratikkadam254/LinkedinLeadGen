@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Home, ChevronRight } from 'lucide-react'
+import { House, CaretRight } from '@phosphor-icons/react'
 import './PageHeader.css'
 
 interface PageHeaderProps {
@@ -15,14 +15,14 @@ function PageHeader({ title, subtitle, breadcrumbs, actions }: PageHeaderProps) 
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav className="page-header-breadcrumbs" aria-label="Breadcrumb">
           <Link to="/dashboard" className="page-header-breadcrumb-home" aria-label="Home">
-            <Home size={14} />
+            <House size={14} />
           </Link>
           {breadcrumbs.map((crumb, index) => {
             const isLast = index === breadcrumbs.length - 1
             return (
               <span key={index} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <span className="page-header-breadcrumb-separator">
-                  <ChevronRight size={14} />
+                  <CaretRight size={14} />
                 </span>
                 {isLast || !crumb.href ? (
                   <span className="page-header-breadcrumb-current">{crumb.label}</span>

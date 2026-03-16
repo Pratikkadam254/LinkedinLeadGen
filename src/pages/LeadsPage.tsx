@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Download, Upload, MoreHorizontal, Check } from 'lucide-react'
+import { MagnifyingGlass, DownloadSimple, UploadSimple, DotsThree, Check } from '@phosphor-icons/react'
 import LeadsTable from '../components/dashboard/LeadsTable'
 import LeadDetailPanel from '../components/dashboard/LeadDetailPanel'
 import PageHeader from '../components/layout/PageHeader'
@@ -155,11 +155,11 @@ function LeadsPage() {
         <div className="leads-header-actions">
             {leadCountPill}
             <Link to="/dashboard/upload" className="btn btn-primary btn-sm">
-                <Upload size={16} />
+                <UploadSimple size={16} />
                 Import
             </Link>
             <button className="btn btn-secondary btn-sm">
-                <Download size={16} />
+                <DownloadSimple size={16} />
                 Export
             </button>
         </div>
@@ -182,7 +182,7 @@ function LeadsPage() {
                     <div className="leads-toolbar-inner">
                         <div className="toolbar-left">
                             <div className="search-box">
-                                <Search size={18} />
+                                <MagnifyingGlass size={18} />
                                 <input
                                     type="text"
                                     placeholder="Search leads..."
@@ -215,7 +215,7 @@ function LeadsPage() {
                                     Approve All
                                 </button>
                                 <button className="btn btn-text btn-sm">
-                                    <MoreHorizontal size={16} />
+                                    <DotsThree size={16} />
                                 </button>
                             </div>
                         )}
@@ -234,12 +234,12 @@ function LeadsPage() {
                 {!isLoading && filteredLeads.length === 0 && (
                     <Card padding="lg" className="empty-state-card">
                         <div className="empty-state-icon">
-                            <Upload size={48} />
+                            <UploadSimple size={48} weight="duotone" />
                         </div>
                         <h3>No leads yet</h3>
                         <p>Import your first leads to get started with AI-powered outreach.</p>
                         <Link to="/dashboard/upload" className="btn btn-primary">
-                            <Upload size={16} />
+                            <UploadSimple size={16} />
                             Import Leads
                         </Link>
                     </Card>

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { CheckCircle, ArrowRight } from 'lucide-react'
+import { CheckCircle, ArrowRight } from '@phosphor-icons/react'
 import DashboardPreview from './DashboardPreview'
 import './HeroSection.css'
 

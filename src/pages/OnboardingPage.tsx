@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { CaretLeft, CaretRight } from '@phosphor-icons/react'
 import Logo from '../components/ui/Logo'
 import OnboardingQuestion from '../components/onboarding/OnboardingQuestion'
 import Card from '../components/ui/Card'
@@ -90,7 +90,7 @@ function OnboardingPage() {
                                 className="btn btn-text"
                                 disabled={currentStep === 0}
                             >
-                                <ChevronLeft size={18} />
+                                <CaretLeft size={18} />
                                 Back
                             </button>
                             <button
@@ -99,7 +99,7 @@ function OnboardingPage() {
                                 disabled={!canContinue}
                             >
                                 {isLastStep ? 'Complete Setup' : 'Continue'}
-                                <ChevronRight size={18} />
+                                <CaretRight size={18} />
                             </button>
                         </div>
                     </Card>

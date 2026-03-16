@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { CaretDown } from '@phosphor-icons/react'
 import './FAQSection.css'
 
 const faqs = [
@@ -56,7 +56,7 @@ function FAQSection() {
                                 aria-expanded={openIndex === i}
                             >
                                 <span>{faq.q}</span>
-                                <ChevronDown size={20} className="faq-chevron" />
+                                <CaretDown size={20} className="faq-chevron" />
                             </button>
                             <div className="faq-answer">
                                 <p>{faq.a}</p>

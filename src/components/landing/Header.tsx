@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { List, X } from '@phosphor-icons/react'
 import Logo from '../ui/Logo'
 import './Header.css'
 
@@ -38,7 +38,7 @@ function Header() {
                         {mobileOpen ? (
                             <X size={24} aria-hidden="true" />
                         ) : (
-                            <Menu size={24} aria-hidden="true" />
+                            <List size={24} aria-hidden="true" />
                         )}
                     </button>
                 </div>

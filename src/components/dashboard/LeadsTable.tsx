@@ -1,4 +1,4 @@
-import { ChevronUp, ChevronDown, ExternalLink, Check, X, Clock, FileText } from 'lucide-react'
+import { CaretUp, CaretDown, ArrowSquareOut, Check, X, Clock, FileText } from '@phosphor-icons/react'
 import { type Lead } from '../../data/mockLeads'
 import StatusBadge from '../ui/StatusBadge'
 import './LeadsTable.css'
@@ -46,7 +46,7 @@ function LeadsTable({
 
     const renderSortIcon = (field: SortField) => {
         if (sortField !== field) return null
-        return sortDirection === 'asc' ? <ChevronUp size={14} /> : <ChevronDown size={14} />
+        return sortDirection === 'asc' ? <CaretUp size={14} /> : <CaretDown size={14} />
     }
 
     const getMessageIcon = (status: Lead['messageStatus']) => {
@@ -164,7 +164,7 @@ function LeadsTable({
                                         rel="noopener noreferrer"
                                         className="action-link"
                                     >
-                                        <ExternalLink size={14} />
+                                        <ArrowSquareOut size={14} />
                                     </a>
                                 </td>
                             </tr>
