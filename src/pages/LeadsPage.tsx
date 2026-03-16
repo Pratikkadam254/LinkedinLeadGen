@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, Filter, Download, Upload, MoreHorizontal, Check } from 'lucide-react'
+import { Search, Download, Upload, MoreHorizontal, Check } from 'lucide-react'
 import LeadsTable from '../components/dashboard/LeadsTable'
 import LeadDetailPanel from '../components/dashboard/LeadDetailPanel'
+import PageHeader from '../components/layout/PageHeader'
+import Card from '../components/ui/Card'
+import StatusBadge from '../components/ui/StatusBadge'
 import { useSyncedUser, useLeads } from '../hooks'
 import { mockLeads, type Lead } from '../data/mockLeads'
 import './LeadsPage.css'
@@ -139,34 +142,44 @@ function LeadsPage() {
     const someSelected = selectedIds.size > 0
     const isLoading = syncedUser.isSignedIn && convexLeads === undefined
 
+    const leadCountPill = (
+        <span className="leads-count-pill">
+            {isLoading ? '...' : filteredLeads.length}
+            {convexLeads && convexLeads.length > 0 && (
+                <span className="data-source-dot live" />
+            )}
+        </span>
+    )
+
+    const headerActions = (
+        <div className="leads-header-actions">
+            {leadCountPill}
+            <Link to="/dashboard/upload" className="btn btn-primary btn-sm">
+                <Upload size={16} />
+                Import
+            </Link>
+            <button className="btn btn-secondary btn-sm">
+                <Download size={16} />
+                Export
+            </button>
+        </div>
+    )
+
     return (
         <div className="leads-page">
             <div className="leads-container">
-                    {/* Page Header */}
-                    <div className="leads-page-header">
-                        <div className="leads-title">
-                            <h1>Leads</h1>
-                            <span className="leads-count">
-                                {isLoading ? 'Loading...' : `${filteredLeads.length} leads`}
-                            </span>
-                            {convexLeads && convexLeads.length > 0 && (
-                                <span className="data-source live">● Live</span>
-                            )}
-                        </div>
-                        <div className="leads-actions">
-                            <Link to="/dashboard/upload" className="btn btn-secondary">
-                                <Upload size={16} />
-                                Import
-                            </Link>
-                            <button className="btn btn-text">
-                                <Download size={16} />
-                                Export
-                            </button>
-                        </div>
-                    </div>
+                <PageHeader
+                    title="Leads"
+                    breadcrumbs={[
+                        { label: 'Dashboard', href: '/dashboard' },
+                        { label: 'Leads' },
+                    ]}
+                    actions={headerActions}
+                />
 
-                    {/* Toolbar */}
-                    <div className="leads-toolbar">
+                {/* Toolbar */}
+                <Card padding="sm" className="leads-toolbar-card animate-fade-in-up animation-delay-1">
+                    <div className="leads-toolbar-inner">
                         <div className="toolbar-left">
                             <div className="search-box">
                                 <Search size={18} />
@@ -178,7 +191,6 @@ function LeadsPage() {
                                 />
                             </div>
                             <div className="filter-group">
-                                <Filter size={16} />
                                 <select
                                     value={filterStatus}
                                     onChange={(e) => setFilterStatus(e.target.value)}
@@ -208,30 +220,34 @@ function LeadsPage() {
                             </div>
                         )}
                     </div>
+                </Card>
 
-                    {/* Loading State */}
-                    {isLoading && (
-                        <div className="loading-state">
-                            <div className="spinner"></div>
-                            <p>Loading leads...</p>
+                {/* Loading State */}
+                {isLoading && (
+                    <Card padding="lg" className="loading-state">
+                        <div className="spinner"></div>
+                        <p>Loading leads...</p>
+                    </Card>
+                )}
+
+                {/* Empty State */}
+                {!isLoading && filteredLeads.length === 0 && (
+                    <Card padding="lg" className="empty-state-card">
+                        <div className="empty-state-icon">
+                            <Upload size={48} />
                         </div>
-                    )}
+                        <h3>No leads yet</h3>
+                        <p>Import your first leads to get started with AI-powered outreach.</p>
+                        <Link to="/dashboard/upload" className="btn btn-primary">
+                            <Upload size={16} />
+                            Import Leads
+                        </Link>
+                    </Card>
+                )}
 
-                    {/* Empty State */}
-                    {!isLoading && filteredLeads.length === 0 && (
-                        <div className="empty-state">
-                            <div className="empty-icon">📋</div>
-                            <h3>No leads yet</h3>
-                            <p>Import your first leads to get started with AI-powered outreach.</p>
-                            <Link to="/dashboard/upload" className="btn btn-primary">
-                                <Upload size={16} />
-                                Import Leads
-                            </Link>
-                        </div>
-                    )}
-
-                    {/* Table */}
-                    {!isLoading && filteredLeads.length > 0 && (
+                {/* Table */}
+                {!isLoading && filteredLeads.length > 0 && (
+                    <Card padding="none" className="leads-table-card animate-fade-in-up animation-delay-2">
                         <LeadsTable
                             leads={filteredLeads}
                             selectedIds={selectedIds}
@@ -243,25 +259,18 @@ function LeadsPage() {
                             onSort={handleSort}
                             onRowClick={handleRowClick}
                         />
-                    )}
+                    </Card>
+                )}
 
-                    {/* Status Legend */}
-                    {filteredLeads.length > 0 && (
-                        <div className="status-legend">
-                            <span className="legend-item">
-                                <span className="status-dot pending"></span> Pending
-                            </span>
-                            <span className="legend-item">
-                                <span className="status-dot sent"></span> Sent
-                            </span>
-                            <span className="legend-item">
-                                <span className="status-dot accepted"></span> Accepted
-                            </span>
-                            <span className="legend-item">
-                                <span className="status-dot replied"></span> Replied
-                            </span>
-                        </div>
-                    )}
+                {/* Status Legend */}
+                {filteredLeads.length > 0 && (
+                    <div className="status-legend-bar animate-fade-in-up animation-delay-3">
+                        <StatusBadge status="pending" showDot size="sm" />
+                        <StatusBadge status="sent" showDot size="sm" />
+                        <StatusBadge status="accepted" showDot size="sm" />
+                        <StatusBadge status="replied" showDot size="sm" />
+                    </div>
+                )}
             </div>
 
             {/* Detail Panel */}

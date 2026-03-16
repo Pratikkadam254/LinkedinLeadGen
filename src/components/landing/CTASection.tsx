@@ -13,7 +13,7 @@ function CTASection() {
                             Join hundreds of B2B professionals using LeadFlow AI
                             to build meaningful connections at scale.
                         </p>
-                        <Link to="/signup" className="btn btn-cta btn-lg">
+                        <Link to="/signup" className="btn btn-primary btn-pill btn-lg">
                             Start Free Trial
                             <ArrowRight size={18} className="arrow" aria-hidden="true" />
                         </Link>

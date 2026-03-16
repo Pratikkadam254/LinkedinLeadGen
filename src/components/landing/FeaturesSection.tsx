@@ -39,6 +39,7 @@ function FeaturesSection() {
         <section id="features" className="features" aria-labelledby="features-heading">
             <div className="container">
                 <header className="section-header">
+                    <span className="section-badge">Features</span>
                     <h2 id="features-heading">Everything You Need to Generate Leads</h2>
                     <p>Powered by AI, perfected by human insight</p>
                 </header>
@@ -50,7 +51,7 @@ function FeaturesSection() {
                             role="listitem"
                         >
                             <div className="feature-icon" aria-hidden="true">
-                                <feature.icon size={24} strokeWidth={1.75} />
+                                <feature.icon size={22} strokeWidth={1.75} />
                             </div>
                             <h3>{feature.title}</h3>
                             <p>{feature.description}</p>
