@@ -19,7 +19,7 @@ test.describe('Landing page structure & content', () => {
     await expect(landingPage.footer).toBeAttached()
 
     // Verify order by comparing top offsets
-    const sections = ['#stats', '#features', '#how-it-works', '#pricing', '#faq', '#cta']
+    const sections = ['#features', '#how-it-works', '#stats', '#pricing', '#faq', '#cta']
     const offsets = await Promise.all(
       sections.map((sel) =>
         page.locator(sel).evaluate((el) => el.getBoundingClientRect().top)
@@ -32,8 +32,8 @@ test.describe('Landing page structure & content', () => {
 
   test('hero heading text', async ({ landingPage }) => {
     const h1 = landingPage.hero.locator('h1')
-    await expect(h1).toContainText('Turn LinkedIn Into Your')
-    await expect(h1).toContainText('Top Revenue Channel')
+    await expect(h1).toContainText('Transform LinkedIn Connections Into')
+    await expect(h1).toContainText('Qualified Leads')
   })
 
   test('hero has 3 trust badges', async ({ landingPage }) => {
@@ -70,11 +70,8 @@ test.describe('Landing page structure & content', () => {
     }
   })
 
-  test('how it works has badge and 4 tabs', async ({ landingPage }) => {
+  test('how it works has 4 tabs', async ({ landingPage }) => {
     await landingPage.scrollTo('#how-it-works')
-    const badge = landingPage.howItWorks.locator('.section-badge')
-    await expect(badge).toHaveText('Process')
-
     const tabs = landingPage.howItWorks.locator('[role="tab"]')
     await expect(tabs).toHaveCount(4)
   })
@@ -101,13 +98,13 @@ test.describe('Landing page structure & content', () => {
 
   test('CTA section heading', async ({ landingPage }) => {
     await landingPage.scrollTo('#cta')
-    await expect(landingPage.cta.locator('h2')).toContainText('Ready to Fill Your Calendar')
+    await expect(landingPage.cta.locator('h2')).toContainText('Ready to Transform Your Lead Generation')
   })
 
   test('footer has 3 columns and legal links', async ({ landingPage }) => {
     await landingPage.scrollTo('footer')
     await expect(landingPage.footer.locator('.footer-column')).toHaveCount(3)
-    await expect(landingPage.footer.locator('.footer-copyright')).toContainText('2026')
+    await expect(landingPage.footer.locator('.footer-copyright')).toContainText('LeadFlow AI')
     await expect(landingPage.footer.locator('.footer-legal a')).toHaveCount(2)
   })
 })

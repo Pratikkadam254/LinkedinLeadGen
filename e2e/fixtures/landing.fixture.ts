@@ -34,16 +34,6 @@ export class LandingPage {
     await this.page.waitForTimeout(400)
   }
 
-  // Wait for a reveal element to become visible
-  async waitForReveal(selector: string) {
-    const el = this.page.locator(selector)
-    await el.scrollIntoViewIfNeeded()
-    await this.page.waitForFunction(
-      (sel) => document.querySelector(sel)?.classList.contains('visible'),
-      selector,
-      { timeout: 5000 }
-    )
-  }
 }
 
 export const test = base.extend<{ landingPage: LandingPage }>({
