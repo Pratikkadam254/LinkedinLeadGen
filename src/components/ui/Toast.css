@@ -88,11 +88,11 @@
 }
 
 .toast-info::before {
-  background: var(--color-primary);
+  background: var(--color-accent);
 }
 
 .toast-info .toast-icon {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .toast-icon {

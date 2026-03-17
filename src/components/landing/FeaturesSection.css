@@ -1,20 +1,24 @@
 .features {
-    padding: var(--space-4xl) 0;
-    background: var(--color-bg-secondary);
+    padding: 100px 0;
+    background: var(--color-bg-tinted);
 }
 
 /* Section badge pill */
 .section-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--color-primary);
-    background: var(--color-primary-lighter);
-    padding: 4px 14px;
-    border-radius: var(--radius-full);
+    color: var(--color-accent);
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: var(--space-md);
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-lg);
 }
 
 .section-header {
@@ -23,11 +27,12 @@
 }
 
 .section-header h2 {
+    font-family: var(--font-display);
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: var(--space-md);
     color: var(--color-text-primary);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.025em;
 }
 
 .section-header p {
@@ -45,47 +50,41 @@
 
 .feature-card {
     background: var(--color-bg-primary);
-    border-radius: var(--radius-lg);
-    padding: var(--space-xl);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    padding: 36px;
     box-shadow: var(--shadow-card);
-    transition:
-        transform var(--transition-slow),
-        box-shadow var(--transition-slow);
-    /* Staggered animation */
-    opacity: 0;
-    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Stagger the cards */
-.feature-card:nth-child(1) { animation-delay: 0.1s; }
-.feature-card:nth-child(2) { animation-delay: 0.15s; }
-.feature-card:nth-child(3) { animation-delay: 0.2s; }
-.feature-card:nth-child(4) { animation-delay: 0.25s; }
-.feature-card:nth-child(5) { animation-delay: 0.3s; }
-.feature-card:nth-child(6) { animation-delay: 0.35s; }
-
 .feature-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-card-hover);
 }
 
 .feature-card:focus-within {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
 }
 
+/* Per-card icon colors — unique per feature */
 .feature-icon {
     width: 48px;
     height: 48px;
-    background: var(--color-primary-lighter);
-    border-radius: 50%;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-    color: var(--color-primary);
-    transition: transform var(--transition-fast);
+    transition: transform 0.3s ease;
 }
+
+.feature-card:nth-child(1) .feature-icon { background: #E8F2FF; color: #2D8CFF; }
+.feature-card:nth-child(2) .feature-icon { background: #FEF3C7; color: #D97706; }
+.feature-card:nth-child(3) .feature-icon { background: #DCFCE7; color: #16A34A; }
+.feature-card:nth-child(4) .feature-icon { background: #E0E7FF; color: #4F46E5; }
+.feature-card:nth-child(5) .feature-icon { background: #F0EDFF; color: #7C3AED; }
+.feature-card:nth-child(6) .feature-icon { background: #FCE7F3; color: #DB2777; }
 
 .feature-card:hover .feature-icon {
     transform: scale(1.05);
@@ -136,16 +135,5 @@
 
     .feature-card {
         padding: var(--space-lg);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }

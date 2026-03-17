@@ -31,8 +31,8 @@
 }
 
 .stat-icon-blue {
-    background: var(--color-primary-lighter);
-    color: var(--color-primary);
+    background: var(--color-accent-lighter);
+    color: var(--color-accent);
 }
 
 .stat-icon-green {
@@ -96,7 +96,7 @@
     align-items: center;
     gap: 4px;
     font-size: 0.8125rem;
-    color: var(--color-primary);
+    color: var(--color-accent);
     font-weight: 500;
     transition: gap var(--transition-fast);
 }
@@ -136,8 +136,8 @@
 }
 
 .timeline-icon-blue {
-    background: var(--color-primary-lighter);
-    color: var(--color-primary);
+    background: var(--color-accent-lighter);
+    color: var(--color-accent);
 }
 
 .timeline-icon-green {
@@ -201,8 +201,8 @@
 }
 
 .quickaction-icon-blue {
-    background: var(--color-primary-lighter);
-    color: var(--color-primary);
+    background: var(--color-accent-lighter);
+    color: var(--color-accent);
 }
 
 .quickaction-icon-purple {
@@ -244,7 +244,7 @@
 }
 
 .onboarding-card {
-    border-left: 3px solid var(--color-primary) !important;
+    border-left: 3px solid var(--color-accent) !important;
     background: var(--color-info-light) !important;
 }
 
@@ -258,8 +258,8 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--color-primary-lighter);
-    color: var(--color-primary);
+    background: var(--color-accent-lighter);
+    color: var(--color-accent);
     display: flex;
     align-items: center;
     justify-content: center;

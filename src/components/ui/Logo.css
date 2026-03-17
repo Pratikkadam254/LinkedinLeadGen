@@ -1,5 +1,5 @@
 .logo-icon {
-    color: var(--color-primary);
+    color: var(--color-accent);
     flex-shrink: 0;
     /* Subtle animation on parent hover */
     transition: transform var(--transition-fast);

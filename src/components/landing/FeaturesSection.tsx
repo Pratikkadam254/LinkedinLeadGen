@@ -38,7 +38,7 @@ function FeaturesSection() {
     return (
         <section id="features" className="features" aria-labelledby="features-heading">
             <div className="container">
-                <header className="section-header">
+                <header className="section-header reveal">
                     <span className="section-badge">Features</span>
                     <h2 id="features-heading">Everything You Need to Generate Leads</h2>
                     <p>Powered by AI, perfected by human insight</p>
@@ -47,7 +47,7 @@ function FeaturesSection() {
                     {features.map((feature, index) => (
                         <article
                             key={index}
-                            className="feature-card"
+                            className={`feature-card reveal stagger-${index + 1}`}
                             role="listitem"
                         >
                             <div className="feature-icon" aria-hidden="true">

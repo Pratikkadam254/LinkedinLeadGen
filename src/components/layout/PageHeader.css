@@ -19,7 +19,7 @@
 }
 
 .page-header-breadcrumbs a:hover {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .page-header-breadcrumb-current {
@@ -40,7 +40,7 @@
 }
 
 .page-header-breadcrumb-home:hover {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .page-header-top {

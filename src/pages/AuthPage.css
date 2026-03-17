@@ -21,7 +21,7 @@
     gap: 8px;
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-primary);
+    color: var(--color-accent);
     margin-bottom: var(--space-xl);
 }
 
@@ -50,8 +50,8 @@
 }
 
 .auth-notice {
-    background: var(--color-primary-lighter);
-    border: 1px solid var(--color-primary-light);
+    background: var(--color-accent-lighter);
+    border: 1px solid var(--color-accent-light);
     border-radius: var(--radius-md);
     padding: var(--space-md);
     margin-bottom: var(--space-lg);
@@ -97,7 +97,7 @@
 }
 
 .auth-footer a {
-    color: var(--color-primary);
+    color: var(--color-accent);
     font-weight: 500;
 }
 

@@ -12,7 +12,7 @@ function StatsSection() {
         <section id="stats" className="stats" aria-labelledby="stats-heading">
             <h2 id="stats-heading" className="sr-only">Our Results</h2>
             <div className="container">
-                <div className="stats-grid" role="list">
+                <div className="stats-grid reveal" role="list">
                     {stats.map((stat, index) => (
                         <div
                             key={index}
