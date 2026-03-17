@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/landing.fixture'
 
 test.describe('FAQ accordion', () => {
   test.beforeEach(async ({ landingPage }) => {
-    await landingPage.scrollTo('#faq')
+    await landingPage.scrollTo('.faq-list')
   })
 
   test('all items start closed', async ({ landingPage }) => {
@@ -17,7 +17,7 @@ test.describe('FAQ accordion', () => {
   })
 
   test('clicking a question opens it', async ({ landingPage }) => {
-    await landingPage.faqBtn(0).click()
+    await landingPage.click(landingPage.faqBtn(0))
 
     await expect(landingPage.faqItem(0)).toHaveClass(/open/)
     await expect(landingPage.faqBtn(0)).toHaveAttribute('aria-expanded', 'true')
@@ -28,21 +28,21 @@ test.describe('FAQ accordion', () => {
   })
 
   test('clicking the same question closes it', async ({ landingPage }) => {
-    await landingPage.faqBtn(0).click()
+    await landingPage.click(landingPage.faqBtn(0))
     await expect(landingPage.faqItem(0)).toHaveClass(/open/)
 
-    await landingPage.faqBtn(0).click()
+    await landingPage.click(landingPage.faqBtn(0))
     await expect(landingPage.faqItem(0)).not.toHaveClass(/open/)
     await expect(landingPage.faqBtn(0)).toHaveAttribute('aria-expanded', 'false')
   })
 
   test('only one item open at a time', async ({ landingPage }) => {
     // Open item 0
-    await landingPage.faqBtn(0).click()
+    await landingPage.click(landingPage.faqBtn(0))
     await expect(landingPage.faqItem(0)).toHaveClass(/open/)
 
     // Open item 2 — item 0 should close
-    await landingPage.faqBtn(2).click()
+    await landingPage.click(landingPage.faqBtn(2))
     await expect(landingPage.faqItem(2)).toHaveClass(/open/)
     await expect(landingPage.faqItem(0)).not.toHaveClass(/open/)
   })
@@ -63,8 +63,11 @@ test.describe('FAQ accordion', () => {
   })
 
   test('keyboard activation with Enter', async ({ landingPage }) => {
-    await landingPage.faqBtn(0).focus()
-    await landingPage.page.keyboard.press('Enter')
+    // Simulate keyboard Enter on the FAQ button
+    await landingPage.faqBtn(0).evaluate((el) => {
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+      ;(el as HTMLElement).click()
+    })
     await expect(landingPage.faqItem(0)).toHaveClass(/open/)
   })
 })

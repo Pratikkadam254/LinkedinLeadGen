@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/landing.fixture'
 
 test.describe('How It Works tabs', () => {
   test.beforeEach(async ({ landingPage }) => {
-    await landingPage.scrollTo('#how-it-works')
+    await landingPage.scrollTo('.step-tabs')
   })
 
   test('first tab is active by default', async ({ landingPage }) => {
@@ -20,7 +20,7 @@ test.describe('How It Works tabs', () => {
   })
 
   test('clicking second tab switches content', async ({ landingPage }) => {
-    await landingPage.tab(1).click()
+    await landingPage.click(landingPage.tab(1))
 
     await expect(landingPage.tab(1)).toHaveAttribute('aria-selected', 'true')
     await expect(landingPage.tab(0)).toHaveAttribute('aria-selected', 'false')
@@ -31,7 +31,7 @@ test.describe('How It Works tabs', () => {
   })
 
   test('clicking third tab shows Personalize + Launch', async ({ landingPage }) => {
-    await landingPage.tab(2).click()
+    await landingPage.click(landingPage.tab(2))
 
     await expect(landingPage.tab(2)).toHaveAttribute('aria-selected', 'true')
     const panel = landingPage.tabPanel
@@ -40,7 +40,7 @@ test.describe('How It Works tabs', () => {
   })
 
   test('clicking fourth tab shows Scale what works', async ({ landingPage }) => {
-    await landingPage.tab(3).click()
+    await landingPage.click(landingPage.tab(3))
 
     await expect(landingPage.tab(3)).toHaveAttribute('aria-selected', 'true')
     const panel = landingPage.tabPanel
@@ -52,7 +52,7 @@ test.describe('How It Works tabs', () => {
     const { page } = landingPage
 
     for (let i = 0; i < 4; i++) {
-      await landingPage.tab(i).click()
+      await landingPage.click(landingPage.tab(i))
       const selectedCount = await page.locator('[role="tab"][aria-selected="true"]').count()
       expect(selectedCount).toBe(1)
     }
@@ -60,7 +60,7 @@ test.describe('How It Works tabs', () => {
 
   test('each tab panel has 4 detail items', async ({ landingPage }) => {
     for (let i = 0; i < 4; i++) {
-      await landingPage.tab(i).click()
+      await landingPage.click(landingPage.tab(i))
       await expect(landingPage.tabPanel.locator('.step-details li')).toHaveCount(4)
     }
   })

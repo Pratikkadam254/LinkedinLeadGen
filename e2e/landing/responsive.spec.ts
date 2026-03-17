@@ -1,9 +1,9 @@
 import { test, expect } from '../fixtures/landing.fixture'
 
 test.describe('Responsive layout — Desktop', () => {
-  test.skip(({ browserName }, testInfo) => {
-    return testInfo.project.name === 'mobile-chrome'
-  }, 'Desktop-only tests')
+  test.beforeEach(async ({}, testInfo) => {
+    test.skip(testInfo.project.name === 'mobile-chrome', 'Desktop-only tests')
+  })
 
   test('features grid has 3 columns', async ({ landingPage }) => {
     await landingPage.scrollTo('#features')
@@ -39,9 +39,9 @@ test.describe('Responsive layout — Desktop', () => {
 })
 
 test.describe('Responsive layout — Mobile', () => {
-  test.skip(({ browserName }, testInfo) => {
-    return testInfo.project.name !== 'mobile-chrome'
-  }, 'Mobile-only tests')
+  test.beforeEach(async ({}, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile-chrome', 'Mobile-only tests')
+  })
 
   test('features grid is single column', async ({ landingPage }) => {
     await landingPage.scrollTo('#features')

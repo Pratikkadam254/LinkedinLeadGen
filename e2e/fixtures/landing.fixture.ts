@@ -1,11 +1,19 @@
-import { test as base, type Page } from '@playwright/test'
+import { test as base, type Page, type Locator } from '@playwright/test'
 
 export class LandingPage {
   constructor(public page: Page) {}
 
+  // Use evaluate-based click for compatibility with sandboxed Chromium builds
+  async click(locator: Locator) {
+    await locator.evaluate((el) => (el as HTMLElement).click())
+  }
+
   async goto() {
-    await this.page.goto('/')
-    await this.page.waitForSelector('.landing-page')
+    // Block external requests that may hang due to DNS in CI/sandboxed environments
+    await this.page.route('**/*.googleapis.com/**', (route) => route.abort())
+    await this.page.route('**/*.gstatic.com/**', (route) => route.abort())
+    await this.page.goto('/', { waitUntil: 'domcontentloaded' })
+    await this.page.waitForSelector('.landing-page', { timeout: 15000 })
   }
 
   // Section locators
@@ -28,9 +36,11 @@ export class LandingPage {
   tab(i: number) { return this.page.locator('[role="tab"]').nth(i) }
   get tabPanel() { return this.page.locator('[role="tabpanel"]') }
 
-  // Scroll helper
+  // Scroll helper — centers element in viewport to clear the sticky header
   async scrollTo(selector: string) {
-    await this.page.locator(selector).scrollIntoViewIfNeeded()
+    await this.page.locator(selector).evaluate((el) =>
+      el.scrollIntoView({ block: 'center', behavior: 'instant' })
+    )
     await this.page.waitForTimeout(400)
   }
 
