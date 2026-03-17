@@ -1,10 +1,12 @@
+import { Quotes } from '@phosphor-icons/react'
 import './TestimonialSection.css'
 
 function TestimonialSection() {
     return (
         <section className="testimonial-section" aria-label="Customer testimonial">
             <div className="container">
-                <div className="testimonial-card reveal-scale">
+                <div className="testimonial-card">
+                    <Quotes size={32} weight="duotone" className="testimonial-icon" aria-hidden="true" />
                     <blockquote className="testimonial-quote">
                         "Before LeadFlow AI we averaged 2–3 sales calls per week. Within 30 days we were consistently
                         at 10–12 qualified calls per week, and in 6 weeks we closed 4 new clients—about{' '}

@@ -8,15 +8,15 @@ function HeroSection() {
         <section className="hero" aria-labelledby="hero-heading">
             <div className="container">
                 <div className="hero-content">
-                    <h1 id="hero-heading" className="reveal">
-                        Turn LinkedIn Into Your{' '}
-                        <span className="hero-highlight">Top Revenue Channel</span>
+                    <h1 id="hero-heading" className="animate-fade-in-up">
+                        Transform LinkedIn Connections Into{' '}
+                        <span className="hero-highlight">Qualified Leads</span>
                     </h1>
-                    <p className="hero-subtitle reveal stagger-1">
+                    <p className="hero-subtitle animate-fade-in-up animation-delay-1">
                         AI-powered lead generation that feels human. Build meaningful
                         relationships at scale without losing authenticity.
                     </p>
-                    <div className="hero-cta reveal stagger-2">
+                    <div className="hero-cta animate-fade-in-up animation-delay-2">
                         <Link to="/signup" className="btn btn-primary btn-pill btn-lg">
                             Start Free Trial
                             <ArrowRight size={18} className="arrow" aria-hidden="true" />
@@ -25,7 +25,7 @@ function HeroSection() {
                             See How It Works
                         </a>
                     </div>
-                    <div className="trust-badges reveal stagger-3" aria-label="Benefits">
+                    <div className="trust-badges animate-fade-in-up animation-delay-3" aria-label="Benefits">
                         <span>
                             <CheckCircle size={16} aria-hidden="true" />
                             7-day free trial
@@ -40,7 +40,7 @@ function HeroSection() {
                         </span>
                     </div>
                 </div>
-                <div className="hero-preview reveal-scale stagger-4" aria-hidden="true">
+                <div className="hero-preview animate-fade-in-up animation-delay-4" aria-hidden="true">
                     <DashboardPreview />
                 </div>
             </div>

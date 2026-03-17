@@ -16,7 +16,7 @@
 
 .progress-percentage {
     font-size: 0.875rem;
-    color: var(--color-accent);
+    color: var(--color-primary);
     font-weight: 600;
 }
 
@@ -30,7 +30,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
     border-radius: var(--radius-full);
     transition: width 0.4s ease;
 }
@@ -50,10 +50,10 @@
 }
 
 .progress-dot.completed {
-    background: var(--color-accent);
+    background: var(--color-primary);
 }
 
 .progress-dot.current {
-    background: var(--color-accent);
-    box-shadow: 0 0 0 4px var(--color-accent-lighter);
+    background: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-primary-lighter);
 }

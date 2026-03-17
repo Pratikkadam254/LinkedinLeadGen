@@ -40,18 +40,5 @@
 
 /* Highlighted variant */
 .card--highlighted {
-  border-left: 3px solid var(--color-accent);
-}
-
-/* Outlined variant */
-.card--outlined {
-  background: transparent;
-  border: 1px solid var(--color-border-medium);
-  box-shadow: none;
-}
-
-/* Accent variant */
-.card--accent {
-  background: var(--color-accent-lighter);
-  border: 1px solid rgba(45, 140, 255, 0.12);
+  border-left: 3px solid var(--color-primary);
 }

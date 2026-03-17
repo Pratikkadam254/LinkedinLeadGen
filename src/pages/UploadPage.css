@@ -53,13 +53,13 @@
 }
 
 .step-circle--active {
-    background: var(--color-accent);
-    color: var(--color-text-on-accent);
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
 }
 
 .step-circle--completed {
-    background: var(--color-accent);
-    color: var(--color-text-on-accent);
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
 }
 
 .step-circle--pending {
@@ -75,11 +75,11 @@
 }
 
 .step-label--active {
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .step-label--completed {
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .step-label--pending {
@@ -94,7 +94,7 @@
 }
 
 .step-line--completed {
-    background: var(--color-accent);
+    background: var(--color-primary);
 }
 
 .step-line--pending {
@@ -120,12 +120,12 @@
 
 .dropzone:hover,
 .dropzone--active {
-    border-color: var(--color-accent);
-    background: var(--color-accent-lighter);
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
 }
 
 .dropzone__icon {
-    color: var(--color-accent-light);
+    color: var(--color-primary-light);
     margin-bottom: var(--space-sm);
 }
 
@@ -184,8 +184,8 @@
 }
 
 .column-tag--required {
-    background: var(--color-accent-lighter);
-    color: var(--color-accent);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
 }
 
 .column-tag--optional {
@@ -335,7 +335,7 @@
 }
 
 .spin-icon {
-    color: var(--color-accent);
+    color: var(--color-primary);
     animation: spin 1s linear infinite;
     margin-bottom: var(--space-lg);
 }
@@ -369,7 +369,7 @@
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-dark));
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
     border-radius: var(--radius-full);
     transition: width 0.3s ease;
 }
@@ -378,7 +378,7 @@
     margin-top: var(--space-sm);
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 /* ====================

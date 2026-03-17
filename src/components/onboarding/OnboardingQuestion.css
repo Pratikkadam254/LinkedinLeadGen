@@ -42,8 +42,8 @@
 }
 
 .option-btn.selected {
-    border-color: var(--color-accent);
-    background: var(--color-accent-lighter);
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
 }
 
 .option-icon {
@@ -72,8 +72,8 @@
 }
 
 .option-btn.selected .option-check {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .selection-hint {

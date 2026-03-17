@@ -8,14 +8,12 @@ import PricingSection from '../components/landing/PricingSection'
 import FAQSection from '../components/landing/FAQSection'
 import CTASection from '../components/landing/CTASection'
 import Footer from '../components/landing/Footer'
-import { useScrollReveal } from '../hooks/useScrollReveal'
 import './LandingPage.css'
 
 function LandingPage() {
-    useScrollReveal()
-
     return (
         <div className="landing-page">
+            {/* Skip to main content link for accessibility */}
             <a href="#main-content" className="skip-to-main">
                 Skip to main content
             </a>
@@ -24,9 +22,9 @@ function LandingPage() {
 
             <main id="main-content">
                 <HeroSection />
-                <StatsSection />
                 <FeaturesSection />
                 <HowItWorksSection />
+                <StatsSection />
                 <TestimonialSection />
                 <PricingSection />
                 <FAQSection />

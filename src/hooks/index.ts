@@ -3,4 +3,3 @@ export * from './useUser';
 export * from './useLeads';
 export * from './useActivities';
 export * from './useSyncedUser';
-export * from './useScrollReveal';

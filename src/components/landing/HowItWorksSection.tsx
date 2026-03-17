@@ -60,13 +60,13 @@ function HowItWorksSection() {
     return (
         <section id="how-it-works" className="how-it-works" aria-labelledby="how-heading">
             <div className="container">
-                <header className="section-header reveal">
-                    <span className="section-badge">Process</span>
+                <header className="section-header">
                     <h2 id="how-heading">How LeadFlow AI works</h2>
                     <p>A simple proven process that turns targeting + messaging into booked meetings.</p>
                 </header>
 
-                <div className="step-tabs reveal stagger-1" role="tablist">
+                {/* Step tabs */}
+                <div className="step-tabs" role="tablist">
                     {steps.map((step, i) => (
                         <button
                             key={step.id}
@@ -81,7 +81,8 @@ function HowItWorksSection() {
                     ))}
                 </div>
 
-                <div className="step-content reveal stagger-2" role="tabpanel" key={currentStep.id}>
+                {/* Step content */}
+                <div className="step-content" role="tabpanel" key={currentStep.id}>
                     <div className="step-text">
                         <div className="step-number">Step {activeStep + 1}</div>
                         <h3>{currentStep.title}</h3>

@@ -36,7 +36,7 @@
   width: 28px;
   height: 28px;
   flex-shrink: 0;
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 .sidebar-logo-text {
@@ -102,9 +102,9 @@
 }
 
 .sidebar-nav-item.active {
-  background: var(--color-accent-lighter);
-  color: var(--color-accent);
-  border-left: 3px solid var(--color-accent);
+  background: var(--color-primary-lighter);
+  color: var(--color-primary);
+  border-left: 3px solid var(--color-primary);
   padding-left: 9px;
 }
 

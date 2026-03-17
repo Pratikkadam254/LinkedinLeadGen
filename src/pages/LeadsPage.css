@@ -77,7 +77,7 @@
 }
 
 .search-box:focus-within {
-    border-color: var(--color-accent);
+    border-color: var(--color-primary);
     box-shadow: var(--shadow-focus);
     background: var(--color-bg-primary);
 }
@@ -121,7 +121,7 @@
 }
 
 .filter-group select:focus {
-    border-color: var(--color-accent);
+    border-color: var(--color-primary);
     box-shadow: var(--shadow-focus);
 }
 
@@ -157,7 +157,7 @@
     width: 40px;
     height: 40px;
     border: 3px solid var(--color-bg-tertiary);
-    border-top-color: var(--color-accent);
+    border-top-color: var(--color-primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -185,7 +185,7 @@
 }
 
 .empty-state-icon {
-    color: var(--color-accent-light);
+    color: var(--color-primary-light);
     margin-bottom: var(--space-lg);
 }
 

@@ -20,7 +20,7 @@
 }
 
 .faq-item.open {
-    border-color: var(--color-accent);
+    border-color: var(--color-primary-light);
 }
 
 .faq-question {
@@ -33,17 +33,17 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    font-family: var(--font-display);
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--color-text-primary);
     text-align: left;
     line-height: 1.4;
+    font-family: var(--font-sans);
     transition: color var(--transition-fast);
 }
 
 .faq-question:hover {
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .faq-chevron {
@@ -54,7 +54,7 @@
 
 .faq-item.open .faq-chevron {
     transform: rotate(180deg);
-    color: var(--color-accent);
+    color: var(--color-primary);
 }
 
 .faq-answer {

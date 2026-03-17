@@ -61,8 +61,8 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: var(--color-accent-lighter);
-    color: var(--color-accent);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -29,25 +29,25 @@
   flex-shrink: 0;
 }
 
-/* Color variants — higher contrast */
+/* Color variants */
 .status-badge--pending {
-  background: rgba(107, 114, 128, 0.10);
-  color: #4B5563;
+  background: #F0F2F9;
+  color: #5F6581;
 }
 
 .status-badge--sent {
-  background: rgba(45, 140, 255, 0.10);
-  color: #2D8CFF;
+  background: #EEF1FE;
+  color: #4F6BED;
 }
 
 .status-badge--accepted {
-  background: rgba(34, 197, 94, 0.10);
-  color: #16A34A;
+  background: #E8F8F0;
+  color: #2D9D6F;
 }
 
 .status-badge--replied {
-  background: rgba(124, 92, 252, 0.10);
-  color: #7C3AED;
+  background: #F3EEFE;
+  color: #7C5CFC;
 }
 
 .status-badge--success {
