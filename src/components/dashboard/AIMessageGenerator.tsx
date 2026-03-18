@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { Sparkles, RefreshCw, Copy, Check, Send, ChevronDown } from 'lucide-react'
+import { Sparkle, ArrowsClockwise, Copy, Check, PaperPlaneTilt, CaretDown } from '@phosphor-icons/react'
 import { aiMessageService, type MessageTone, type GeneratedMessage, type LeadContext, type UserContext } from '../../lib/aiMessages'
 import { useToast } from '../ui/Toast'
 import './AIMessageGenerator.css'
@@ -23,11 +23,11 @@ interface AIMessageGeneratorProps {
     onSend?: (message: string) => void
 }
 
-const TONE_OPTIONS: { value: MessageTone; label: string; emoji: string }[] = [
-    { value: 'professional', label: 'Professional', emoji: '💼' },
-    { value: 'friendly', label: 'Friendly', emoji: '😊' },
-    { value: 'casual', label: 'Casual', emoji: '☕' },
-    { value: 'bold', label: 'Bold', emoji: '🔥' },
+const TONE_OPTIONS: { value: MessageTone; label: string }[] = [
+    { value: 'professional', label: 'Professional' },
+    { value: 'friendly', label: 'Friendly' },
+    { value: 'casual', label: 'Casual' },
+    { value: 'bold', label: 'Bold' },
 ]
 
 function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
@@ -135,14 +135,14 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
         <div className="ai-message-gen">
             <div className="ai-gen-header">
                 <div className="ai-gen-title">
-                    <Sparkles size={18} />
+                    <Sparkle size={18} />
                     <h3>AI Message Generator</h3>
                 </div>
                 <button
                     className="options-toggle"
                     onClick={() => setShowOptions(!showOptions)}
                 >
-                    Options <ChevronDown size={14} className={showOptions ? 'rotated' : ''} />
+                    Options <CaretDown size={14} className={showOptions ? 'rotated' : ''} />
                 </button>
             </div>
 
@@ -151,36 +151,33 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
                 <div className="ai-gen-options">
                     <div className="option-group">
                         <label>Tone</label>
-                        <div className="tone-selector">
+                        <div className="tone-pill-group">
                             {TONE_OPTIONS.map(opt => (
                                 <button
                                     key={opt.value}
-                                    className={`tone-btn ${tone === opt.value ? 'active' : ''}`}
+                                    className={`tone-pill ${tone === opt.value ? 'active' : ''}`}
                                     onClick={() => setTone(opt.value)}
                                 >
-                                    <span className="tone-emoji">{opt.emoji}</span>
-                                    <span>{opt.label}</span>
+                                    {opt.label}
                                 </button>
                             ))}
                         </div>
                     </div>
 
                     <div className="option-toggles">
-                        <label className="toggle-option">
-                            <input
-                                type="checkbox"
-                                checked={includeCompliment}
-                                onChange={(e) => setIncludeCompliment(e.target.checked)}
-                            />
+                        <label className="toggle-switch-label">
                             <span>Include compliment</span>
+                            <div className={`toggle-switch ${includeCompliment ? 'active' : ''}`}
+                                onClick={() => setIncludeCompliment(!includeCompliment)}>
+                                <div className="toggle-switch-handle" />
+                            </div>
                         </label>
-                        <label className="toggle-option">
-                            <input
-                                type="checkbox"
-                                checked={includeQuestion}
-                                onChange={(e) => setIncludeQuestion(e.target.checked)}
-                            />
+                        <label className="toggle-switch-label">
                             <span>End with question</span>
+                            <div className={`toggle-switch ${includeQuestion ? 'active' : ''}`}
+                                onClick={() => setIncludeQuestion(!includeQuestion)}>
+                                <div className="toggle-switch-handle" />
+                            </div>
                         </label>
                     </div>
                 </div>
@@ -195,12 +192,12 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
                 >
                     {isGenerating ? (
                         <>
-                            <RefreshCw size={16} className="spin-icon" />
+                            <ArrowsClockwise size={16} className="spin-icon" />
                             Generating...
                         </>
                     ) : (
                         <>
-                            <Sparkles size={16} />
+                            <Sparkle size={16} />
                             Generate Message for {lead.firstName}
                         </>
                     )}
@@ -213,7 +210,7 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
                     <div className="message-meta">
                         <div className="meta-badges">
                             <span className={`score-badge p-${generatedMessage.personalizationScore >= 7 ? 'high' : generatedMessage.personalizationScore >= 4 ? 'mid' : 'low'}`}>
-                                ✨ {generatedMessage.personalizationScore}/10 personalization
+                                {generatedMessage.personalizationScore}/10 personalization
                             </span>
                             <span className="char-badge">{charCount}/300 chars</span>
                         </div>
@@ -234,32 +231,31 @@ function AIMessageGenerator({ lead, user, onSend }: AIMessageGeneratorProps) {
                     />
 
                     {isOverLimit && (
-                        <p className="limit-warning">⚠️ LinkedIn connection requests are limited to 300 characters</p>
+                        <p className="limit-warning">LinkedIn connection requests are limited to 300 characters</p>
                     )}
 
                     <div className="message-actions">
                         <button
-                            className="btn btn-text"
+                            className="btn btn-text action-icon-btn"
                             onClick={handleRegenerate}
                             disabled={isGenerating}
+                            title="Regenerate"
                         >
-                            <RefreshCw size={14} className={isGenerating ? 'spin-icon' : ''} />
-                            Regenerate
+                            <ArrowsClockwise size={16} className={isGenerating ? 'spin-icon' : ''} />
                         </button>
 
                         <div className="action-group">
-                            <button className="btn btn-secondary" onClick={handleCopy}>
-                                {copied ? <Check size={14} /> : <Copy size={14} />}
-                                {copied ? 'Copied!' : 'Copy'}
+                            <button className="btn btn-text action-icon-btn" onClick={handleCopy} title="Copy">
+                                {copied ? <Check size={16} /> : <Copy size={16} />}
                             </button>
                             {onSend && (
                                 <button
-                                    className="btn btn-primary"
+                                    className="btn btn-primary btn-sm"
                                     onClick={handleSend}
                                     disabled={isOverLimit || !editedMessage}
                                 >
-                                    <Send size={14} />
-                                    Send Request
+                                    <PaperPlaneTilt size={14} />
+                                    Send
                                 </button>
                             )}
                         </div>

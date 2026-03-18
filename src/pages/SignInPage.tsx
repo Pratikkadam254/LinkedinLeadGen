@@ -82,7 +82,7 @@ function SignInWithClerk() {
                             colorText: '#191919',
                             colorTextSecondary: '#666666',
                             borderRadius: '8px',
-                            fontFamily: 'Inter, sans-serif',
+                            fontFamily: "'Plus Jakarta Sans', sans-serif",
                         }
                     }}
                 />

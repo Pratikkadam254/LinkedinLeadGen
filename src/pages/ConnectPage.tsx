@@ -1,24 +1,47 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
-    Linkedin,
+    LinkedinLogo,
     Check,
-    AlertCircle,
-    ExternalLink,
-    Shield,
-    Zap,
-    RefreshCw,
-    Unplug
-} from 'lucide-react'
-import Logo from '../components/ui/Logo'
+    WarningCircle,
+    ArrowSquareOut,
+    ShieldCheck,
+    Lightning,
+    ArrowsClockwise,
+    PlugsConnected,
+    CaretDown
+} from '@phosphor-icons/react'
 import { unipileService, initializeUnipile, type LinkedInAccount } from '../lib/unipile'
+import PageHeader from '../components/layout/PageHeader'
+import Card from '../components/ui/Card'
+import StatusBadge from '../components/ui/StatusBadge'
 import './ConnectPage.css'
+
+const FAQ_ITEMS = [
+    {
+        question: 'Is this safe for my LinkedIn account?',
+        answer: 'Yes! We use Unipile\'s official API integration with built-in rate limiting. We never exceed LinkedIn\'s daily limits and follow all platform guidelines.',
+    },
+    {
+        question: 'What data do you access?',
+        answer: 'We only access what\'s needed: your profile info, ability to send connection requests, and messages. We never access your conversations or connections list.',
+    },
+    {
+        question: 'Can I disconnect anytime?',
+        answer: 'Absolutely! You can disconnect your account at any time. All pending actions will be cancelled and we\'ll delete your connection tokens.',
+    },
+    {
+        question: 'What are the daily limits?',
+        answer: 'To keep your account safe, we limit to 100 connection requests and 150 messages per day. These limits reset at midnight UTC.',
+    },
+]
 
 function ConnectPage() {
     const [isConnecting, setIsConnecting] = useState(false)
     const [account, setAccount] = useState<LinkedInAccount | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [limits, setLimits] = useState(unipileService.getDailyLimits())
+    const [openFaq, setOpenFaq] = useState<number | null>(null)
 
     useEffect(() => {
         // Initialize Unipile on mount
@@ -106,166 +129,190 @@ function ConnectPage() {
         setLimits(unipileService.getDailyLimits())
     }
 
+    const toggleFaq = (index: number) => {
+        setOpenFaq(openFaq === index ? null : index)
+    }
+
     return (
         <div className="connect-page">
-            <header className="connect-header">
-                <Link to="/dashboard" className="connect-logo">
-                    <Logo />
-                    <span>LeadFlow AI</span>
-                </Link>
-                <nav className="connect-nav">
-                    <Link to="/dashboard" className="nav-link">← Back to Dashboard</Link>
-                </nav>
-            </header>
+            <PageHeader
+                title="Connect LinkedIn"
+                breadcrumbs={[
+                    { label: 'Dashboard', href: '/dashboard' },
+                    { label: 'Connect' },
+                ]}
+            />
 
-            <main className="connect-main">
+            <div className="connect-body">
                 <div className="connect-container">
-                    <div className="connect-intro">
-                        <div className="linkedin-icon-wrapper">
-                            <Linkedin size={32} />
-                        </div>
-                        <h1>Connect LinkedIn</h1>
-                        <p>Link your LinkedIn account to automate connection requests and messaging</p>
-                    </div>
-
                     {error && (
-                        <div className="error-banner">
-                            <AlertCircle size={16} />
+                        <div className="connect-error-banner">
+                            <WarningCircle size={16} />
                             <span>{error}</span>
                         </div>
                     )}
 
                     {!account ? (
                         // Not connected state
-                        <div className="connect-card">
-                            <div className="connect-status disconnected">
-                                <div className="status-indicator"></div>
-                                <span>Not Connected</span>
+                        <>
+                            <Card padding="lg" className="connect-card">
+                                <div className="connect-card__inner">
+                                    <div className="connect-linkedin-icon">
+                                        <LinkedinLogo size={28} />
+                                    </div>
+                                    <h2 className="connect-card__title">Connect LinkedIn</h2>
+                                    <p className="connect-card__desc">Link your LinkedIn account to automate connection requests and messaging</p>
+
+                                    <div className="connect-benefits">
+                                        <div className="connect-benefit">
+                                            <Lightning size={24} />
+                                            <div>
+                                                <h4>Automated Outreach</h4>
+                                                <p>Send connection requests and messages automatically</p>
+                                            </div>
+                                        </div>
+                                        <div className="connect-benefit">
+                                            <ShieldCheck size={24} />
+                                            <div>
+                                                <h4>LinkedIn-Safe</h4>
+                                                <p>Built-in rate limiting to protect your account</p>
+                                            </div>
+                                        </div>
+                                        <div className="connect-benefit">
+                                            <ArrowsClockwise size={24} />
+                                            <div>
+                                                <h4>Real-time Sync</h4>
+                                                <p>Track responses and engagement instantly</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        className="btn btn-linkedin btn-lg btn-pill"
+                                        onClick={handleConnect}
+                                        disabled={isConnecting}
+                                    >
+                                        {isConnecting ? (
+                                            <>
+                                                <ArrowsClockwise size={18} className="spinning" />
+                                                Connecting...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <LinkedinLogo size={18} />
+                                                Connect LinkedIn Account
+                                            </>
+                                        )}
+                                    </button>
+
+                                    <p className="connect-note">
+                                        We use <a href="https://unipile.com" target="_blank" rel="noopener noreferrer">
+                                            Unipile <ArrowSquareOut size={12} />
+                                        </a> for secure LinkedIn integration
+                                    </p>
+                                </div>
+                            </Card>
+
+                            {/* FAQ Accordion */}
+                            <div className="connect-faq">
+                                <h3 className="connect-faq__title">Frequently Asked Questions</h3>
+                                <div className="connect-faq__list">
+                                    {FAQ_ITEMS.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            className={`connect-faq__item ${openFaq === index ? 'connect-faq__item--open' : ''}`}
+                                        >
+                                            <button
+                                                className="connect-faq__question"
+                                                onClick={() => toggleFaq(index)}
+                                            >
+                                                <span>{item.question}</span>
+                                                <CaretDown size={18} className="connect-faq__chevron" />
+                                            </button>
+                                            <div className="connect-faq__answer">
+                                                <p>{item.answer}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-
-                            <div className="connect-benefits">
-                                <div className="benefit">
-                                    <Zap size={20} />
-                                    <div>
-                                        <h4>Automated Outreach</h4>
-                                        <p>Send connection requests and messages automatically</p>
-                                    </div>
-                                </div>
-                                <div className="benefit">
-                                    <Shield size={20} />
-                                    <div>
-                                        <h4>LinkedIn-Safe</h4>
-                                        <p>Built-in rate limiting to protect your account</p>
-                                    </div>
-                                </div>
-                                <div className="benefit">
-                                    <RefreshCw size={20} />
-                                    <div>
-                                        <h4>Real-time Sync</h4>
-                                        <p>Track responses and engagement instantly</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button
-                                className="btn btn-linkedin btn-lg"
-                                onClick={handleConnect}
-                                disabled={isConnecting}
-                            >
-                                {isConnecting ? (
-                                    <>
-                                        <RefreshCw size={18} className="spinning" />
-                                        Connecting...
-                                    </>
-                                ) : (
-                                    <>
-                                        <Linkedin size={18} />
-                                        Connect LinkedIn Account
-                                    </>
-                                )}
-                            </button>
-
-                            <p className="connect-note">
-                                We use <a href="https://unipile.com" target="_blank" rel="noopener noreferrer">
-                                    Unipile <ExternalLink size={12} />
-                                </a> for secure LinkedIn integration
-                            </p>
-                        </div>
+                        </>
                     ) : (
                         // Connected state
-                        <div className="connect-card connected">
-                            <div className="connect-status connected">
-                                <div className="status-indicator"></div>
-                                <span>Connected</span>
+                        <>
+                            <div className="connect-status-row">
+                                <StatusBadge status="success" label="Connected" showDot />
                             </div>
 
-                            <div className="account-info">
-                                <div className="account-avatar">
-                                    {account.name.split(' ').map(n => n[0]).join('')}
-                                </div>
-                                <div className="account-details">
-                                    <h3>{account.name}</h3>
-                                    <p>{account.email}</p>
-                                    <a
-                                        href={account.profileUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="profile-link"
-                                    >
-                                        View Profile <ExternalLink size={12} />
-                                    </a>
-                                </div>
-                                <Check size={24} className="check-icon" />
-                            </div>
-
-                            <div className="limits-section">
-                                <div className="limits-header">
-                                    <h4>Daily Limits</h4>
-                                    <button onClick={handleRefreshLimits} className="btn btn-text btn-sm">
-                                        <RefreshCw size={14} />
-                                        Refresh
-                                    </button>
-                                </div>
-                                <div className="limits-grid">
-                                    <div className="limit-card">
-                                        <div className="limit-label">Connection Requests</div>
-                                        <div className="limit-bar">
-                                            <div
-                                                className="limit-fill"
-                                                style={{ width: `${(limits.connectionRequests.used / limits.connectionRequests.limit) * 100}%` }}
-                                            ></div>
-                                        </div>
-                                        <div className="limit-values">
-                                            <span>{limits.connectionRequests.used} used</span>
-                                            <span>{limits.connectionRequests.remaining} remaining</span>
-                                        </div>
+                            <Card padding="lg" className="connect-card">
+                                <div className="account-info">
+                                    <div className="account-avatar">
+                                        {account.name.split(' ').map(n => n[0]).join('')}
                                     </div>
-                                    <div className="limit-card">
-                                        <div className="limit-label">Direct Messages</div>
-                                        <div className="limit-bar">
-                                            <div
-                                                className="limit-fill"
-                                                style={{ width: `${(limits.messages.used / limits.messages.limit) * 100}%` }}
-                                            ></div>
-                                        </div>
-                                        <div className="limit-values">
-                                            <span>{limits.messages.used} used</span>
-                                            <span>{limits.messages.remaining} remaining</span>
-                                        </div>
+                                    <div className="account-details">
+                                        <h3>{account.name}</h3>
+                                        <p>{account.email}</p>
+                                        <a
+                                            href={account.profileUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="profile-link"
+                                        >
+                                            View Profile <ArrowSquareOut size={12} />
+                                        </a>
                                     </div>
+                                    <Check size={24} className="check-icon" />
                                 </div>
+                            </Card>
+
+                            {/* Limits */}
+                            <div className="connect-limits-header">
+                                <h4>Daily Limits</h4>
+                                <button onClick={handleRefreshLimits} className="btn btn-text btn-sm">
+                                    <ArrowsClockwise size={14} />
+                                    Refresh
+                                </button>
+                            </div>
+                            <div className="connect-limits-grid">
+                                <Card padding="md">
+                                    <div className="limit-label">Connection Requests</div>
+                                    <div className="limit-bar">
+                                        <div
+                                            className="limit-fill"
+                                            style={{ width: `${(limits.connectionRequests.used / limits.connectionRequests.limit) * 100}%` }}
+                                        ></div>
+                                    </div>
+                                    <div className="limit-values">
+                                        <span>{limits.connectionRequests.used} used</span>
+                                        <span>{limits.connectionRequests.remaining} remaining</span>
+                                    </div>
+                                </Card>
+                                <Card padding="md">
+                                    <div className="limit-label">Direct Messages</div>
+                                    <div className="limit-bar">
+                                        <div
+                                            className="limit-fill"
+                                            style={{ width: `${(limits.messages.used / limits.messages.limit) * 100}%` }}
+                                        ></div>
+                                    </div>
+                                    <div className="limit-values">
+                                        <span>{limits.messages.used} used</span>
+                                        <span>{limits.messages.remaining} remaining</span>
+                                    </div>
+                                </Card>
                             </div>
 
-                            <div className="account-actions">
-                                <Link to="/dashboard/leads" className="btn btn-primary">
-                                    Start Sending →
+                            {/* Actions */}
+                            <div className="connect-actions">
+                                <Link to="/dashboard/leads" className="btn btn-primary btn-lg">
+                                    Start Sending
                                 </Link>
                                 <button
                                     onClick={handleDisconnect}
-                                    className="btn btn-danger-outline"
+                                    className="btn btn-danger btn-lg"
                                     disabled={isConnecting}
                                 >
-                                    <Unplug size={16} />
+                                    <PlugsConnected size={16} />
                                     Disconnect
                                 </button>
                             </div>
@@ -273,33 +320,10 @@ function ConnectPage() {
                             <p className="connected-time">
                                 Connected {new Date(account.connectedAt).toLocaleDateString()}
                             </p>
-                        </div>
+                        </>
                     )}
-
-                    {/* FAQ Section */}
-                    <div className="faq-section">
-                        <h3>Frequently Asked Questions</h3>
-                        <div className="faq-list">
-                            <details className="faq-item">
-                                <summary>Is this safe for my LinkedIn account?</summary>
-                                <p>Yes! We use Unipile's official API integration with built-in rate limiting. We never exceed LinkedIn's daily limits and follow all platform guidelines.</p>
-                            </details>
-                            <details className="faq-item">
-                                <summary>What data do you access?</summary>
-                                <p>We only access what's needed: your profile info, ability to send connection requests, and messages. We never access your conversations or connections list.</p>
-                            </details>
-                            <details className="faq-item">
-                                <summary>Can I disconnect anytime?</summary>
-                                <p>Absolutely! You can disconnect your account at any time. All pending actions will be cancelled and we'll delete your connection tokens.</p>
-                            </details>
-                            <details className="faq-item">
-                                <summary>What are the daily limits?</summary>
-                                <p>To keep your account safe, we limit to 100 connection requests and 150 messages per day. These limits reset at midnight UTC.</p>
-                            </details>
-                        </div>
-                    </div>
                 </div>
-            </main>
+            </div>
         </div>
     )
 }

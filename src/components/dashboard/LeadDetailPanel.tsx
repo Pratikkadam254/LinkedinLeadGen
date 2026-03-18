@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { X, ExternalLink, RefreshCw, Linkedin, Sparkles, AlertCircle } from 'lucide-react'
+import { X, ArrowSquareOut, ArrowsClockwise, LinkedinLogo, Sparkle, WarningCircle } from '@phosphor-icons/react'
 import { type Lead } from '../../data/mockLeads'
 import { calculateLeadScore, type ScoringResult } from '../../lib/scoring'
+import StatusBadge from '../ui/StatusBadge'
 import AIMessageGenerator from './AIMessageGenerator'
 import { unipileService } from '../../lib/unipile'
 import { useToast } from '../ui/Toast'
@@ -60,116 +61,107 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
         }
     }
 
-    const getTierColor = (tier: string) => {
-        switch (tier) {
-            case 'hot': return '#22C55E'
-            case 'warm': return '#F59E0B'
-            case 'cold': return '#6B7280'
-            default: return '#6B7280'
-        }
-    }
-
     return (
         <div className="panel-overlay" onClick={onClose}>
             <div className="lead-panel" onClick={(e) => e.stopPropagation()}>
-                <div className="panel-header">
-                    <h2>Lead Details</h2>
-                    <button className="close-btn" onClick={onClose}>
-                        <X size={20} />
-                    </button>
-                </div>
+                {/* Close Button */}
+                <button className="panel-close-btn" onClick={onClose}>
+                    <X size={20} />
+                </button>
 
                 <div className="panel-content">
                     {/* Profile Section */}
-                    <div className="profile-section">
-                        <div className="profile-avatar">
+                    <div className="panel-profile">
+                        <div className="panel-profile-avatar">
                             {lead.firstName[0]}{lead.lastName[0]}
                         </div>
-                        <div className="profile-info">
-                            <h3>{lead.firstName} {lead.lastName}</h3>
-                            <p className="profile-title">{lead.title} at {lead.company}</p>
+                        <div className="panel-profile-info">
+                            <h2 className="panel-profile-name">{lead.firstName} {lead.lastName}</h2>
+                            <p className="panel-profile-title">{lead.title}</p>
+                            <p className="panel-profile-company">{lead.company}</p>
                             <a
                                 href={lead.linkedInUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="linkedin-link"
+                                className="panel-linkedin-link"
                             >
-                                <Linkedin size={14} />
-                                View LinkedIn Profile
-                                <ExternalLink size={12} />
+                                <LinkedinLogo size={14} />
+                                View LinkedIn
+                                <ArrowSquareOut size={12} />
                             </a>
-                        </div>
-                        <div className="overall-score">
-                            <div
-                                className="score-circle"
-                                style={{
-                                    background: `linear-gradient(135deg, ${getTierColor(scoringResult.tier)}, ${getTierColor(scoringResult.tier)}99)`
-                                }}
-                            >
-                                <span className="score-number">{scoringResult.totalScore}</span>
-                            </div>
-                            <span
-                                className="score-tier"
-                                style={{ color: getTierColor(scoringResult.tier) }}
-                            >
-                                {scoringResult.tier.toUpperCase()}
-                            </span>
                         </div>
                     </div>
 
+                    {/* Score Section */}
+                    <div className="panel-section panel-score-section">
+                        <div className="panel-score-header">
+                            <h4>Lead Score</h4>
+                            <span className="panel-score-number">{scoringResult.totalScore}</span>
+                        </div>
+                        <div className="panel-score-bar-track">
+                            <div
+                                className="panel-score-bar-fill"
+                                style={{ width: `${scoringResult.totalScore}%` }}
+                            />
+                        </div>
+                        <span className={`panel-score-tier panel-score-tier--${scoringResult.tier}`}>
+                            {scoringResult.tier.toUpperCase()} LEAD
+                        </span>
+                    </div>
+
                     {/* AI Recommendation */}
-                    <div className="ai-recommendation">
-                        <Sparkles size={14} />
+                    <div className="panel-recommendation">
+                        <Sparkle size={14} />
                         <span>{scoringResult.recommendation}</span>
                     </div>
 
                     {/* Score Breakdown */}
-                    <div className="section">
+                    <div className="panel-section">
                         <h4>Score Breakdown</h4>
-                        <div className="score-breakdown">
+                        <div className="panel-breakdown">
                             {scoringResult.breakdown.map((item, index) => (
-                                <div key={index} className="breakdown-row">
-                                    <div className="breakdown-header">
-                                        <span className="breakdown-label">{item.label}</span>
-                                        <span className="breakdown-value">{item.score}/{item.maxScore}</span>
+                                <div key={index} className="panel-breakdown-row">
+                                    <div className="panel-breakdown-header">
+                                        <span className="panel-breakdown-label">{item.label}</span>
+                                        <span className="panel-breakdown-value">{item.score}/{item.maxScore}</span>
                                     </div>
-                                    <div className="breakdown-bar">
+                                    <div className="panel-breakdown-bar">
                                         <div
-                                            className="breakdown-fill"
+                                            className="panel-breakdown-fill"
                                             style={{ width: `${(item.score / item.maxScore) * 100}%` }}
-                                        ></div>
+                                        />
                                     </div>
-                                    <span className="breakdown-reason">{item.reason}</span>
+                                    <span className="panel-breakdown-reason">{item.reason}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
                     {/* Recent Posts */}
-                    <div className="section">
+                    <div className="panel-section">
                         <h4>Recent Posts</h4>
                         {lead.postScraped ? (
-                            <div className="post-card">
+                            <div className="panel-post-card">
                                 <p>"Excited to share that we've just closed our Series B! Looking forward to scaling our team and impact in 2026..."</p>
-                                <div className="post-meta">
-                                    <span>📅 3 days ago</span>
-                                    <span>❤️ 234</span>
-                                    <span>💬 45</span>
+                                <div className="panel-post-meta">
+                                    <span>3 days ago</span>
+                                    <span>234 likes</span>
+                                    <span>45 comments</span>
                                 </div>
                             </div>
                         ) : (
-                            <div className="empty-posts">
+                            <div className="panel-empty-posts">
                                 <p>Posts not yet scraped</p>
                                 <button className="btn btn-secondary btn-sm">
-                                    <RefreshCw size={14} />
+                                    <ArrowsClockwise size={14} />
                                     Scrape Posts
                                 </button>
                             </div>
                         )}
                     </div>
 
-                    {/* AI Message Generator (Gemini-powered) */}
-                    <div className="section">
+                    {/* AI Message Generator */}
+                    <div className="panel-section">
                         <AIMessageGenerator
                             lead={{
                                 firstName: lead.firstName,
@@ -186,28 +178,31 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
                         />
                     </div>
 
-                    {/* Status Info */}
-                    <div className="section status-section">
-                        <div className="status-row">
-                            <span className="status-label">Message Status:</span>
-                            <span className={`status-value ${lead.messageStatus === 'ready' ? 'ready' : 'draft'}`}>
-                                {lead.messageStatus === 'ready' ? '✓ Ready to Send' : '⟳ Draft'}
-                            </span>
+                    {/* Status Section */}
+                    <div className="panel-section panel-status-section">
+                        <div className="panel-status-row">
+                            <span className="panel-status-label">Message</span>
+                            <StatusBadge
+                                status={lead.messageStatus === 'ready' ? 'success' : lead.messageStatus === 'sent' ? 'sent' : 'warning'}
+                                label={lead.messageStatus === 'ready' ? 'Ready' : lead.messageStatus === 'sent' ? 'Sent' : lead.messageStatus === 'draft' ? 'Draft' : 'Empty'}
+                                size="sm"
+                            />
                         </div>
-                        <div className="status-row">
-                            <span className="status-label">Outreach Status:</span>
-                            <span className={`status-value outreach ${lead.outreachStatus}`}>
-                                {lead.outreachStatus.charAt(0).toUpperCase() + lead.outreachStatus.slice(1)}
-                            </span>
+                        <div className="panel-status-row">
+                            <span className="panel-status-label">Outreach</span>
+                            <StatusBadge
+                                status={lead.outreachStatus as 'pending' | 'sent' | 'accepted' | 'replied'}
+                                size="sm"
+                            />
                         </div>
-                        <div className="status-row">
-                            <span className="status-label">Unipile:</span>
+                        <div className="panel-status-row">
+                            <span className="panel-status-label">LinkedIn</span>
                             {isConnected ? (
-                                <span className="status-value connected">🟢 Connected</span>
+                                <StatusBadge status="success" label="Connected" size="sm" />
                             ) : (
-                                <Link to="/dashboard/connect" className="status-link">
-                                    <AlertCircle size={12} />
-                                    Connect LinkedIn
+                                <Link to="/dashboard/connect" className="panel-connect-link">
+                                    <WarningCircle size={12} />
+                                    Connect
                                 </Link>
                             )}
                         </div>
@@ -216,12 +211,12 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
 
                 {/* Panel Footer */}
                 <div className="panel-footer">
-                    <div className="footer-status">
-                        <span className={`outreach-badge ${lead.outreachStatus}`}>
-                            {lead.outreachStatus.charAt(0).toUpperCase() + lead.outreachStatus.slice(1)}
-                        </span>
+                    <div className="panel-footer-status">
+                        <StatusBadge
+                            status={lead.outreachStatus as 'pending' | 'sent' | 'accepted' | 'replied'}
+                        />
                         {isConnected ? (
-                            <span className="connected-badge">🟢 LinkedIn Connected</span>
+                            <StatusBadge status="success" label="LinkedIn Connected" showDot />
                         ) : (
                             <Link to="/dashboard/connect" className="btn btn-secondary btn-sm">
                                 Connect LinkedIn
@@ -238,4 +233,3 @@ function LeadDetailPanel({ lead, onClose, onStatusChange }: LeadDetailPanelProps
 }
 
 export default LeadDetailPanel
-

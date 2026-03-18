@@ -3,7 +3,7 @@
 }
 
 .question-title {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--color-text-primary);
     margin-bottom: var(--space-sm);
@@ -25,12 +25,12 @@
     display: flex;
     align-items: center;
     gap: var(--space-md);
-    padding: var(--space-md) var(--space-lg);
+    padding: 12px 16px;
     background: var(--color-bg-primary);
-    border: 2px solid var(--color-border-light);
-    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-base);
     text-align: left;
     width: 100%;
     font-family: inherit;
@@ -38,8 +38,7 @@
 }
 
 .option-btn:hover {
-    border-color: var(--color-primary-light);
-    background: var(--color-primary-lighter);
+    background: var(--color-bg-hover);
 }
 
 .option-btn.selected {
@@ -69,7 +68,7 @@
     font-size: 0.75rem;
     font-weight: 600;
     color: white;
-    transition: all 0.2s;
+    transition: all var(--transition-base);
 }
 
 .option-btn.selected .option-check {
@@ -104,7 +103,7 @@
 
 @media (max-width: 640px) {
     .option-btn {
-        padding: var(--space-sm) var(--space-md);
+        padding: 10px 14px;
     }
 
     .option-icon {

@@ -5,174 +5,99 @@
     background: var(--color-bg-secondary);
 }
 
-.connect-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-md) var(--space-xl);
-    background: var(--color-bg-primary);
-    border-bottom: 1px solid var(--color-border-light);
-}
-
-.connect-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-.connect-nav .nav-link {
-    color: var(--color-text-secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.connect-nav .nav-link:hover {
-    color: var(--color-primary);
-}
-
-.connect-main {
+.connect-body {
     flex: 1;
     display: flex;
     justify-content: center;
-    padding: var(--space-2xl);
+    padding: var(--space-2xl) var(--space-lg);
 }
 
 .connect-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 520px;
 }
 
-.connect-intro {
-    text-align: center;
-    margin-bottom: var(--space-xl);
-}
-
-.linkedin-icon-wrapper {
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
-    background: #0A66C2;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto var(--space-lg);
-}
-
-.connect-intro h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-sm);
-}
-
-.connect-intro p {
-    color: var(--color-text-secondary);
-}
-
-/* Error Banner */
-.error-banner {
+/* ====================
+   Error Banner
+   ==================== */
+.connect-error-banner {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    background: #FEF2F2;
-    border: 1px solid #FECACA;
-    color: #DC2626;
+    background: var(--color-error-light);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-error);
     padding: var(--space-md);
     border-radius: var(--radius-md);
     margin-bottom: var(--space-lg);
     font-size: 0.875rem;
 }
 
-/* Connect Card */
-.connect-card {
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-xl);
-    padding: var(--space-2xl);
+/* ====================
+   Connect Card (Not Connected)
+   ==================== */
+.connect-card__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
-.connect-status {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-sm);
-    padding: 6px 16px;
-    border-radius: var(--radius-full);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    margin-bottom: var(--space-xl);
-}
-
-.connect-status.disconnected {
-    background: var(--color-bg-tertiary);
-    color: var(--color-text-secondary);
-}
-
-.connect-status.connected {
-    background: #DCFCE7;
-    color: var(--color-success);
-}
-
-.status-indicator {
-    width: 8px;
-    height: 8px;
+.connect-linkedin-icon {
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
+    background: #EEF3F8;
+    color: #0A66C2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-lg);
 }
 
-.connect-status.disconnected .status-indicator {
-    background: var(--color-text-tertiary);
+.connect-card__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
 }
 
-.connect-status.connected .status-indicator {
-    background: var(--color-success);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.5;
-    }
+.connect-card__desc {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    margin-bottom: var(--space-2xl);
 }
 
 /* Benefits */
 .connect-benefits {
     display: flex;
     flex-direction: column;
-    gap: var(--space-lg);
+    gap: var(--space-md);
     margin-bottom: var(--space-2xl);
     text-align: left;
+    width: 100%;
 }
 
-.benefit {
+.connect-benefit {
     display: flex;
     gap: var(--space-md);
     align-items: flex-start;
 }
 
-.benefit svg {
+.connect-benefit svg {
     color: var(--color-primary);
     flex-shrink: 0;
     margin-top: 2px;
 }
 
-.benefit h4 {
+.connect-benefit h4 {
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--color-text-primary);
     margin-bottom: 2px;
 }
 
-.benefit p {
+.connect-benefit p {
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
 }
@@ -195,6 +120,15 @@
     cursor: not-allowed;
 }
 
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 .connect-note {
     margin-top: var(--space-lg);
     font-size: 0.75rem;
@@ -208,15 +142,90 @@
     gap: 2px;
 }
 
-/* Connected State */
+/* ====================
+   FAQ Accordion
+   ==================== */
+.connect-faq {
+    margin-top: var(--space-2xl);
+}
+
+.connect-faq__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.connect-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.connect-faq__item {
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.connect-faq__question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: var(--space-md);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+}
+
+.connect-faq__question:hover {
+    background: var(--color-bg-hover);
+}
+
+.connect-faq__chevron {
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-base);
+    flex-shrink: 0;
+}
+
+.connect-faq__item--open .connect-faq__chevron {
+    transform: rotate(180deg);
+}
+
+.connect-faq__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow);
+}
+
+.connect-faq__item--open .connect-faq__answer {
+    max-height: 200px;
+}
+
+.connect-faq__answer p {
+    padding: 0 var(--space-md) var(--space-md);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+/* ====================
+   Connected State
+   ==================== */
+.connect-status-row {
+    margin-bottom: var(--space-lg);
+}
+
 .account-info {
     display: flex;
     align-items: center;
     gap: var(--space-md);
-    padding: var(--space-lg);
-    background: var(--color-bg-secondary);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-xl);
     text-align: left;
 }
 
@@ -263,34 +272,24 @@
     color: var(--color-success);
 }
 
-/* Limits Section */
-.limits-section {
-    margin-bottom: var(--space-xl);
-}
-
-.limits-header {
+/* Limits */
+.connect-limits-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-md);
+    margin: var(--space-xl) 0 var(--space-md);
 }
 
-.limits-header h4 {
+.connect-limits-header h4 {
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--color-text-primary);
 }
 
-.limits-grid {
+.connect-limits-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-md);
-}
-
-.limit-card {
-    background: var(--color-bg-secondary);
-    border-radius: var(--radius-md);
-    padding: var(--space-md);
 }
 
 .limit-label {
@@ -303,7 +302,7 @@
 .limit-bar {
     height: 6px;
     background: var(--color-bg-tertiary);
-    border-radius: 3px;
+    border-radius: var(--radius-full);
     overflow: hidden;
     margin-bottom: var(--space-sm);
 }
@@ -311,7 +310,7 @@
 .limit-fill {
     height: 100%;
     background: var(--color-primary);
-    border-radius: 3px;
+    border-radius: var(--radius-full);
     transition: width 0.3s;
 }
 
@@ -322,92 +321,34 @@
     color: var(--color-text-tertiary);
 }
 
-/* Account Actions */
-.account-actions {
+/* Actions */
+.connect-actions {
     display: flex;
     gap: var(--space-sm);
-    margin-bottom: var(--space-lg);
+    margin-top: var(--space-xl);
 }
 
-.account-actions .btn {
+.connect-actions .btn {
     flex: 1;
-}
-
-.btn-danger-outline {
-    background: transparent;
-    border: 1px solid var(--color-error);
-    color: var(--color-error);
-}
-
-.btn-danger-outline:hover {
-    background: #FEF2F2;
+    justify-content: center;
 }
 
 .connected-time {
+    margin-top: var(--space-lg);
     font-size: 0.75rem;
     color: var(--color-text-tertiary);
+    text-align: center;
 }
 
-/* FAQ Section */
-.faq-section {
-    margin-top: var(--space-2xl);
-}
-
-.faq-section h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-lg);
-}
-
-.faq-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-sm);
-}
-
-.faq-item {
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-}
-
-.faq-item summary {
-    padding: var(--space-md);
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.faq-item summary::after {
-    content: '+';
-    font-size: 1.25rem;
-    color: var(--color-text-tertiary);
-}
-
-.faq-item[open] summary::after {
-    content: '−';
-}
-
-.faq-item p {
-    padding: 0 var(--space-md) var(--space-md);
-    font-size: 0.875rem;
-    color: var(--color-text-secondary);
-    line-height: 1.6;
-}
-
+/* ====================
+   Responsive
+   ==================== */
 @media (max-width: 640px) {
-    .limits-grid {
+    .connect-limits-grid {
         grid-template-columns: 1fr;
     }
 
-    .account-actions {
+    .connect-actions {
         flex-direction: column;
     }
 }

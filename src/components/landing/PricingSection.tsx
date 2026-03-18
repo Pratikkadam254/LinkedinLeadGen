@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Check, ArrowRight } from 'lucide-react'
+import { Check, ArrowRight } from '@phosphor-icons/react'
 import './PricingSection.css'
 
 const features = [
@@ -30,7 +30,7 @@ function PricingSection() {
                         <div className="pricing-plan">Growth</div>
                         <div className="pricing-model">Pay Per Qualified Lead</div>
 
-                        <Link to="/signup" className="btn btn-primary btn-lg pricing-cta">
+                        <Link to="/signup" className="btn btn-primary btn-pill btn-lg pricing-cta">
                             Get Started
                             <ArrowRight size={18} className="arrow" />
                         </Link>

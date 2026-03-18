@@ -5,13 +5,35 @@
     background: var(--color-bg-secondary);
 }
 
+/* ====================
+   Top Progress Bar
+   ==================== */
+.onboarding-top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--color-bg-tertiary);
+    z-index: 100;
+}
+
+.onboarding-top-bar__fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 0 var(--radius-full) var(--radius-full) 0;
+    transition: width 0.4s ease;
+}
+
+/* ====================
+   Header
+   ==================== */
 .onboarding-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: var(--space-md) var(--space-xl);
-    background: var(--color-bg-primary);
-    border-bottom: 1px solid var(--color-border-light);
+    padding-top: calc(var(--space-md) + 4px); /* account for top bar */
 }
 
 .onboarding-logo {
@@ -23,22 +45,14 @@
     color: var(--color-primary);
 }
 
-.skip-btn {
-    background: transparent;
-    border: none;
-    color: var(--color-primary);
+.onboarding-skip-btn {
+    color: var(--color-text-tertiary);
     font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 8px 16px;
-    border-radius: var(--radius-md);
-    transition: all 0.2s;
 }
 
-.skip-btn:hover {
-    background: var(--color-primary-lighter);
-}
-
+/* ====================
+   Main Content
+   ==================== */
 .onboarding-main {
     flex: 1;
     display: flex;
@@ -49,34 +63,31 @@
 
 .onboarding-container {
     width: 100%;
-    max-width: 600px;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.onboarding-intro {
-    text-align: center;
-    margin-bottom: var(--space-xl);
-}
-
-.onboarding-intro h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin-bottom: var(--space-sm);
-}
-
-.onboarding-intro p {
+.onboarding-step-counter {
+    font-size: 0.875rem;
     color: var(--color-text-secondary);
-    font-size: 1rem;
+    margin-bottom: var(--space-lg);
+    text-align: center;
 }
 
+/* ====================
+   Card Overrides
+   ==================== */
 .onboarding-card {
-    background: var(--color-bg-primary);
-    border: 1px solid var(--color-border-light);
-    border-radius: var(--radius-xl);
-    padding: var(--space-2xl);
-    box-shadow: var(--shadow-card);
+    width: 100%;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: var(--shadow-md) !important;
 }
 
+/* ====================
+   Actions
+   ==================== */
 .onboarding-actions {
     display: flex;
     justify-content: space-between;
@@ -87,27 +98,19 @@
 }
 
 .onboarding-actions .btn:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
 }
 
-.onboarding-tip {
-    text-align: center;
-    margin-top: var(--space-lg);
-    color: var(--color-text-tertiary);
-    font-size: 0.875rem;
-}
-
+/* ====================
+   Responsive
+   ==================== */
 @media (max-width: 640px) {
     .onboarding-main {
         padding: var(--space-lg);
     }
 
     .onboarding-card {
-        padding: var(--space-lg);
-    }
-
-    .onboarding-intro h1 {
-        font-size: 1.5rem;
+        padding: var(--space-lg) !important;
     }
 }

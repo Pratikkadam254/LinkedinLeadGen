@@ -1,6 +1,6 @@
-.env.local 
+
+.env.local
 node_modules
-.vite
-.vscode
-.idea
-.DS_Store
+dist
+e2e/test-results/
+e2e/playwright-report/

@@ -4,7 +4,7 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { UserButton } from '@clerk/clerk-react'
 import Logo from '../components/ui/Logo'
-import { Play, Pause, Plus, MoreHorizontal, Calendar, Zap } from 'lucide-react'
+import { Play, Pause, Plus, DotsThree, CalendarBlank, Lightning } from '@phosphor-icons/react'
 import './CampaignsPage.css'
 
 export default function CampaignsPage() {
@@ -120,7 +120,7 @@ export default function CampaignsPage() {
                                             {campaign.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
                                         </button>
                                         <button className="btn-icon">
-                                            <MoreHorizontal size={16} />
+                                            <DotsThree size={16} />
                                         </button>
                                     </div>
                                 </div>
@@ -142,11 +142,11 @@ export default function CampaignsPage() {
 
                                 <div className="campaign-footer">
                                     <div className="schedule-info">
-                                        <Calendar size={14} />
+                                        <CalendarBlank size={14} />
                                         <span>{campaign.schedule.hours.start} - {campaign.schedule.hours.end}</span>
                                     </div>
                                     <div className="autopilot-info">
-                                        <Zap size={14} className={campaign.autoPilot ? "text-yellow" : "text-muted"} />
+                                        <Lightning size={14} className={campaign.autoPilot ? "text-yellow" : "text-muted"} />
                                         <span>{campaign.autoPilot ? "Autopilot On" : "Manual"}</span>
                                     </div>
                                 </div>

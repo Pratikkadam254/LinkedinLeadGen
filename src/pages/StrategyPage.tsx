@@ -4,7 +4,7 @@ import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../convex/_generated/api'
 import { UserButton } from '@clerk/clerk-react'
 import Logo from '../components/ui/Logo'
-import { Sparkles, ArrowRight, Check, FileText } from 'lucide-react'
+import { Sparkle, ArrowRight, Check, FileText } from '@phosphor-icons/react'
 import './StrategyPage.css'
 
 export default function StrategyPage() {
@@ -120,7 +120,7 @@ export default function StrategyPage() {
                             <h1>Strategy Center</h1>
                             <p>Define your Ideal Customer Profile (ICP) and Irresistible Offer using AI.</p>
                             <button className="btn btn-primary" onClick={() => setIsCreating(true)}>
-                                <Sparkles size={18} />
+                                <Sparkle size={18} />
                                 Create New Strategy
                             </button>
                         </div>
@@ -141,7 +141,7 @@ export default function StrategyPage() {
                                     </div>
                                 </div>
                                 <div className="strategy-card">
-                                    <h2><Sparkles size={18} /> Grand Slam Offer</h2>
+                                    <h2><Sparkle size={18} /> Grand Slam Offer</h2>
                                     <div className="markdown-preview">
                                         <pre>{activeStrategy.offerDocument}</pre>
                                     </div>
