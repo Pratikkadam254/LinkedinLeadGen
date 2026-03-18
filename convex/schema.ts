@@ -2,192 +2,135 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-    // Users table - stores user preferences and settings
-    users: defineTable({
-        clerkId: v.string(),
-        email: v.string(),
-        firstName: v.optional(v.string()),
-        lastName: v.optional(v.string()),
-        imageUrl: v.optional(v.string()),
+  users: defineTable({
+    clerkId: v.string(),
+    email: v.string(),
+    firstName: v.optional(v.string()),
+    lastName: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
+    onboardingCompleted: v.boolean(),
+    // Unipile (multi-tenant: one master API key, per-user account_id)
+    unipileConnected: v.boolean(),
+    unipileAccountId: v.optional(v.string()),
+    unipileHealthy: v.optional(v.boolean()),
+    unipileLastChecked: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_email", ["email"]),
 
-        // Onboarding preferences
-        preferences: v.optional(v.object({
-            primaryGoal: v.optional(v.string()),
-            targetIndustries: v.optional(v.array(v.string())),
-            targetCompanySize: v.optional(v.string()),
-            targetTitles: v.optional(v.array(v.string())),
-            weeklyVolume: v.optional(v.string()),
-            messageTone: v.optional(v.string()),
-        })),
+  batches: defineTable({
+    userId: v.id("users"),
+    fileName: v.string(),
+    totalLeads: v.number(),
+    globalMessage: v.optional(v.string()),
+    status: v.union(
+      v.literal("draft"),
+      v.literal("running"),
+      v.literal("paused"),
+      v.literal("completed"),
+      v.literal("cancelled"),
+      v.literal("daily_limit_reached"),
+      v.literal("weekly_limit_reached"),
+      v.literal("error_disconnected")
+    ),
+    rateTier: v.union(
+      v.literal("conservative"),
+      v.literal("normal"),
+      v.literal("aggressive")
+    ),
+    stats: v.object({
+      sent: v.number(),
+      accepted: v.number(),
+      replied: v.number(),
+      alreadyConnected: v.number(),
+      errors: v.number(),
+      pending: v.number(),
+    }),
+    dailySentCount: v.number(),
+    weeklySentCount: v.number(),
+    lastSentAt: v.optional(v.number()),
+    nextSendAt: v.optional(v.number()),
+    estimatedCompletion: v.optional(v.number()),
+    pauseReason: v.optional(v.string()),
+    autoResumeAt: v.optional(v.number()),
+    createdAt: v.number(),
+    startedAt: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+  })
+    .index("by_user", ["userId"])
+    .index("by_status", ["status"])
+    .index("by_user_and_status", ["userId", "status"]),
 
-        // Onboarding status
-        onboardingCompleted: v.boolean(),
+  leads: defineTable({
+    batchId: v.id("batches"),
+    userId: v.id("users"),
+    linkedinUrl: v.string(),
+    linkedinIdentifier: v.optional(v.string()),
+    providerId: v.optional(v.string()),
+    firstName: v.optional(v.string()),
+    lastName: v.optional(v.string()),
+    company: v.optional(v.string()),
+    title: v.optional(v.string()),
+    message: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("sent"),
+      v.literal("accepted"),
+      v.literal("replied"),
+      v.literal("already_connected"),
+      v.literal("error"),
+      v.literal("cancelled")
+    ),
+    errorType: v.optional(v.string()),
+    errorDetail: v.optional(v.string()),
+    sentAt: v.optional(v.number()),
+    acceptedAt: v.optional(v.number()),
+    repliedAt: v.optional(v.number()),
+  })
+    .index("by_batch", ["batchId"])
+    .index("by_user", ["userId"])
+    .index("by_user_and_status", ["userId", "status"])
+    .index("by_linkedin_url", ["linkedinUrl"])
+    .index("by_batch_and_status", ["batchId", "status"]),
 
-        // Unipile connection
-        unipileConnected: v.boolean(),
-        unipileAccountId: v.optional(v.string()),
+  messages: defineTable({
+    leadId: v.id("leads"),
+    chatId: v.string(),
+    messageText: v.string(),
+    senderType: v.union(v.literal("us"), v.literal("them")),
+    isReply: v.boolean(),
+    receivedAt: v.number(),
+    providerMessageId: v.string(),
+  })
+    .index("by_lead", ["leadId"])
+    .index("by_provider_message", ["providerMessageId"]),
 
-        createdAt: v.number(),
-        updatedAt: v.number(),
-    })
-        .index("by_clerk_id", ["clerkId"])
-        .index("by_email", ["email"]),
-
-    // Leads table - stores imported leads
-    leads: defineTable({
-        userId: v.id("users"),
-
-        // Basic info
-        firstName: v.string(),
-        lastName: v.string(),
-        company: v.string(),
-        title: v.string(),
-        linkedInUrl: v.string(),
-        email: v.optional(v.string()),
-
-        // Scoring data
-        score: v.number(),
-        scoreTier: v.union(v.literal("hot"), v.literal("warm"), v.literal("cold")),
-        scoreBreakdown: v.optional(v.object({
-            companySize: v.number(),
-            followerInfluence: v.number(),
-            recentActivity: v.number(),
-            eventKeywords: v.number(),
-            mutualConnections: v.number(),
-            titleMatch: v.number(),
-        })),
-
-        // Enrichment data
-        companySize: v.optional(v.number()),
-        followers: v.optional(v.number()),
-        lastPostDays: v.optional(v.number()),
-        postContent: v.optional(v.string()),
-        mutualConnections: v.optional(v.number()),
-        postScraped: v.boolean(),
-
-        // Message status
-        messageStatus: v.union(
-            v.literal("empty"),
-            v.literal("draft"),
-            v.literal("ready"),
-            v.literal("sent")
-        ),
-        generatedMessage: v.optional(v.string()),
-        messageTone: v.optional(v.string()),
-
-        // Outreach status
-        outreachStatus: v.union(
-            v.literal("pending"),
-            v.literal("sent"),
-            v.literal("accepted"),
-            v.literal("replied")
-        ),
-        outreachSentAt: v.optional(v.number()),
-        outreachRespondedAt: v.optional(v.number()),
-
-        // Campaign & Outcome
-        campaignId: v.optional(v.id("campaigns")),
-        bookingStatus: v.union(
-            v.literal("not_booked"),
-            v.literal("booked"),
-            v.literal("cancelled")
-        ),
-        potentialValue: v.number(),          // Estimated revenue
-        lastInteractionAt: v.optional(v.number()),
-
-        // Metadata
-        source: v.optional(v.string()), // csv, google_sheets, manual
-        importedAt: v.number(),
-        createdAt: v.number(),
-        updatedAt: v.number(),
-    })
-        .index("by_user", ["userId"])
-        .index("by_user_and_status", ["userId", "outreachStatus"])
-        .index("by_user_and_score", ["userId", "score"])
-        .index("by_campaign", ["campaignId"])
-        .index("by_linkedin_url", ["linkedInUrl"]),
-
-    // Activity log - tracks all actions
-    activities: defineTable({
-        userId: v.id("users"),
-        leadId: v.optional(v.id("leads")),
-        campaignId: v.optional(v.id("campaigns")),
-
-        type: v.union(
-            v.literal("lead_imported"),
-            v.literal("lead_scored"),
-            v.literal("message_generated"),
-            v.literal("message_approved"),
-            v.literal("connection_sent"),
-            v.literal("connection_accepted"),
-            v.literal("message_replied"),
-            v.literal("strategy_created"),
-            v.literal("campaign_created"),
-            v.literal("lead_booked")
-        ),
-
-        metadata: v.optional(v.any()),
-
-        createdAt: v.number(),
-    })
-        .index("by_user", ["userId"])
-        .index("by_lead", ["leadId"])
-        .index("by_user_and_type", ["userId", "type"]),
-
-    // Strategies table (The "Brain")
-    strategies: defineTable({
-        userId: v.id("users"),
-        name: v.string(), // e.g. "Q1 Marketing Agency Push"
-
-        // User's unrefined answers
-        rawInputs: v.object({
-            businessDescription: v.string(),
-            targetAudienceHints: v.string(),
-            primaryOffer: v.string(),
-        }),
-
-        // AI Generated Assets
-        icpDocument: v.string(),
-        offerDocument: v.string(),
-
-        isActive: v.boolean(),
-        createdAt: v.number(),
-        updatedAt: v.number(),
-    })
-        .index("by_user", ["userId"])
-        .index("by_user_active", ["userId", "isActive"]),
-
-    // Campaigns table (The "Engine")
-    campaigns: defineTable({
-        userId: v.id("users"),
-        strategyId: v.id("strategies"),
-        name: v.string(),
-
-        status: v.union(v.literal("active"), v.literal("paused"), v.literal("completed")),
-        autoPilot: v.boolean(),
-
-        // Schedule settings
-        schedule: v.object({
-            timezone: v.string(),
-            days: v.array(v.string()), // ["Mon", "Tue", ...]
-            hours: v.object({
-                start: v.string(), // "09:00"
-                end: v.string(),   // "17:00"
-            }),
-        }),
-
-        // Aggregated Stats
-        stats: v.object({
-            sent: v.number(),
-            replied: v.number(),
-            booked: v.number(),
-            revenue: v.number(),
-        }),
-
-        createdAt: v.number(),
-        updatedAt: v.number(),
-    })
-        .index("by_user", ["userId"])
-        .index("by_strategy", ["strategyId"])
-        .index("by_status", ["status"]),
+  activities: defineTable({
+    userId: v.id("users"),
+    batchId: v.optional(v.id("batches")),
+    leadId: v.optional(v.id("leads")),
+    type: v.union(
+      v.literal("batch_created"),
+      v.literal("outreach_started"),
+      v.literal("connection_sent"),
+      v.literal("connection_accepted"),
+      v.literal("reply_received"),
+      v.literal("error"),
+      v.literal("batch_paused"),
+      v.literal("batch_resumed"),
+      v.literal("batch_cancelled"),
+      v.literal("batch_completed"),
+      v.literal("linkedin_disconnected"),
+      v.literal("linkedin_reconnected"),
+      v.literal("rate_limit_hit"),
+      v.literal("weekly_limit_warning")
+    ),
+    metadata: v.optional(v.any()),
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_recent", ["userId", "createdAt"])
+    .index("by_batch", ["batchId"]),
 });
