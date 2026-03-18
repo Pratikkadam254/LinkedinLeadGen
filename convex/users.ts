@@ -1,4 +1,4 @@
-import { mutation, query, internalQuery } from "./_generated/server";
+import { mutation, query, internalQuery, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 
 export const getByClerkId = query({
@@ -92,7 +92,7 @@ export const updateUnipileConnection = mutation({
   },
 });
 
-export const setUnipileHealth = mutation({
+export const setUnipileHealth = internalMutation({
   args: {
     userId: v.id("users"),
     healthy: v.boolean(),
