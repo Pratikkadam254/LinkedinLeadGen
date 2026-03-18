@@ -6,8 +6,7 @@ import SignUpPage from './pages/SignUpPage'
 import DashboardPage from './pages/DashboardPage'
 import OnboardingPage from './pages/OnboardingPage'
 import UploadPage from './pages/UploadPage'
-import LeadsPage from './pages/LeadsPage'
-import ConnectPage from './pages/ConnectPage'
+import BatchDetailPage from './pages/BatchDetailPage'
 import DashboardLayout from './components/layout/DashboardLayout'
 
 // Get the Clerk publishable key from environment
@@ -28,8 +27,7 @@ function ClerkProviderWithRoutes() {
                 <Route path="/dashboard" element={<DashboardLayout />}>
                     <Route index element={<DashboardPage />} />
                     <Route path="upload" element={<UploadPage />} />
-                    <Route path="leads" element={<LeadsPage />} />
-                    <Route path="connect" element={<ConnectPage />} />
+                    <Route path="batch/:id" element={<BatchDetailPage />} />
                 </Route>
                 <Route path="*" element={<LandingPage />} />
             </Routes>
@@ -77,8 +75,7 @@ function ClerkProviderWithRoutes() {
                 >
                     <Route index element={<DashboardPage />} />
                     <Route path="upload" element={<UploadPage />} />
-                    <Route path="leads" element={<LeadsPage />} />
-                    <Route path="connect" element={<ConnectPage />} />
+                    <Route path="batch/:id" element={<BatchDetailPage />} />
                 </Route>
 
                 {/* Fallback */}

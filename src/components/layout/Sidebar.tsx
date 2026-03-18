@@ -2,11 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import {
   SquaresFour,
-  Users,
-  Rocket,
-  Brain,
   UploadSimple,
-  LinkSimple,
   GearSix,
   CaretLeft,
   CaretRight,
@@ -79,7 +75,7 @@ function Sidebar() {
         {/* Logo */}
         <Link to="/dashboard" className="sidebar-logo">
           <Logo />
-          <span className="sidebar-logo-text">LeadFlow</span>
+          <span className="sidebar-logo-text">QuickConnect</span>
         </Link>
 
         {/* Navigation */}
@@ -98,44 +94,6 @@ function Sidebar() {
               </span>
               <span className="sidebar-nav-item-text">Dashboard</span>
             </NavLink>
-
-            <NavLink
-              to="/dashboard/leads"
-              className={({ isActive }) =>
-                `sidebar-nav-item ${isActive ? 'active' : ''}`
-              }
-            >
-              <span className="sidebar-nav-item-icon">
-                <Users size={20} />
-              </span>
-              <span className="sidebar-nav-item-text">Leads</span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/campaigns"
-              className={({ isActive }) =>
-                `sidebar-nav-item ${isActive ? 'active' : ''}`
-              }
-            >
-              <span className="sidebar-nav-item-icon">
-                <Rocket size={20} />
-              </span>
-              <span className="sidebar-nav-item-text">Campaigns</span>
-              <span className="sidebar-badge-soon">Soon</span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/strategy"
-              className={({ isActive }) =>
-                `sidebar-nav-item ${isActive ? 'active' : ''}`
-              }
-            >
-              <span className="sidebar-nav-item-icon">
-                <Brain size={20} />
-              </span>
-              <span className="sidebar-nav-item-text">Strategy</span>
-              <span className="sidebar-badge-soon">Soon</span>
-            </NavLink>
           </div>
 
           <div className="sidebar-divider" />
@@ -152,18 +110,6 @@ function Sidebar() {
                 <UploadSimple size={20} />
               </span>
               <span className="sidebar-nav-item-text">Import Leads</span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/connect"
-              className={({ isActive }) =>
-                `sidebar-nav-item ${isActive ? 'active' : ''}`
-              }
-            >
-              <span className="sidebar-nav-item-icon">
-                <LinkSimple size={20} />
-              </span>
-              <span className="sidebar-nav-item-text">Connect</span>
             </NavLink>
           </div>
         </nav>
