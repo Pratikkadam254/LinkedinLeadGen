@@ -199,6 +199,44 @@ export const updateStats = mutation({
   },
 });
 
+// Internal version of updateStats for use by actions
+export const updateStatsInternal = internalMutation({
+  args: { batchId: v.id("batches") },
+  handler: async (ctx, { batchId }) => {
+    const batch = await ctx.db.get(batchId);
+    if (!batch) return;
+
+    const leads = await ctx.db
+      .query("leads")
+      .withIndex("by_batch", (q) => q.eq("batchId", batchId))
+      .collect();
+
+    const stats = {
+      sent: leads.filter((l) => l.status === "sent").length,
+      accepted: leads.filter((l) => l.status === "accepted").length,
+      replied: leads.filter((l) => l.status === "replied").length,
+      alreadyConnected: leads.filter((l) => l.status === "already_connected").length,
+      errors: leads.filter((l) => l.status === "error").length,
+      pending: leads.filter((l) => l.status === "pending").length,
+    };
+
+    const ratePerDay = batch.rateTier === "conservative" ? 16
+      : batch.rateTier === "normal" ? 36 : 72;
+    const daysRemaining = stats.pending / ratePerDay;
+    const estimatedCompletion = stats.pending > 0
+      ? Date.now() + daysRemaining * 24 * 60 * 60 * 1000
+      : undefined;
+
+    const isComplete = stats.pending === 0 && batch.status === "running";
+
+    await ctx.db.patch(batchId, {
+      stats,
+      estimatedCompletion,
+      ...(isComplete ? { status: "completed" as const, completedAt: Date.now() } : {}),
+    });
+  },
+});
+
 // Internal functions for server-side actions
 export const getRunningBatches = internalQuery({
   handler: async (ctx) => {
