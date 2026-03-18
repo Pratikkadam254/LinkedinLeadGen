@@ -10,13 +10,12 @@ function Footer() {
             <div className="container">
                 <div className="footer-content">
                     <div className="footer-brand">
-                        <Link to="/" className="footer-logo" aria-label="LeadFlow AI - Home">
+                        <Link to="/" className="footer-logo" aria-label="QuickConnect - Home">
                             <Logo />
-                            <span>LeadFlow AI</span>
+                            <span>QuickConnect</span>
                         </Link>
                         <p className="footer-tagline">
-                            Intelligence meets opportunity. Transform your LinkedIn
-                            outreach with AI-powered lead generation.
+                            Automate LinkedIn connection requests. Upload a CSV, click start, grow your network.
                         </p>
                     </div>
 
@@ -50,7 +49,7 @@ function Footer() {
 
                 <div className="footer-bottom">
                     <p className="footer-copyright">
-                        © {currentYear} LeadFlow AI. All rights reserved.
+                        © {currentYear} QuickConnect. All rights reserved.
                     </p>
                     <div className="footer-legal">
                         <a href="#privacy">Privacy Policy</a>

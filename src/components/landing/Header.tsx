@@ -12,9 +12,9 @@ function Header() {
     return (
         <header className="header" role="banner">
             <nav className="container header-nav" aria-label="Main navigation">
-                <Link to="/" className="header-logo" aria-label="LeadFlow AI - Home">
+                <Link to="/" className="header-logo" aria-label="QuickConnect - Home">
                     <Logo />
-                    <span>LeadFlow AI</span>
+                    <span>QuickConnect</span>
                 </Link>
 
                 <ul className="header-links" role="list">

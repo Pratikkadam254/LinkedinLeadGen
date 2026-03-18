@@ -1,36 +1,21 @@
-import { UploadSimple, Crosshair, PencilSimpleLine, MagnifyingGlass, Rocket, ChartBar } from '@phosphor-icons/react'
+import { UploadSimple, Rocket, ChartBar } from '@phosphor-icons/react'
 import './FeaturesSection.css'
 
 const features = [
     {
         icon: UploadSimple,
-        title: 'Easy Import',
-        description: 'Upload CSV, Excel, or connect Google Sheets. Your leads are parsed and organized automatically.'
-    },
-    {
-        icon: Crosshair,
-        title: 'Smart Scoring',
-        description: 'AI analyzes company size, influence, activity, and more to rank your best prospects.'
-    },
-    {
-        icon: PencilSimpleLine,
-        title: 'Personalized Messages',
-        description: 'AI crafts unique connection requests based on recent posts and activity.'
-    },
-    {
-        icon: MagnifyingGlass,
-        title: 'Post Scraping',
-        description: 'Automatically gather recent LinkedIn posts to inform message personalization.'
+        title: 'Upload Your CSV',
+        description: 'Drop in a Sales Navigator export with LinkedIn URLs. We handle the rest.'
     },
     {
         icon: Rocket,
-        title: 'Safe Automation',
-        description: 'Send connection requests automatically with built-in rate limiting and safety features.'
+        title: 'Auto-Send Connections',
+        description: 'We send personalized connection requests at safe, human-like intervals.'
     },
     {
         icon: ChartBar,
-        title: 'Real-Time Dashboard',
-        description: 'Track acceptance rates, message performance, and outreach metrics in real-time.'
+        title: 'Track Everything',
+        description: 'Real-time dashboard shows sent, accepted, replies, and errors.'
     }
 ]
 
@@ -40,8 +25,8 @@ function FeaturesSection() {
             <div className="container">
                 <header className="section-header">
                     <span className="section-badge">Features</span>
-                    <h2 id="features-heading">Everything You Need to Generate Leads</h2>
-                    <p>Powered by AI, perfected by human insight</p>
+                    <h2 id="features-heading">Everything You Need to Grow Your Network</h2>
+                    <p>Simple tools, real results</p>
                 </header>
                 <div className="features-grid" role="list">
                     {features.map((feature, index) => (

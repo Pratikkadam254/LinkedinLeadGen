@@ -1,107 +1,114 @@
-import { useState } from 'react'
-import { Brain, MagnifyingGlass, Rocket, TrendUp } from '@phosphor-icons/react'
+import { UploadSimple, Play, ChartBar } from '@phosphor-icons/react'
 import './HowItWorksSection.css'
 
 const steps = [
     {
-        id: 'onboarding',
-        icon: Brain,
-        title: 'AI Onboarding',
-        summary: 'Chat with our AI to lock in your ICP and tighten your offer before we launch.',
+        id: 'upload',
+        icon: UploadSimple,
+        title: 'Upload CSV',
+        summary: 'Export from Sales Navigator and upload your leads CSV.',
         details: [
-            'Define your Ideal Customer Profile with AI guidance',
-            'Craft an irresistible offer that resonates',
-            'Set targeting criteria and messaging tone',
-            'Review and approve your strategy document',
+            'Export your leads from LinkedIn Sales Navigator',
+            'Upload the CSV file to QuickConnect',
+            'We auto-detect LinkedIn URLs, names, and companies',
+            'Review the parsed leads before proceeding',
         ],
     },
     {
-        id: 'source',
-        icon: MagnifyingGlass,
-        title: 'Source the right leads',
-        summary: 'We find leads from unique sources and filter them to match your ICP.',
+        id: 'start',
+        icon: Play,
+        title: 'Click Start',
+        summary: 'Choose your sending speed and hit go.',
         details: [
-            'Scrape leads from LinkedIn, databases, and directories',
-            'Enrich contact data with company intel',
-            'Score and rank by ICP fit',
-            'Filter out bad-fit prospects automatically',
+            'Write a connection message or use per-lead messages from your CSV',
+            'Pick your rate: Conservative, Normal, or Aggressive',
+            'Click start and QuickConnect handles the rest',
+            'Requests are sent at human-like intervals',
         ],
     },
     {
-        id: 'launch',
-        icon: Rocket,
-        title: 'Personalize + Launch',
-        summary: 'Hyper-personalized messages so you get buyers, not browsers.',
+        id: 'results',
+        icon: ChartBar,
+        title: 'Watch Results',
+        summary: 'Track accepts and replies in real-time.',
         details: [
-            'AI crafts unique messages for each prospect',
-            'Multi-touch sequences across channels',
-            'Smart follow-up timing based on engagement',
-            'A/B test messaging for maximum response',
-        ],
-    },
-    {
-        id: 'scale',
-        icon: TrendUp,
-        title: 'Scale what works',
-        summary: 'We monitor replies, booking rate, and meeting quality — then tighten targeting.',
-        details: [
-            'Track reply rates, booking rates, and quality',
-            'Weekly optimization of targeting + messaging',
-            'Scale winning campaigns automatically',
-            'Performance reports delivered to your inbox',
+            'See sent, accepted, and replied counts update live',
+            'Monitor errors and already-connected leads',
+            'Pause or cancel anytime from your dashboard',
+            'Download results when your batch completes',
         ],
     },
 ]
 
 function HowItWorksSection() {
-    const [activeStep, setActiveStep] = useState(0)
-    const currentStep = steps[activeStep]
-
     return (
         <section id="how-it-works" className="how-it-works" aria-labelledby="how-heading">
             <div className="container">
                 <header className="section-header">
-                    <h2 id="how-heading">How LeadFlow AI works</h2>
-                    <p>A simple proven process that turns targeting + messaging into booked meetings.</p>
+                    <h2 id="how-heading">How QuickConnect Works</h2>
+                    <p>Three simple steps to grow your LinkedIn network.</p>
                 </header>
 
-                {/* Step tabs */}
-                <div className="step-tabs" role="tablist">
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                    gap: 'var(--space-xl)',
+                    marginTop: 'var(--space-2xl)',
+                }}>
                     {steps.map((step, i) => (
-                        <button
-                            key={step.id}
-                            role="tab"
-                            aria-selected={activeStep === i}
-                            className={`step-tab ${activeStep === i ? 'active' : ''}`}
-                            onClick={() => setActiveStep(i)}
-                        >
-                            <step.icon size={18} weight={activeStep === i ? "fill" : "regular"} />
-                            <span>{step.title}</span>
-                        </button>
-                    ))}
-                </div>
-
-                {/* Step content */}
-                <div className="step-content" role="tabpanel" key={currentStep.id}>
-                    <div className="step-text">
-                        <div className="step-number">Step {activeStep + 1}</div>
-                        <h3>{currentStep.title}</h3>
-                        <p>{currentStep.summary}</p>
-                        <ul className="step-details">
-                            {currentStep.details.map((detail, i) => (
-                                <li key={i}>
-                                    <span className="check-icon">✓</span>
-                                    {detail}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className="step-visual">
-                        <div className="step-illustration">
-                            <currentStep.icon size={64} weight="duotone" />
-                            <span className="step-label">{currentStep.title}</span>
+                        <div key={step.id} style={{
+                            background: 'var(--color-bg-primary)',
+                            borderRadius: 'var(--radius-lg)',
+                            padding: 'var(--space-xl)',
+                            boxShadow: 'var(--shadow-card)',
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--space-md)',
+                                marginBottom: 'var(--space-lg)',
+                            }}>
+                                <div style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 'var(--radius-md)',
+                                    background: 'var(--color-primary-lighter)',
+                                    color: 'var(--color-primary)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontWeight: 700,
+                                    fontSize: '1rem',
+                                }}>
+                                    {i + 1}
+                                </div>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>{step.title}</h3>
+                            </div>
+                            <p style={{
+                                color: 'var(--color-text-secondary)',
+                                fontSize: '0.875rem',
+                                lineHeight: 1.6,
+                                marginBottom: 'var(--space-md)',
+                            }}>
+                                {step.summary}
+                            </p>
+                            <ul style={{ listStyle: 'none', padding: 0 }}>
+                                {step.details.map((detail, j) => (
+                                    <li key={j} style={{
+                                        fontSize: '0.8125rem',
+                                        color: 'var(--color-text-secondary)',
+                                        padding: '4px 0',
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        gap: 'var(--space-sm)',
+                                    }}>
+                                        <span style={{ color: 'var(--color-success)', fontWeight: 700, flexShrink: 0 }}>&#10003;</span>
+                                        {detail}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>

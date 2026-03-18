@@ -8,15 +8,15 @@ function TestimonialSection() {
                 <div className="testimonial-card">
                     <Quotes size={32} weight="duotone" className="testimonial-icon" aria-hidden="true" />
                     <blockquote className="testimonial-quote">
-                        "Before LeadFlow AI we averaged 2–3 sales calls per week. Within 30 days we were consistently
-                        at 10–12 qualified calls per week, and in 6 weeks we closed 4 new clients—about{' '}
-                        <strong>$78k in added revenue.</strong>"
+                        "We used to spend hours manually sending LinkedIn connection requests. With QuickConnect,
+                        we uploaded our Sales Navigator list and had{' '}
+                        <strong>200+ new connections in a week.</strong> The dashboard makes it easy to track everything."
                     </blockquote>
                     <div className="testimonial-author">
-                        <div className="testimonial-avatar">JR</div>
+                        <div className="testimonial-avatar">SM</div>
                         <div>
-                            <div className="testimonial-name">James Rodriguez</div>
-                            <div className="testimonial-role">Founder, Represent Agency</div>
+                            <div className="testimonial-name">Sarah Mitchell</div>
+                            <div className="testimonial-role">Head of Sales, Apex Consulting</div>
                         </div>
                     </div>
                 </div>

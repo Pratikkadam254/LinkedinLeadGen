@@ -8,13 +8,12 @@ function CTASection() {
             <div className="container">
                 <div className="cta-card">
                     <div className="cta-content">
-                        <h2 id="cta-heading">Ready to Transform Your Lead Generation?</h2>
+                        <h2 id="cta-heading">Ready to Grow Your LinkedIn Network?</h2>
                         <p>
-                            Join hundreds of B2B professionals using LeadFlow AI
-                            to build meaningful connections at scale.
+                            Upload your CSV and start sending connection requests in minutes.
                         </p>
                         <Link to="/signup" className="btn btn-primary btn-pill btn-lg">
-                            Start Free Trial
+                            Start Connecting Free
                             <ArrowRight size={18} className="arrow" aria-hidden="true" />
                         </Link>
                     </div>
