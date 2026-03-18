@@ -12,7 +12,7 @@ function getConfig() {
   return { baseUrl, apiKey };
 }
 
-async function unipileFetch(path: string, accountId: string, options?: RequestInit) {
+async function unipileFetch(path: string, _accountId: string, options?: RequestInit) {
   const { baseUrl, apiKey } = getConfig();
   const url = path.startsWith("http") ? path : `${baseUrl}/api/v1${path}`;
   const res = await fetch(url, {

@@ -27,15 +27,6 @@ test.describe('Responsive layout — Desktop', () => {
     const navLinks = landingPage.page.locator('.header-links')
     await expect(navLinks).toBeVisible()
   })
-
-  test('how it works content is 2-column', async ({ landingPage }) => {
-    await landingPage.scrollTo('#how-it-works')
-    const content = landingPage.page.locator('.step-content')
-    const cols = await content.evaluate((el) =>
-      getComputedStyle(el).gridTemplateColumns.split(' ').length
-    )
-    expect(cols).toBe(2)
-  })
 })
 
 test.describe('Responsive layout — Mobile', () => {

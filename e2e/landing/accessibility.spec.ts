@@ -56,25 +56,13 @@ test.describe('Accessibility', () => {
     await expect(buttons.first()).toHaveAttribute('aria-expanded', 'true')
   })
 
-  test('HowItWorks has proper tab roles', async ({ landingPage }) => {
-    await landingPage.scrollTo('#how-it-works')
-    const { page } = landingPage
-
-    await expect(page.locator('[role="tablist"]')).toHaveCount(1)
-    await expect(page.locator('[role="tab"]')).toHaveCount(4)
-    await expect(page.locator('[role="tabpanel"]')).toHaveCount(1)
-
-    // First tab is selected
-    await expect(page.locator('[role="tab"]').first()).toHaveAttribute('aria-selected', 'true')
-  })
-
   test('features and stats use role="list" with role="listitem"', async ({ landingPage }) => {
     const { page } = landingPage
 
     // Features
     const featuresGrid = page.locator('.features-grid[role="list"]')
     await expect(featuresGrid).toHaveCount(1)
-    await expect(featuresGrid.locator('[role="listitem"]')).toHaveCount(6)
+    await expect(featuresGrid.locator('[role="listitem"]')).toHaveCount(3)
 
     // Stats
     const statsGrid = page.locator('.stats-grid[role="list"]')

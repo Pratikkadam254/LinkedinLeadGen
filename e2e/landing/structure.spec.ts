@@ -2,16 +2,16 @@ import { test, expect } from '../fixtures/landing.fixture'
 
 test.describe('Landing page structure & content', () => {
   test('page loads successfully', async ({ landingPage }) => {
-    await expect(landingPage.page).toHaveTitle(/LeadFlow/)
+    await expect(landingPage.page).toHaveTitle(/QuickConnect/)
   })
 
   test('all sections render in correct order', async ({ landingPage }) => {
     const { page } = landingPage
     await expect(landingPage.header).toBeVisible()
     await expect(landingPage.hero).toBeVisible()
-    await expect(landingPage.stats).toBeAttached()
     await expect(landingPage.features).toBeAttached()
     await expect(landingPage.howItWorks).toBeAttached()
+    await expect(landingPage.stats).toBeAttached()
     await expect(landingPage.testimonial).toBeAttached()
     await expect(landingPage.pricing).toBeAttached()
     await expect(landingPage.faq).toBeAttached()
@@ -32,16 +32,16 @@ test.describe('Landing page structure & content', () => {
 
   test('hero heading text', async ({ landingPage }) => {
     const h1 = landingPage.hero.locator('h1')
-    await expect(h1).toContainText('Transform LinkedIn Connections Into')
-    await expect(h1).toContainText('Qualified Leads')
+    await expect(h1).toContainText('Automate LinkedIn Connection Requests')
+    await expect(h1).toContainText('in Minutes')
   })
 
   test('hero has 3 trust badges', async ({ landingPage }) => {
     const badges = landingPage.hero.locator('.trust-badges span')
     await expect(badges).toHaveCount(3)
-    await expect(badges.nth(0)).toContainText('7-day free trial')
+    await expect(badges.nth(0)).toContainText('Free to start')
     await expect(badges.nth(1)).toContainText('No credit card required')
-    await expect(badges.nth(2)).toContainText('Setup in 5 minutes')
+    await expect(badges.nth(2)).toContainText('Setup in 2 minutes')
   })
 
   test('stats section shows 4 stats', async ({ landingPage }) => {
@@ -56,55 +56,56 @@ test.describe('Landing page structure & content', () => {
     await expect(values.nth(3)).toHaveText('95%')
   })
 
-  test('features section has badge and 6 cards', async ({ landingPage }) => {
+  test('features section has badge and 3 cards', async ({ landingPage }) => {
     await landingPage.scrollTo('#features')
     const badge = landingPage.features.locator('.section-badge')
     await expect(badge).toHaveText('Features')
 
     const cards = landingPage.features.locator('[role="listitem"]')
-    await expect(cards).toHaveCount(6)
+    await expect(cards).toHaveCount(3)
 
-    const titles = ['Easy Import', 'Smart Scoring', 'Personalized Messages', 'Post Scraping', 'Safe Automation', 'Real-Time Dashboard']
+    const titles = ['Upload Your CSV', 'Auto-Send Connections', 'Track Everything']
     for (let i = 0; i < titles.length; i++) {
       await expect(cards.nth(i).locator('h3')).toHaveText(titles[i])
     }
   })
 
-  test('how it works has 4 tabs', async ({ landingPage }) => {
+  test('how it works has 3 step cards', async ({ landingPage }) => {
     await landingPage.scrollTo('#how-it-works')
-    const tabs = landingPage.howItWorks.locator('[role="tab"]')
-    await expect(tabs).toHaveCount(4)
+    const heading = landingPage.howItWorks.locator('h2')
+    await expect(heading).toContainText('How QuickConnect Works')
+    const cards = landingPage.howItWorks.locator('h3')
+    await expect(cards).toHaveCount(3)
   })
 
   test('testimonial shows author info', async ({ landingPage }) => {
     await landingPage.scrollTo('[aria-label="Customer testimonial"]')
     const card = landingPage.testimonial
-    await expect(card.locator('blockquote')).toContainText('$78k in added revenue')
-    await expect(card.locator('.testimonial-name')).toHaveText('James Rodriguez')
-    await expect(card.locator('.testimonial-role')).toHaveText('Founder, Represent Agency')
+    await expect(card.locator('blockquote')).toContainText('200+ new connections')
+    await expect(card.locator('.testimonial-name')).toHaveText('Sarah Mitchell')
+    await expect(card.locator('.testimonial-role')).toHaveText('Head of Sales, Apex Consulting')
   })
 
-  test('pricing card with plan and features', async ({ landingPage }) => {
+  test('pricing card with plan and badge', async ({ landingPage }) => {
     await landingPage.scrollTo('#pricing')
-    await expect(landingPage.pricing.locator('.pricing-badge')).toHaveText('Popular')
-    await expect(landingPage.pricing.locator('.pricing-plan')).toHaveText('Growth')
-    await expect(landingPage.pricing.locator('.pricing-features li')).toHaveCount(10)
+    await expect(landingPage.pricing.locator('.pricing-badge')).toHaveText('Early Access')
+    await expect(landingPage.pricing.locator('.pricing-plan')).toHaveText('Free')
   })
 
-  test('FAQ has 6 items', async ({ landingPage }) => {
+  test('FAQ has 5 items', async ({ landingPage }) => {
     await landingPage.scrollTo('#faq')
-    await expect(landingPage.faq.locator('.faq-item')).toHaveCount(6)
+    await expect(landingPage.faq.locator('.faq-item')).toHaveCount(5)
   })
 
   test('CTA section heading', async ({ landingPage }) => {
     await landingPage.scrollTo('#cta')
-    await expect(landingPage.cta.locator('h2')).toContainText('Ready to Transform Your Lead Generation')
+    await expect(landingPage.cta.locator('h2')).toContainText('Ready to Grow Your LinkedIn Network')
   })
 
   test('footer has 3 columns and legal links', async ({ landingPage }) => {
     await landingPage.scrollTo('footer')
     await expect(landingPage.footer.locator('.footer-column')).toHaveCount(3)
-    await expect(landingPage.footer.locator('.footer-copyright')).toContainText('LeadFlow AI')
+    await expect(landingPage.footer.locator('.footer-copyright')).toContainText('QuickConnect')
     await expect(landingPage.footer.locator('.footer-legal a')).toHaveCount(2)
   })
 })

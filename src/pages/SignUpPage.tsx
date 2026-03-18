@@ -16,7 +16,7 @@ function SignUpPage() {
             <div className="auth-container">
                 <Link to="/" className="auth-logo">
                     <Logo />
-                    <span>LeadFlow AI</span>
+                    <span>QuickConnect</span>
                 </Link>
 
                 <div className="auth-card">
@@ -57,7 +57,7 @@ function SignUpWithClerk() {
             <div className="auth-container">
                 <Link to="/" className="auth-logo">
                     <Logo />
-                    <span>LeadFlow AI</span>
+                    <span>QuickConnect</span>
                 </Link>
 
                 <SignUp

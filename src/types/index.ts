@@ -1,4 +1,4 @@
-// Shared type definitions for LeadFlow AI
+// Shared type definitions for QuickConnect
 
 export interface Lead {
     _id: string

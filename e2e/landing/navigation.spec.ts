@@ -25,14 +25,14 @@ test.describe('Navigation & links', () => {
     await expect(getStarted).toHaveAttribute('href', '/signup')
   })
 
-  test('hero Start Free Trial links to /signup', async ({ landingPage }) => {
-    const cta = landingPage.hero.locator('a:has-text("Start Free Trial")')
+  test('hero Start Connecting Free links to /signup', async ({ landingPage }) => {
+    const cta = landingPage.hero.locator('a:has-text("Start Connecting Free")')
     await expect(cta).toHaveAttribute('href', '/signup')
   })
 
-  test('hero See How It Works links to #features', async ({ landingPage }) => {
+  test('hero See How It Works links to #how-it-works', async ({ landingPage }) => {
     const link = landingPage.hero.locator('a:has-text("See How It Works")')
-    await expect(link).toHaveAttribute('href', '#features')
+    await expect(link).toHaveAttribute('href', '#how-it-works')
   })
 
   test('clicking anchor link scrolls to section', async ({ landingPage }) => {
@@ -50,7 +50,7 @@ test.describe('Navigation & links', () => {
 
   test('CTA section button links to /signup', async ({ landingPage }) => {
     await landingPage.scrollTo('#cta')
-    const cta = landingPage.cta.locator('a:has-text("Start Free Trial")')
+    const cta = landingPage.cta.locator('a:has-text("Start Connecting Free")')
     await expect(cta).toHaveAttribute('href', '/signup')
   })
 

@@ -8,7 +8,7 @@ test.describe('FAQ accordion', () => {
   test('all items start closed', async ({ landingPage }) => {
     const items = landingPage.page.locator('.faq-item')
     const count = await items.count()
-    expect(count).toBe(6)
+    expect(count).toBe(5)
 
     for (let i = 0; i < count; i++) {
       await expect(items.nth(i)).not.toHaveClass(/open/)
@@ -24,7 +24,7 @@ test.describe('FAQ accordion', () => {
 
     // Answer should be visible
     const answer = landingPage.faqItem(0).locator('.faq-answer p')
-    await expect(answer).toContainText('qualified lead')
+    await expect(answer).toContainText('human-like delays')
   })
 
   test('clicking the same question closes it', async ({ landingPage }) => {
@@ -49,12 +49,11 @@ test.describe('FAQ accordion', () => {
 
   test('FAQ questions have correct text', async ({ landingPage }) => {
     const questions = [
-      'What counts as a qualified lead?',
-      'How long until I see results?',
-      'Do I need to commit to a long-term contract?',
-      'How is this different from hiring a sales team?',
-      'What tools do you integrate with?',
-      'Can I see a demo before signing up?',
+      'Is this safe for my LinkedIn account?',
+      'What CSV format do I need?',
+      'How many requests can I send per day?',
+      'Can I include a custom message?',
+      'What happens if something goes wrong?',
     ]
 
     for (let i = 0; i < questions.length; i++) {

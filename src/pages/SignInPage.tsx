@@ -17,7 +17,7 @@ function SignInPage() {
             <div className="auth-container">
                 <Link to="/" className="auth-logo">
                     <Logo />
-                    <span>LeadFlow AI</span>
+                    <span>QuickConnect</span>
                 </Link>
 
                 <div className="auth-card">
@@ -58,7 +58,7 @@ function SignInWithClerk() {
             <div className="auth-container">
                 <Link to="/" className="auth-logo">
                     <Logo />
-                    <span>LeadFlow AI</span>
+                    <span>QuickConnect</span>
                 </Link>
 
                 <SignIn
