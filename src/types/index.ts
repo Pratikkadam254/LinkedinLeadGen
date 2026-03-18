@@ -1,74 +1,47 @@
 // Shared type definitions for QuickConnect
 
-export interface Lead {
-    _id: string
-    firstName: string
-    lastName: string
-    company: string
-    title: string
-    linkedInUrl: string
-    email?: string
-    score: number
-    messageStatus: 'empty' | 'draft' | 'ready' | 'sent'
-    outreachStatus: 'pending' | 'sent' | 'accepted' | 'replied'
-    postScraped: boolean
-    createdAt: number
+export type BatchStatus =
+  | "draft"
+  | "running"
+  | "paused"
+  | "completed"
+  | "cancelled"
+  | "daily_limit_reached"
+  | "weekly_limit_reached"
+  | "error_disconnected";
 
-    // Campaign & Outcome
-    campaignId?: string
-    bookingStatus: 'not_booked' | 'booked' | 'cancelled'
-    potentialValue: number
-    lastInteractionAt?: number
+export type LeadStatus =
+  | "pending"
+  | "sent"
+  | "accepted"
+  | "replied"
+  | "already_connected"
+  | "error"
+  | "cancelled";
 
-    // Extended data for scoring
-    companySize?: number
-    followers?: number
-    lastPostDays?: number
-    postContent?: string
-    mutualConnections?: number
+export type RateTier = "conservative" | "normal" | "aggressive";
+
+export interface BatchStats {
+  sent: number;
+  accepted: number;
+  replied: number;
+  alreadyConnected: number;
+  errors: number;
+  pending: number;
 }
 
-export interface Strategy {
-    _id: string
-    name: string
-    rawInputs: {
-        businessDescription: string
-        targetAudienceHints: string
-        primaryOffer: string
-    }
-    icpDocument: string
-    offerDocument: string
-    isActive: boolean
-    createdAt: number
-}
-
-export interface Campaign {
-    _id: string
-    strategyId: string
-    name: string
-    status: 'active' | 'paused' | 'completed'
-    autoPilot: boolean
-    schedule: {
-        timezone: string
-        days: string[]
-        hours: { start: string; end: string }
-    }
-    stats: {
-        sent: number
-        replied: number
-        booked: number
-        revenue: number
-    }
-    createdAt: number
-}
-
-export interface UserPreferences {
-    primaryGoal: string
-    targetIndustries: string[]
-    companySize: string
-    targetTitles: string[]
-    weeklyVolume: string
-    messageTone: 'professional' | 'friendly' | 'direct' | 'conversational'
-    hasExistingLeads: string
-    linkedInReady: string
-}
+export type ActivityType =
+  | "batch_created"
+  | "outreach_started"
+  | "connection_sent"
+  | "connection_accepted"
+  | "reply_received"
+  | "error"
+  | "batch_paused"
+  | "batch_resumed"
+  | "batch_cancelled"
+  | "batch_completed"
+  | "linkedin_disconnected"
+  | "linkedin_reconnected"
+  | "rate_limit_hit"
+  | "weekly_limit_warning";
