@@ -1,78 +1,78 @@
+import { mutation, query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
-import { query } from "./_generated/server";
 
-// Get recent activities for a user
+const activityTypeValidator = v.union(
+  v.literal("batch_created"),
+  v.literal("outreach_started"),
+  v.literal("connection_sent"),
+  v.literal("connection_accepted"),
+  v.literal("reply_received"),
+  v.literal("error"),
+  v.literal("batch_paused"),
+  v.literal("batch_resumed"),
+  v.literal("batch_cancelled"),
+  v.literal("batch_completed"),
+  v.literal("linkedin_disconnected"),
+  v.literal("linkedin_reconnected"),
+  v.literal("rate_limit_hit"),
+  v.literal("weekly_limit_warning")
+);
+
+export const log = internalMutation({
+  args: {
+    userId: v.id("users"),
+    batchId: v.optional(v.id("batches")),
+    leadId: v.optional(v.id("leads")),
+    type: activityTypeValidator,
+    metadata: v.optional(v.any()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("activities", {
+      ...args,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const logFromClient = mutation({
+  args: {
+    userId: v.id("users"),
+    batchId: v.optional(v.id("batches")),
+    type: v.union(
+      v.literal("batch_created"),
+      v.literal("outreach_started"),
+      v.literal("batch_paused"),
+      v.literal("batch_resumed"),
+      v.literal("batch_cancelled")
+    ),
+    metadata: v.optional(v.any()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("activities", {
+      ...args,
+      createdAt: Date.now(),
+    });
+  },
+});
+
 export const listRecent = query({
-    args: {
-        userId: v.id("users"),
-        limit: v.optional(v.number()),
-    },
-    handler: async (ctx, args) => {
-        const limit = args.limit || 50;
-        return await ctx.db
-            .query("activities")
-            .withIndex("by_user", (q) => q.eq("userId", args.userId))
-            .order("desc")
-            .take(limit);
-    },
+  args: { userId: v.id("users"), limit: v.optional(v.number()) },
+  handler: async (ctx, { userId, limit }) => {
+    return await ctx.db
+      .query("activities")
+      .withIndex("by_user_recent", (q) => q.eq("userId", userId))
+      .order("desc")
+      .take(limit ?? 20);
+  },
 });
 
-// Get activities for a specific lead
-export const listByLead = query({
-    args: { leadId: v.id("leads") },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("activities")
-            .withIndex("by_lead", (q) => q.eq("leadId", args.leadId))
-            .order("desc")
-            .collect();
-    },
-});
-
-// Get activity summary for dashboard
-export const getSummary = query({
-    args: {
-        userId: v.id("users"),
-        days: v.optional(v.number()),
-    },
-    handler: async (ctx, args) => {
-        const days = args.days || 7;
-        const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
-
-        const activities = await ctx.db
-            .query("activities")
-            .withIndex("by_user", (q) => q.eq("userId", args.userId))
-            .filter((q) => q.gte(q.field("createdAt"), cutoffTime))
-            .collect();
-
-        const summary = {
-            leadsImported: 0,
-            messagesGenerated: 0,
-            connectionsSent: 0,
-            connectionsAccepted: 0,
-            repliesReceived: 0,
-        };
-
-        for (const activity of activities) {
-            switch (activity.type) {
-                case "lead_imported":
-                    summary.leadsImported += (activity.metadata as any)?.count || 1;
-                    break;
-                case "message_generated":
-                    summary.messagesGenerated++;
-                    break;
-                case "connection_sent":
-                    summary.connectionsSent++;
-                    break;
-                case "connection_accepted":
-                    summary.connectionsAccepted++;
-                    break;
-                case "message_replied":
-                    summary.repliesReceived++;
-                    break;
-            }
-        }
-
-        return summary;
-    },
+export const listByBatch = query({
+  args: { batchId: v.id("batches") },
+  handler: async (ctx, { batchId }) => {
+    return await ctx.db
+      .query("activities")
+      .withIndex("by_batch", (q) => q.eq("batchId", batchId))
+      .order("desc")
+      .collect();
+  },
 });
