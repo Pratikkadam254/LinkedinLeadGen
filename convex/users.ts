@@ -1,150 +1,122 @@
+import { mutation, query, internalQuery } from "./_generated/server";
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
 
-// Get current user by Clerk ID
 export const getByClerkId = query({
-    args: { clerkId: v.string() },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("users")
-            .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-            .first();
-    },
+  args: { clerkId: v.string() },
+  handler: async (ctx, { clerkId }) => {
+    return await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
+      .first();
+  },
 });
 
-// Get current user (for authenticated requests)
 export const current = query({
-    args: { clerkId: v.string() },
-    handler: async (ctx, args) => {
-        return await ctx.db
-            .query("users")
-            .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-            .first();
-    },
+  args: { clerkId: v.string() },
+  handler: async (ctx, { clerkId }) => {
+    return await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
+      .first();
+  },
 });
 
-// Create or update user on sign in
 export const upsert = mutation({
-    args: {
-        clerkId: v.string(),
-        email: v.string(),
-        firstName: v.optional(v.string()),
-        lastName: v.optional(v.string()),
-        imageUrl: v.optional(v.string()),
-    },
-    handler: async (ctx, args) => {
-        const existing = await ctx.db
-            .query("users")
-            .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-            .first();
+  args: {
+    clerkId: v.string(),
+    email: v.string(),
+    firstName: v.optional(v.string()),
+    lastName: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .first();
 
-        const now = Date.now();
+    if (existing) {
+      await ctx.db.patch(existing._id, {
+        email: args.email,
+        firstName: args.firstName,
+        lastName: args.lastName,
+        imageUrl: args.imageUrl,
+        updatedAt: Date.now(),
+      });
+      return existing._id;
+    }
 
-        if (existing) {
-            // Update existing user
-            await ctx.db.patch(existing._id, {
-                email: args.email,
-                firstName: args.firstName,
-                lastName: args.lastName,
-                imageUrl: args.imageUrl,
-                updatedAt: now,
-            });
-            return existing._id;
-        }
-
-        // Create new user
-        return await ctx.db.insert("users", {
-            clerkId: args.clerkId,
-            email: args.email,
-            firstName: args.firstName,
-            lastName: args.lastName,
-            imageUrl: args.imageUrl,
-            onboardingCompleted: false,
-            unipileConnected: false,
-            createdAt: now,
-            updatedAt: now,
-        });
-    },
+    return await ctx.db.insert("users", {
+      ...args,
+      onboardingCompleted: false,
+      unipileConnected: false,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  },
 });
 
-// Update user preferences (from onboarding)
-export const updatePreferences = mutation({
-    args: {
-        clerkId: v.string(),
-        preferences: v.object({
-            primaryGoal: v.optional(v.string()),
-            targetIndustries: v.optional(v.array(v.string())),
-            targetCompanySize: v.optional(v.string()),
-            targetTitles: v.optional(v.array(v.string())),
-            weeklyVolume: v.optional(v.string()),
-            messageTone: v.optional(v.string()),
-        }),
-    },
-    handler: async (ctx, args) => {
-        const user = await ctx.db
-            .query("users")
-            .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-            .first();
-
-        if (!user) {
-            throw new Error("User not found");
-        }
-
-        await ctx.db.patch(user._id, {
-            preferences: args.preferences,
-            onboardingCompleted: true,
-            updatedAt: Date.now(),
-        });
-
-        return user._id;
-    },
-});
-
-// Mark onboarding as complete
 export const completeOnboarding = mutation({
-    args: { clerkId: v.string() },
-    handler: async (ctx, args) => {
-        const user = await ctx.db
-            .query("users")
-            .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-            .first();
-
-        if (!user) {
-            throw new Error("User not found");
-        }
-
-        await ctx.db.patch(user._id, {
-            onboardingCompleted: true,
-            updatedAt: Date.now(),
-        });
-
-        return user._id;
-    },
+  args: { clerkId: v.string() },
+  handler: async (ctx, { clerkId }) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
+      .first();
+    if (!user) throw new Error("User not found");
+    await ctx.db.patch(user._id, {
+      onboardingCompleted: true,
+      updatedAt: Date.now(),
+    });
+  },
 });
 
-// Update Unipile connection status
 export const updateUnipileConnection = mutation({
-    args: {
-        clerkId: v.string(),
-        connected: v.boolean(),
-        accountId: v.optional(v.string()),
-    },
-    handler: async (ctx, args) => {
-        const user = await ctx.db
-            .query("users")
-            .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-            .first();
+  args: {
+    clerkId: v.string(),
+    unipileConnected: v.boolean(),
+    unipileAccountId: v.optional(v.string()),
+  },
+  handler: async (ctx, { clerkId, unipileConnected, unipileAccountId }) => {
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", clerkId))
+      .first();
+    if (!user) throw new Error("User not found");
+    await ctx.db.patch(user._id, {
+      unipileConnected,
+      unipileAccountId,
+      unipileHealthy: unipileConnected ? true : undefined,
+      updatedAt: Date.now(),
+    });
+  },
+});
 
-        if (!user) {
-            throw new Error("User not found");
-        }
+export const setUnipileHealth = mutation({
+  args: {
+    userId: v.id("users"),
+    healthy: v.boolean(),
+  },
+  handler: async (ctx, { userId, healthy }) => {
+    await ctx.db.patch(userId, {
+      unipileHealthy: healthy,
+      unipileLastChecked: Date.now(),
+      updatedAt: Date.now(),
+    });
+  },
+});
 
-        await ctx.db.patch(user._id, {
-            unipileConnected: args.connected,
-            unipileAccountId: args.accountId,
-            updatedAt: Date.now(),
-        });
+// Internal queries for server-side actions
+export const getById = internalQuery({
+  args: { userId: v.id("users") },
+  handler: async (ctx, { userId }) => {
+    return await ctx.db.get(userId);
+  },
+});
 
-        return user._id;
-    },
+export const getConnectedUsers = internalQuery({
+  handler: async (ctx) => {
+    const users = await ctx.db.query("users").collect();
+    return users.filter((u) => u.unipileConnected && u.unipileAccountId);
+  },
 });
