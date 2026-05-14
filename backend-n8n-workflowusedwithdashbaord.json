@@ -1,0 +1,1458 @@
+{
+    "nodes": [
+        {
+            "parameters": {
+                "documentId": {
+                    "__rl": true,
+                    "value": "1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ",
+                    "mode": "list",
+                    "cachedResultName": "Philly  - LeadGen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 303350912,
+                    "mode": "list",
+                    "cachedResultName": "Leadgen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit#gid=303350912"
+                },
+                "filtersUI": {
+                    "values": [
+                        {
+                            "lookupColumn": "Status",
+                            "lookupValue": "Draft G"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                1152,
+                224
+            ],
+            "id": "1f908e64-9795-4764-9380-ef3013d8026b",
+            "name": "Get row(s) in sheet",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "4XAkuGZWcq70w1fS",
+                    "name": "Pratik"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "159c9fb0-16a0-4e45-9c61-dc68e7e107d0",
+                            "name": "company name",
+                            "value": "={{ $json.Company }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "02bacf4e-034a-44ca-b2e1-6e39f7ba35a6",
+                            "name": "=address",
+                            "value": "={{ $json.Location }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "e94f7e9f-c623-4232-84df-d3a2fc35525b",
+                            "name": "linkedin profile URL of the company's owner or CEO",
+                            "value": "={{ $json['LinkedIn URL'] }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "bf3f64f8-ba48-4b1f-87f6-0bfc0cca7d76",
+                            "name": "Draft Message",
+                            "value": "={{ $json['Draft Message'] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1520,
+                224
+            ],
+            "id": "f6589515-1f15-44f9-a55c-71dfd717e987",
+            "name": "Edit Fields2"
+        },
+        {
+            "parameters": {
+                "url": "https://api15.unipile.com:14550/api/v1/accounts",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "X-API-KEY",
+                            "value": "gXNj2GiV.DkK2QM1Z79c1ejd79ZQEOVbRDNcQF4B1wpu0DT+xQJY="
+                        },
+                        {
+                            "name": "accept",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1936,
+                224
+            ],
+            "id": "6fc420b3-a89a-417a-acb3-62704a47c58a",
+            "name": "unipile api setup",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "cee61ada-40b2-4b6e-94e0-f11f215e6594",
+                            "name": "=linkedin_urn",
+                            "value": "={{ $('Loop Over Items').item.json['linkedin profile URL of the company\\'s owner or CEO'].split('/').filter(Boolean).pop() }}\n",
+                            "type": "string"
+                        },
+                        {
+                            "id": "f09d2740-6094-4e2f-8b00-04f60c335b53",
+                            "name": "unipile_account_id",
+                            "value": "=3102DRROSpWH79JacKW5aw",
+                            "type": "string"
+                        },
+                        {
+                            "id": "d1feb18b-f41b-46ac-b37e-bad5a3906667",
+                            "name": "Linkedin Profile",
+                            "value": "={{ $('Loop Over Items').item.json['linkedin profile URL of the company\\'s owner or CEO'] }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                2176,
+                208
+            ],
+            "id": "7f406eb1-39a6-4ec7-964d-2124e66795bf",
+            "name": "set information"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=https://api15.unipile.com:14550/api/v1/users/invite",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "X-API-KEY",
+                            "value": "gXNj2GiV.DkK2QM1Z79c1ejd79ZQEOVbRDNcQF4B1wpu0DT+xQJY="
+                        },
+                        {
+                            "name": "accept",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "provider_id",
+                            "value": "={{ $json.provider_id }}"
+                        },
+                        {
+                            "name": "account_id",
+                            "value": "3102DRROSpWH79JacKW5aw"
+                        },
+                        {
+                            "name": "message",
+                            "value": "={{ $('Loop Over Items').item.json['Draft Message'] }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                2544,
+                208
+            ],
+            "id": "f276c4db-65e4-43a6-943a-37b2b254bfba",
+            "name": "Invite User1",
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ",
+                    "mode": "list",
+                    "cachedResultName": "Philly  - LeadGen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 303350912,
+                    "mode": "list",
+                    "cachedResultName": "Leadgen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit#gid=303350912"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Status": "Message sent",
+                        "row_number": 0,
+                        "LinkedIn URL": "={{ $('Loop Over Items').item.json['linkedin profile URL of the company\\'s owner or CEO'] }}",
+                        "Sent Date": "={{ $today }}"
+                    },
+                    "matchingColumns": [
+                        "LinkedIn URL"
+                    ],
+                    "schema": [
+                        {
+                            "id": "Name",
+                            "displayName": "Name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "LinkedIn URL",
+                            "displayName": "LinkedIn URL",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Title",
+                            "displayName": "Title",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Company",
+                            "displayName": "Company",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Location",
+                            "displayName": "Location",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Employees",
+                            "displayName": "Employees",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Followers",
+                            "displayName": "Followers",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Vitality Score",
+                            "displayName": "Vitality Score",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Conference Signal",
+                            "displayName": "Conference Signal",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Draft Message",
+                            "displayName": "Draft Message",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Subject ",
+                            "displayName": "Subject ",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Sent Date",
+                            "displayName": "Sent Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Status",
+                            "displayName": "Status",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "number",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                2976,
+                128
+            ],
+            "id": "44ecd87c-85b7-4df3-b158-3ec22ff9867e",
+            "name": "Update row in sheet",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "4XAkuGZWcq70w1fS",
+                    "name": "Pratik"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ",
+                    "mode": "list",
+                    "cachedResultName": "Philly  - LeadGen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 303350912,
+                    "mode": "list",
+                    "cachedResultName": "Leadgen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit#gid=303350912"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Status": "Error Occurred",
+                        "LinkedIn URL": "={{ $('Loop Over Items').item.json['linkedin profile URL of the company\\'s owner or CEO'] }}",
+                        "Sent Date": "={{ $today }}"
+                    },
+                    "matchingColumns": [
+                        "LinkedIn URL"
+                    ],
+                    "schema": [
+                        {
+                            "id": "Name",
+                            "displayName": "Name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "LinkedIn URL",
+                            "displayName": "LinkedIn URL",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Title",
+                            "displayName": "Title",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Company",
+                            "displayName": "Company",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Location",
+                            "displayName": "Location",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Employees",
+                            "displayName": "Employees",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Followers",
+                            "displayName": "Followers",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Vitality Score",
+                            "displayName": "Vitality Score",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Conference Signal",
+                            "displayName": "Conference Signal",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Draft Message",
+                            "displayName": "Draft Message",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Subject ",
+                            "displayName": "Subject ",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Status",
+                            "displayName": "Status",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Sent Date",
+                            "displayName": "Sent Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "number",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                3040,
+                464
+            ],
+            "id": "4b681db2-a535-48bf-8d90-08720d684113",
+            "name": "Update row in sheet1",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "4XAkuGZWcq70w1fS",
+                    "name": "Pratik"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ",
+                    "mode": "list",
+                    "cachedResultName": "Lead gen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 303350912,
+                    "mode": "list",
+                    "cachedResultName": "Leadgen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit#gid=303350912"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Status": "Error Occurred",
+                        "row_number": 0,
+                        "LinkedIn URL": "={{ $('Loop Over Items').first().json['linkedin profile URL of the company\\'s owner or CEO'] }}",
+                        "Sent Date": "={{ $today }}"
+                    },
+                    "matchingColumns": [
+                        "LinkedIn URL"
+                    ],
+                    "schema": [
+                        {
+                            "id": "Name",
+                            "displayName": "Name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "LinkedIn URL",
+                            "displayName": "LinkedIn URL",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Title",
+                            "displayName": "Title",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Company",
+                            "displayName": "Company",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Location",
+                            "displayName": "Location",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Employees",
+                            "displayName": "Employees",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Followers",
+                            "displayName": "Followers",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Vitality Score",
+                            "displayName": "Vitality Score",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Conference Signal",
+                            "displayName": "Conference Signal",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Draft Message",
+                            "displayName": "Draft Message",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Subject ",
+                            "displayName": "Subject ",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Status",
+                            "displayName": "Status",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Sent Date",
+                            "displayName": "Sent Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "number",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                2176,
+                464
+            ],
+            "id": "be62e800-3c63-4242-9c5c-8874b6e10d9b",
+            "name": "Update row in sheet2",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "4XAkuGZWcq70w1fS",
+                    "name": "Pratik"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                1728,
+                224
+            ],
+            "id": "d6373c1f-75ec-4374-841b-1fdc69843b0d",
+            "name": "Loop Over Items"
+        },
+        {
+            "parameters": {
+                "amount": "={{(() => {\n  const min = 1800; // 30 minutes in seconds\n  const max = 3600; // 60 minutes in seconds\n  return Math.floor(Math.random() * (max - min + 1)) + min;\n})()}}\n"
+            },
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1.1,
+            "position": [
+                3168,
+                128
+            ],
+            "id": "1931b27c-7a3d-4ff8-a9a9-fdbc42d15f4f",
+            "name": "Wait",
+            "webhookId": "ead31f1e-9fc3-4aac-a6b7-91630eb31d1e"
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.noOp",
+            "typeVersion": 1,
+            "position": [
+                3648,
+                448
+            ],
+            "id": "826dd85b-d1b2-4f68-8ce7-bdb9e8875323",
+            "name": "No Operation, do nothing"
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "triggerAtHour": 7,
+                            "triggerAtMinute": 34
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                896,
+                224
+            ],
+            "id": "b5444102-34c6-4765-a9a6-0ef807109c83",
+            "name": "Schedule Trigger"
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "documentId": {
+                    "__rl": true,
+                    "value": "1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ",
+                    "mode": "list",
+                    "cachedResultName": "Philly  - LeadGen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit?usp=drivesdk"
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "value": 303350912,
+                    "mode": "list",
+                    "cachedResultName": "Leadgen",
+                    "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1P9JEAUK8J_NtNgZ9f_HtJZvhZmywyUIELeX_H95lqYQ/edit#gid=303350912"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "Status": "AlreadyInvited",
+                        "LinkedIn URL": "={{ $('Loop Over Items').item.json['linkedin profile URL of the company\\'s owner or CEO'] }}",
+                        "Sent Date": "={{ $today }}"
+                    },
+                    "matchingColumns": [
+                        "LinkedIn URL"
+                    ],
+                    "schema": [
+                        {
+                            "id": "Name",
+                            "displayName": "Name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "LinkedIn URL",
+                            "displayName": "LinkedIn URL",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Title",
+                            "displayName": "Title",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Company",
+                            "displayName": "Company",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Location",
+                            "displayName": "Location",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Employees",
+                            "displayName": "Employees",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Followers",
+                            "displayName": "Followers",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Vitality Score",
+                            "displayName": "Vitality Score",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Conference Signal",
+                            "displayName": "Conference Signal",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Draft Message",
+                            "displayName": "Draft Message",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Subject ",
+                            "displayName": "Subject ",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": true
+                        },
+                        {
+                            "id": "Status",
+                            "displayName": "Status",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "Sent Date",
+                            "displayName": "Sent Date",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "string",
+                            "canBeUsedToMatch": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "row_number",
+                            "displayName": "row_number",
+                            "required": false,
+                            "defaultMatch": false,
+                            "display": true,
+                            "type": "number",
+                            "canBeUsedToMatch": true,
+                            "readOnly": true,
+                            "removed": true
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.7,
+            "position": [
+                3040,
+                304
+            ],
+            "id": "b735f2b1-4d32-4205-9328-80e9f79fe1da",
+            "name": "Update AlreadyInvited",
+            "credentials": {
+                "googleSheetsOAuth2Api": {
+                    "id": "4XAkuGZWcq70w1fS",
+                    "name": "Pratik"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "loose",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "9f04eecf-b529-459b-a2a5-5558e6daf3f3",
+                            "leftValue": "={{ $json.error }}",
+                            "rightValue": "already_invited",
+                            "operator": {
+                                "type": "string",
+                                "operation": "contains"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "looseTypeValidation": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                2752,
+                368
+            ],
+            "id": "6b215e28-fd44-453c-aa72-ed1ac8c38b7c",
+            "name": "If error = already invited"
+        },
+        {
+            "parameters": {
+                "method": "=GET",
+                "url": "=https://api15.unipile.com:14550/api/v1/users/{{ $json.linkedin_urn }}?linkedin_sections=%2A&account_id=3102DRROSpWH79JacKW5aw",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "X-API-KEY",
+                            "value": "gXNj2GiV.DkK2QM1Z79c1ejd79ZQEOVbRDNcQF4B1wpu0DT+xQJY="
+                        },
+                        {
+                            "name": "accept",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                2352,
+                208
+            ],
+            "id": "02c60161-964c-426c-9b36-d0bd5fae42c7",
+            "name": "getproviderId",
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "maxItems": 10
+            },
+            "type": "n8n-nodes-base.limit",
+            "typeVersion": 1,
+            "position": [
+                1344,
+                224
+            ],
+            "id": "ae0a999a-59e2-492c-a856-f4050469dd71",
+            "name": "Limit1"
+        }
+    ],
+    "connections": {
+        "Get row(s) in sheet": {
+            "main": [
+                [
+                    {
+                        "node": "Limit1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields2": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "unipile api setup": {
+            "main": [
+                [
+                    {
+                        "node": "set information",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Update row in sheet2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "set information": {
+            "main": [
+                [
+                    {
+                        "node": "getproviderId",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Invite User1": {
+            "main": [
+                [
+                    {
+                        "node": "Update row in sheet",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "If error = already invited",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update row in sheet": {
+            "main": [
+                [
+                    {
+                        "node": "Wait",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update row in sheet1": {
+            "main": [
+                [
+                    {
+                        "node": "No Operation, do nothing",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update row in sheet2": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop Over Items": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "unipile api setup",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait": {
+            "main": [
+                [
+                    {
+                        "node": "No Operation, do nothing",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "No Operation, do nothing": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Get row(s) in sheet",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update AlreadyInvited": {
+            "main": [
+                [
+                    {
+                        "node": "No Operation, do nothing",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If error = already invited": {
+            "main": [
+                [
+                    {
+                        "node": "Update AlreadyInvited",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Update row in sheet1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "getproviderId": {
+            "main": [
+                [
+                    {
+                        "node": "Invite User1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Limit1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "pinData": {
+        "Schedule Trigger": [
+            {
+                "timestamp": "2026-01-24T07:34:27.016+05:30",
+                "Readable date": "January 24th 2026, 7:34:27 am",
+                "Readable time": "7:34:27 am",
+                "Day of week": "Saturday",
+                "Year": "2026",
+                "Month": "January",
+                "Day of month": "24",
+                "Hour": "07",
+                "Minute": "34",
+                "Second": "27",
+                "Timezone": "Asia/Kolkata (UTC+05:30)"
+            }
+        ],
+        "Limit1": [
+            {
+                "row_number": 199,
+                "Name": "Jaye Allison",
+                "LinkedIn URL": "https://www.linkedin.com/in/jaye-allison-48543418",
+                "Title": "Founding Director, JADA Dance",
+                "Company": "www.jayeallisondanceproductions.org",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 1,
+                "Followers": 1516,
+                "Vitality Score": 100,
+                "Conference Signal": "Tier A - High-Scale Local Founder (Philadelphia, 1 employee, Founding Director)",
+                "Draft Message": "Hey Jaye, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-10T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 200,
+                "Name": "Tysheira Wanser",
+                "LinkedIn URL": "https://www.linkedin.com/in/tysheirawanser",
+                "Title": "Therapist | Author| Speaker PhD Student at Baylor University researching Adult Survivors of Childhood Exposure to Domestic Violence.",
+                "Company": "redefinelives.com",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 1,
+                "Followers": 1354,
+                "Vitality Score": 80,
+                "Conference Signal": "Tier A - Local SMB Owner (Solo Practice)",
+                "Draft Message": "Hey Tysheira, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-11T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 201,
+                "Name": "Melanie T",
+                "LinkedIn URL": "https://www.linkedin.com/in/melanietantillo",
+                "Title": "Owner & IIDA PND Chapter President",
+                "Company": "www.yellowboxcollective.com",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 1,
+                "Followers": 2381,
+                "Vitality Score": 100,
+                "Conference Signal": "Tier A - High-Scale Local Owner/Principal",
+                "Draft Message": "Hey Melanie, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-12T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 202,
+                "Name": "Dylan Eddinger",
+                "LinkedIn URL": "https://www.linkedin.com/in/dylan-eddinger-ba7758183",
+                "Title": "Five-Star Photography Services: Branding, Product, Commercial, Events and Headshots Photography Services",
+                "Company": "dylaneddinger.squarespace.com",
+                "Location": "Greater Philadelphia",
+                "Employees": 1,
+                "Followers": 1098,
+                "Vitality Score": 100,
+                "Conference Signal": "Tier A - Local Solo Owner/Founder (Photographer)",
+                "Draft Message": "Hey Dylan, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-13T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 203,
+                "Name": "Matthew Hamilton",
+                "LinkedIn URL": "https://www.linkedin.com/in/mhamiltonvisuals",
+                "Title": "LinkedIn Headshot Photographer | Creating great modern profile pictures for professionals, entrepreneurs, and businesses.",
+                "Company": "mhamiltonvisuals.com",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 1,
+                "Followers": 1397,
+                "Vitality Score": 100,
+                "Conference Signal": "Tier A - Philly SMB Owner/Founder, 1 employee, strong headline signal",
+                "Draft Message": "Hey Matthew, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-14T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 204,
+                "Name": "Michael Virata",
+                "LinkedIn URL": "https://www.linkedin.com/in/mikevirata",
+                "Title": "20+ years in IT | Investor | Owner | Coach",
+                "Company": "doyourbesteveryday.com",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 1,
+                "Followers": 736,
+                "Vitality Score": 100,
+                "Conference Signal": "Tier A - High-Scale Local Owner/Investor (Philadelphia)",
+                "Draft Message": "Hey Michael, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-15T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 205,
+                "Name": "Molly Simkiss",
+                "LinkedIn URL": "https://www.linkedin.com/in/mollysimkiss",
+                "Title": "Senior Copywriter | Storyteller | D2C Copywriting That Connects & Converts | Beauty, Home, Electronics & Fashion | Product Marketing, Email Campaigns, Website Copy, Social Media Content Creation",
+                "Company": "www.boldfacemarketingsolutions.com",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 1,
+                "Followers": 393,
+                "Vitality Score": 70,
+                "Conference Signal": "Tier B - Local SMB Senior Copywriter, likely owner but not explicit",
+                "Draft Message": "Hey Molly, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-16T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 206,
+                "Name": "Sean Blanda",
+                "LinkedIn URL": "https://www.linkedin.com/in/seanblanda",
+                "Title": "I help founder-led, AI-era companies build editorial systems that don’t depend on algorithms or rented channels",
+                "Company": "gatecheckstudios.com",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 1,
+                "Followers": 2194,
+                "Vitality Score": 80,
+                "Conference Signal": "Tier A - Local Philly Founder/Owner (1 employee)",
+                "Draft Message": "Hey Sean, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-17T00:00:00.000+05:30",
+                "Status": "Draft G"
+            },
+            {
+                "row_number": 254,
+                "Name": "Forte Men’S Health",
+                "LinkedIn URL": "https://www.linkedin.com/in/forte-men%E2%80%99s-health-807914370",
+                "Title": "Optimize your Health through comprehensive, personalized care with Dr. Michael Attanasio",
+                "Company": "",
+                "Location": "Philadelphia, Pennsylvania, United States",
+                "Employees": 0,
+                "Followers": 113,
+                "Vitality Score": 60,
+                "Conference Signal": "Tier B - Local Healthcare Owner/Founder via Profile Headline",
+                "Draft Message": "Hey Forte, I'm a fellow Philly business owner. I guarantee you I can generate customers for you, and eliminate your admin work - by implementing AI Agents that work 24/7. At $500/month-to-month. I can show you on a 15 min virtual call. Here's my face-to-a-name intro! RE-ALINE.com",
+                "Subject ": "",
+                "Sent Date": "2026-02-22T00:00:00.000+05:30",
+                "Status": "Draft G"
+            }
+        ]
+    },
+    "meta": {
+        "templateCredsSetupCompleted": true,
+        "instanceId": "b382263a998df75614ddcb3f450048bccd49e04c2fc4aede4c3f977cd8c8f630"
+    }
+}
